@@ -1,0 +1,19 @@
+<div class="card" style="width: 40em;">
+  <div class="card-body">
+    <h6 class="card-title">Выберите ответстенные подразделения</h6>
+    <div class="card-text">
+      <div *ngFor="let d of departments" (click)="d.checked = !d.checked" class="checkin card card-block {{d.checked ? 'text-white bg-dark' : ''}} mb-1">
+        <div class="row">
+          <div class="col-12 mx-2 pointer">
+            <span class="far {{d.checked ? 'fa-check-square' : 'fa-square'}}"> </span>
+            ({{d.code}}) {{d.name}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-inline float-right">
+      <button class="btn btn-light mr-2" (click)="cancel()">Отмена</button>
+      <button class="btn btn-success" (click)="ok()">Добавить</button>
+    </div>
+  </div>
+</div>

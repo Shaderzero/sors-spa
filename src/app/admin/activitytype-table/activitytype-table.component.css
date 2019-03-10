@@ -1,0 +1,27 @@
+.pointer {
+    cursor: pointer;
+}
+
+.icons {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: auto;
+    opacity: 0;
+}
+
+.description {
+    overflow: hidden;
+    position: relative;
+}
+
+.description:hover .icons {
+    bottom: 0;
+    opacity: 1;
+}
+
+.animate {
+    transition: all 0.5s ease-in-out
+}

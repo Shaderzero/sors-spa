@@ -1,0 +1,32 @@
+<form [formGroup]="categoryForm" (ngSubmit)="ok()">
+  <div class="modal-header p-1">
+    <h4 class="modal-title pull-left">{{title}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body p-1">
+    <div class="form-group">
+      <input class="form-control p-1" [ngClass]="{
+                'is-invalid':
+                  categoryForm.get('code').errors &&
+                  categoryForm.get('code').touched
+                }"
+        formControlName="code" />
+      <div class="invalid-feedback">Код категории должен быть в диапазоне 100000 - 999999</div>
+    </div>
+    <div class="form-group">
+      <textarea class="form-control p-1" [ngClass]="{
+            'is-invalid':
+              categoryForm.get('name').errors &&
+              categoryForm.get('name').touched
+            }"
+        autosize [minRows]="2" formControlName="name"></textarea>
+      <div class="invalid-feedback">Наименование категории не может превышать 100 символов</div>
+    </div>
+    <div class="modal-footer p-1">
+      <button type="button" class="btn btn-sm btn-outline-secondary" (click)="modalRef.hide()">Отмена</button>
+      <button type="button" class="btn btn-sm btn-outline-success" (click)="ok()" [disabled]="!categoryForm.valid">{{buttonName}}</button>
+    </div>
+  </div>
+</form>

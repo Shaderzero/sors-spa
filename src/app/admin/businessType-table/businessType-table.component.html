@@ -1,0 +1,37 @@
+<div>
+  <div class="row">
+    <div class="col-12">
+      <div class="float-left">
+        <h4>Виды бизнеса</h4>
+      </div>
+      <div class="float-right">
+        <div (click)="createBT()" class="btn btn-sm btn-outline-success">
+          добавить
+        </div>
+      </div>
+    </div>
+  </div>
+  <table class="table table-sm table-hover">
+    <thead>
+    <tr>
+      <th>Код
+      </th>
+      <th>
+        Наименование
+      </th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let bt of btypes">
+      <td>{{ bt.code }}</td>
+      <td>{{ bt.name }}</td>
+      <td class="float-right">
+        <i class="fas fa-edit text-secondary pointer mr-2" (click)="editBT(bt)"></i>
+        <i class="fas fa-trash-alt text-danger pointer" (click)="deleteBT(bt)"></i>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+

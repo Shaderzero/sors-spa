@@ -1,0 +1,60 @@
+<form [formGroup]="modalForm" (ngSubmit)="ok()">
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">{{title}}</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="form-group">
+      <label for="name">Аккаунт пользователя</label>
+      <input class="form-control" [ngClass]="{
+                  'is-invalid':
+                  modalForm.get('name').errors &&
+                  modalForm.get('name').touched
+                  }"
+        id="name" formControlName="name" />
+    </div>
+    <div class="form-group">
+      <label for="fullname">ФИО пользователя</label>
+      <input class="form-control" [ngClass]="{
+                    'is-invalid':
+                    modalForm.get('fullname').errors &&
+                    modalForm.get('fullname').touched
+                    }"
+        id="fullname" formControlName="fullname" />
+    </div>
+    <div class="form-group">
+      <label for="email">Электронная почта</label>
+      <input class="form-control" [ngClass]="{
+                      'is-invalid':
+                      modalForm.get('email').errors &&
+                      modalForm.get('email').touched
+                      }"
+        id="email" formControlName="email" />
+    </div>
+    <div class="form-group">
+      <label>Подразделение пользователя</label>
+      <input [typeahead]="departments" typeaheadOptionField="name" (typeaheadOnSelect)="onSelectDepartment($event)"
+        class="form-control" formControlName="department">
+    </div>
+    <div>
+      <label for="roles">Роли пользователя</label>
+      <div id="roles" *ngFor="let r of roles" (click)="r.checked = !r.checked">
+        <div class="row check mx-2">
+          <div>
+            <i *ngIf="r.checked" class="far fa-check-square"></i>
+            <i *ngIf="!r.checked" class="far fa-square"></i>
+          </div>
+          <div class="ml-2">
+            {{r.name}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" (click)="modalRef.hide()">Отмена</button>
+      <button type="button" class="btn btn-success" (click)="ok()" form="modalForm" [disabled]="!modalForm.valid">{{buttonName}}</button>
+    </div>
+  </div>
+</form>

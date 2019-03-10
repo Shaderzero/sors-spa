@@ -1,0 +1,35 @@
+<div class="card card-block bg-light">
+  <div *ngFor="let r of reports" class="mx-2">
+    <div class="row">
+      <div class="col-6">
+        <span class="font-weight-bolder">Дата: </span>
+        {{r.dateCreate | date: "dd.MM.yy"}}
+      </div>
+      <div class="col-6">
+        <div class="float-right">
+          <i *ngIf="r.status === 'check' && canSign" class="blink fas fa-check-double text-primary mr-2 pointer"
+             tooltip="согласовать" (click)="sign(r)"></i>
+          <i *ngIf="r.status === 'check' && !canSign" class="fas fa-check text-primary mr-2"
+             tooltip="на проверке риск координатора"></i>
+          <i *ngIf="r.status === 'sign'" class="fas fa-check-double text-success mr-2" tooltip="проверено риск координатором"></i>
+          <i *ngIf="r.status === 'check' && canEdit" class="fas fa-edit text-warning mr-2 pointer" tooltip="изменить"
+             (click)="editReport(r)"></i>
+          <i *ngIf="r.status === 'check' && canEdit" class="fas fa-trash-alt text-danger mr-2 pointer" (click)="removeReport(r)"
+             tooltip="удалить"></i>
+          <i *ngIf="r.status === 'sign' && canSign" class="fas fa-ban text-warning mr-2 pointer"
+             tooltip="отозвать" (click)="unSign(r)"></i>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <span class="font-weight-bolder">Описание: </span>
+        {{r.description}}
+      </div>
+    </div>
+    <hr class="my-0">
+  </div>
+  <div *ngIf="canEdit" class="float-left">
+    <button type="button" class="btn btn-sm btn-outline-success ml-2 my-2" (click)="createReport()">добавить отчёт</button>
+  </div>
+</div>

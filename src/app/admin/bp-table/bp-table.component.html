@@ -1,0 +1,85 @@
+<div>
+  <div class="row">
+    <div class="col-12">
+      <div class="float-left">
+        <h4>Бизнес процессы</h4>
+      </div>
+    </div>
+  </div>
+  <table class="table table-sm table-hover">
+    <thead>
+    <tr>
+      <th>
+        <div>Код
+        </div>
+      </th>
+      <th>
+        <div>Уровень 1
+          <i class="fa fa-plus-circle text-success pointer" (click)="newBP1()"></i>
+        </div>
+      </th>
+      <th>
+        <div>Уровень 2
+          <i class="fa fa-plus-circle text-success pointer" (click)="newBP2()"></i>
+        </div>
+      </th>
+      <th>
+        <div>Уровень 3
+          <i class="fa fa-plus-circle text-success pointer" (click)="newBP3()"></i>
+        </div>
+      </th>
+      <th>
+        <div>Уровень 4
+          <i class="fa fa-plus-circle text-success pointer" (click)="newBP4()"></i>
+        </div>
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let bp of bpTable">
+      <td>{{ bp.code }}</td>
+      <td class="description">{{ bp.bp1 }}
+        <ul class="list-inline icons animate text-right">
+          <li class="list-inline-item">
+            <i class="fas fa-edit text-secondary pointer" (click)="editBP1(bp.bp1Id)"></i>
+          </li>
+          <li *ngIf="!bp.bp2" class="list-inline-item">
+            <i class="fas fa-trash-alt text-danger pointer" (click)="deleteBP(bp.id)"></i>
+          </li>
+        </ul>
+      </td>
+      <td class="description">{{ bp.bp2 }}
+        <ul *ngIf="bp.bp2" class="list-inline icons animate text-right">
+          <li class="list-inline-item">
+            <i class="fas fa-edit text-secondary pointer" (click)="editBP2(bp.bp2Id)"></i>
+          </li>
+          <li *ngIf="!bp.bp3" class="list-inline-item">
+            <i class="fas fa-trash-alt text-danger pointer" (click)="deleteBP(bp.id)"></i>
+          </li>
+        </ul>
+      </td>
+      <td class="description">{{ bp.bp3 }}
+        <ul *ngIf="bp.bp3" class="list-inline icons animate text-right">
+          <li class="list-inline-item">
+            <i class="fas fa-edit text-secondary pointer" (click)="editBP3(bp.bp3Id)"></i>
+          </li>
+          <li *ngIf="!bp.bp4" class="list-inline-item">
+            <i class="fas fa-trash-alt text-danger pointer" (click)="deleteBP(bp.id)"></i>
+          </li>
+        </ul>
+      </td>
+      <td class="description">{{ bp.bp4 }}
+        <ul *ngIf="bp.bp4" class="list-inline icons animate text-right">
+          <li class="list-inline-item">
+            <i class="fas fa-edit text-secondary pointer" (click)="editBP4(bp.bp4Id)"></i>
+          </li>
+          <li class="list-inline-item">
+            <i class="fas fa-trash-alt text-danger pointer" (click)="deleteBP(bp.id)"></i>
+          </li>
+        </ul>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+

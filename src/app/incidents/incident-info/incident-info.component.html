@@ -1,0 +1,203 @@
+<div>
+  <div class="row">
+    <div class="col-12">
+      <div class="float-left">
+        <h2>Рисковое событие</h2>
+      </div>
+      <div class="float-right">
+        <!--<i class="far fa-save" (click)="exportAsXLSX()"></i>-->
+        <div (click)="close()" class="btn btn-sm btn-danger" *ngIf="isRiskManager()"
+             class="btn btn-sm btn-outline-dark">Закрыть РС
+        </div>
+        <div (click)="delete()" *ngIf="isAdmin()" class="btn btn-sm btn-outline-danger ml-2">Удалить РС</div>
+      </div>
+    </div>
+  </div>
+  <hr class="mt-0">
+  <div class="row">
+    <div class="col-3">
+      <div class="card mb-2">
+        <div class="card-header font-weight-bolder px-2 py-1">
+          <div class="float-left">
+            Дата события
+          </div>
+          <div class="float-right">
+            <i *ngIf="isRiskManager()" class="far fa-edit pointer" (click)="editDate()" tooltip="изменить"></i>
+          </div>
+        </div>
+        <div class="card-body px-2 py-1">
+          <div class="card-text">{{ incident.dateIncident | date: "dd.MM.yy" }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-9">
+      <div class="card mb-2">
+        <div class="card-header font-weight-bolder px-2 py-1">
+          <div class="float-left">
+            Описание
+          </div>
+          <div class="float-right">
+            <i *ngIf="isRiskManager()" class="far fa-edit pointer" (click)="editDescription()" tooltip="изменить"></i>
+          </div>
+        </div>
+        <div class="card-body px-2 py-1">
+          <div class="card-text">{{ incident.description }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <accordion>
+    <accordion-group [isDisabled]="true" [isOpen]="draftOpen" class="mb-3">
+      <div accordion-heading>
+        <div class="float-left font-weight-bolder" (click)="draftOpen = !draftOpen">
+          <i *ngIf="draftOpen" class="far fa-minus-square"> </i>
+          <i *ngIf="!draftOpen" class="fas fa-expand"> </i>
+          Включённые рисковые события
+        </div>
+        <div class="float-right">
+          <i *ngIf="isRiskManager()" class="fa fa-plus-circle text-success"
+             (click)="addDrafts(); $event.stopPropagation()"></i>
+        </div>
+      </div>
+      <div *ngFor="let d of incident.drafts" class="card card-block my-2 mx-2">
+        <div class="row mx-1 mt-2">
+          <div class="col-4 px-1">
+            <span class="font-weight-bolder">Дата создания: </span>
+            {{d.dateCreate | date: "dd.MM.yy"}}
+          </div>
+          <div class="col-6 px-1">
+            <span class="font-weight-bolder">Автор: </span>
+            {{d.author.fullname}}
+          </div>
+          <div class="col-2 px-1">
+            <div class="float-right">
+              <i (click)="d.collapsed = !d.collapsed" class="fas fa-info text-info pointer mr-2"
+                 tooltip="показать информацию"></i>
+              <i *ngIf="isRiskManager()" (click)="removeDraft(d)" class="fas fa-ban text-danger pointer"
+                 tooltip="исключить сообщение"></i>
+            </div>
+          </div>
+        </div>
+        <div class="row mx-1">
+          <div class="col-12 px-1">
+            <span class="font-weight-bolder">Подразделение: </span>
+            {{d.department.name}}
+          </div>
+        </div>
+        <div class="row mx-1">
+          <div class="col-12 px-1">
+            <span class="font-weight-bolder">Наименование: </span>
+            {{d.description1}}
+          </div>
+        </div>
+        <div *ngIf="d.collapsed" class="row mx-1">
+          <div class="col-12 px-1">
+            <span class="font-weight-bolder">Описание: </span>
+            {{d.description2}}
+          </div>
+        </div>
+        <div *ngIf="d.collapsed" class="row mx-1">
+          <div class="col-12 px-1">
+            <span class="font-weight-bolder">Причины рискового события: </span>
+            {{d.description3}}
+          </div>
+        </div>
+        <div *ngIf="d.collapsed" class="row mx-1">
+          <div class="col-12 px-1">
+            <span class="font-weight-bolder">Затрагиваемые бизнес-процессы: </span>
+            {{d.description4}}
+          </div>
+        </div>
+        <div *ngIf="d.collapsed" class="row mx-1">
+          <div class="col-12 px-1">
+            <span class="font-weight-bolder">Предлагаемые мероприятия: </span>
+            {{d.description5}}
+          </div>
+        </div>
+      </div>
+    </accordion-group>
+    <accordion-group [isDisabled]="true" [isOpen]="responsibleOpen" class="mb-3">
+      <div accordion-heading>
+        <div class="float-left font-weight-bolder" (click)="responsibleOpen = !responsibleOpen">
+          <i *ngIf="responsibleOpen" class="far fa-minus-square"> </i>
+          <i *ngIf="!responsibleOpen" class="fas fa-expand"> </i>
+          Ответственные подразделения
+        </div>
+        <div class="float-right">
+          <i *ngIf="isRiskManager()" class="fa fa-plus-circle text-success"
+             (click)="addResponsibles(); $event.stopPropagation()"></i>
+        </div>
+      </div>
+      <accordion *ngIf="incident.responsibles">
+        <accordion-group *ngFor="let r of incident.responsibles" class="mx-1 my-1">
+          <div accordion-heading>
+            <div class="float-left">
+              {{r.department.name}}
+            </div>
+            <div class="float-right">
+              <i *ngIf="isRiskManager() && !r.accounts" class="fas fa-ban"
+                 (click)="removeResponsible(r); $event.stopPropagation()" tooltip="исключить подразделение"></i>
+            </div>
+          </div>
+          <div class="my-2">
+            <div *ngIf="r.accounts">
+              <div class="mx-2">
+                Ответственные работники
+              </div>
+              <hr class="my-0">
+            </div>
+            <div *ngFor="let u of r.accounts">
+              <div class="mx-2">
+                <div class="float-left ml-3">
+                  {{u.fullname}}
+                </div>
+                <div class="float-right">
+                  <i *ngIf="isRiskCoordinator(r)" class="fas fa-ban"
+                     (click)="removeAccount(u, r)" tooltip="исключить из ответственных работников"></i>
+                </div>
+              </div>
+              <br>
+            </div>
+
+          </div>
+          <div *ngIf="r.collapsed" class="my-2 mx-2">
+            <input (typeaheadOnSelect)="onSelect($event, r)" [(ngModel)]="selectedValue"
+                   [typeahead]="departmentAccounts"
+                   class="form-control-sm col-12" typeaheadOptionField="fullname">
+          </div>
+          <div class="btn-group float-left mx-2 mb-2">
+            <button (click)="r.collapsed = true" *ngIf="isRiskCoordinator(r)" class="btn btn-sm btn-outline-primary"
+                    type="button">добавить
+              ответственного
+            </button>
+            <button (click)="saveResponsibleAccounts(r)" *ngIf="r.isChanged" class="btn btn-sm btn-outline-success ml-2"
+                    type="button">сохранить
+              изменения
+            </button>
+          </div>
+        </accordion-group>
+      </accordion>
+    </accordion-group>
+    <accordion-group [isDisabled]="true" [isOpen]="measureOpen" class="mb-3">
+      <div accordion-heading>
+        <div class="float-left font-weight-bolder" (click)="measureOpen = !measureOpen">
+          <i *ngIf="measureOpen" class="far fa-minus-square"> </i>
+          <i *ngIf="!measureOpen" class="fas fa-expand"> </i>
+          Мероприятия
+        </div>
+      </div>
+      <accordion *ngIf="incident.responsibles">
+        <accordion-group *ngFor="let r of incident.responsibles" class="mx-1 my-1">
+          <div accordion-heading>
+            <div class="float-left">
+              {{r.department.name}}
+            </div>
+          </div>
+          <div class="mx-2 my-2">
+            <app-measure-info [responsible]="r"></app-measure-info>
+          </div>
+        </accordion-group>
+      </accordion>
+    </accordion-group>
+  </accordion>
+</div>

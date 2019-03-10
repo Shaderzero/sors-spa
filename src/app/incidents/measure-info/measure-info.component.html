@@ -1,0 +1,101 @@
+<div class="row mb-2">
+  <div class="col-6">
+    <div class="form-inline">
+      <div class="btn-group" role="group">
+        <div class="btn-group" dropdown>
+          <button dropdownToggle type="button" class="btn btn-sm btn-outline-dark dropdown-toggle"
+                  aria-controls="orderDrop">
+            {{currentOrder}} <span class="caret"></span>
+          </button>
+          <ul id="orderDrop" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="orderDrop">
+            <li *ngFor="let o of orderOptions" role="menuitem"
+                class="pointer dropdown-item {{currentOder === o ? 'active' : ''"
+                (click)="sort(o)">
+              {{o}}
+            </li>
+          </ul>
+        </div>
+        <button type="button"
+                class="btn btn-sm {{ this.measureParams.orderAsc === true ? 'btn-primary' : 'btn-outline-dark'}}"
+                (click)="sortOrder(true)"><i class="fas fa-sort-alpha-down"></i></button>
+        <button type="button"
+                class="btn btn-sm {{ this.measureParams.orderAsc === false ? 'btn-primary' : 'btn-outline-dark'}}"
+                (click)="sortOrder(false)"><i class="fas fa-sort-alpha-up"></i></button>
+      </div>
+    </div>
+  </div>
+  <div class="col-6">
+    <form class="form-inline float-right" [formGroup]="filterForm" (ngSubmit)="filter()">
+      <input class="form-control-sm mr-2" [ngClass]="{
+                    'is-invalid':
+                    filterForm.get('filterString').errors &&
+                    filterForm.get('filterString').touched
+                    }"
+             id="filterString" formControlName="filterString"/>
+      <button class="btn btn-sm btn-outline-success" type="submit" [disabled]="!filterForm.valid">Filter</button>
+      <button class="btn btn-sm btn-outline-warning ml-2" type="button" *ngIf="isFiltered" (click)="unFilter()"><i
+        class="fas fa-ban"></i></button>
+    </form>
+  </div>
+</div>
+<div>
+  <div *ngFor="let m of measures" class="checkin card card-block mb-2">
+
+    <div class="row mx-1 mt-0">
+      <div class="col-6">
+        <div class="float-left pointer" (click)="m.collapsed = !m.collapsed">
+          <i *ngIf="m.collapsed" class="far fa-minus-square"> </i>
+          <i *ngIf="!m.collapsed" class="fas fa-expand"> </i>
+          Показать отчёт о выполнении
+        </div>
+      </div>
+      <div class="col-6">
+        <div class="float-right">
+          <i *ngIf="m.status === 'check' && isRiskCoordinator()" class="blink fas fa-check-double text-primary pointer"
+             tooltip="согласовать" (click)="sign(m)"></i>
+          <i *ngIf="m.status === 'check'" class="fas fa-check text-primary ml-2"
+             tooltip="на проверке риск координатора"></i>
+          <i *ngIf="m.status === 'sign'" class="fas fa-check-double text-success ml-2"
+             tooltip="проверено риск координатором"></i>
+          <i *ngIf="m.status === 'check' && canEdit()" class="fas fa-edit text-warning ml-2 pointer" tooltip="изменить"
+             (click)="editMeasureModal(m)"></i>
+          <i *ngIf="m.status === 'check' && canEdit()" class="fas fa-trash-alt text-danger ml-2 pointer" (click)="removeMeasure(m)"
+             tooltip="удалить"></i>
+          <i *ngIf="m.status === 'sign' && isRiskCoordinator()" class="fas fa-ban text-warning ml-2 pointer"
+             tooltip="отозвать" (click)="unSign(m)"></i>
+        </div>
+      </div>
+    </div>
+    <div class="row mx-1">
+      <div class="col-12">
+        <span class="font-weight-bolder">Дата создания: </span>
+        {{m.dateCreate | date: "dd.MM.yy"}}
+      </div>
+    </div>
+    <div class="row mx-1">
+      <div class="col-12">
+        <span class="font-weight-bolder">Описание: </span>
+        {{m.description}}
+      </div>
+    </div>
+    <div class="row mx-1">
+      <div class="col-12">
+        <span class="font-weight-bolder">Ожидаемый результат: </span>
+        {{m.expectedResult}}
+      </div>
+    </div>
+    <div class="row mx-1 mb-2">
+      <div class="col-12">
+        <span class="font-weight-bolder">Срок выполнения: </span>
+        {{m.deadLine | date: "dd.MM.yy" }} {{m.deadLineText}}
+      </div>
+    </div>
+    <div *ngIf="m.collapsed">
+      <app-report-info [measure]="m" [canEdit]="canEdit()" [canSign]="canSign()"></app-report-info>
+    </div>
+  </div>
+  <div *ngIf="canEdit()" class="btn-group float-left mb-2">
+    <button type="button" class="btn btn-sm btn-outline-success" (click)="createMeasureModal()">добавить мероприятие
+    </button>
+  </div>
+</div>

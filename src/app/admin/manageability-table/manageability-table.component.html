@@ -1,0 +1,33 @@
+<div>
+  <div class="row">
+    <div class="col-12">
+      <div class="float-left">
+        <h4>Управляемость риска</h4>
+      </div>
+      <div class="float-right">
+        <div (click)="createManageability()" class="btn btn-sm btn-outline-success">
+          добавить
+        </div>
+      </div>
+    </div>
+  </div>
+  <table class="table table-sm table-hover">
+    <thead>
+    <tr>
+      <th>
+        Наименование
+      </th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let m of manageabilities">
+      <td>{{ m.name }}</td>
+      <td class="float-right">
+        <i class="fas fa-edit text-secondary pointer mr-2" (click)="editManageability(m)"></i>
+        <i class="fas fa-trash-alt text-danger pointer" (click)="deleteManageability(m)"></i>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

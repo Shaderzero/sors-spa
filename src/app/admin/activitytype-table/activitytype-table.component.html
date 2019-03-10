@@ -1,0 +1,71 @@
+<div>
+  <div class="row">
+    <div class="col-12">
+      <div class="float-left">
+        <h4>Виды деятельности</h4>
+      </div>
+    </div>
+  </div>
+  <table class="table table-sm table-hover">
+    <thead>
+    <tr>
+      <th>
+        <div>Код
+        </div>
+      </th>
+      <th>
+        <div>Уровень 1
+          <i class="fa fa-plus-circle text-success pointer" (click)="newActivity1()"></i>
+        </div>
+      </th>
+      <th>
+        <div>Уровень 2
+          <i class="fa fa-plus-circle text-success pointer" (click)="newActivity2()"></i>
+        </div>
+      </th>
+      <th>
+        <div>Уровень 3
+          <i class="fa fa-plus-circle text-success pointer" (click)="newActivity3()"></i>
+        </div>
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let activity of activityTable">
+      <td>{{ activity.code }}</td>
+      <td class="description">{{ activity.activity1 }}
+        <ul class="list-inline icons animate text-right">
+          <li class="list-inline-item">
+            <i class="fas fa-edit text-secondary pointer" (click)="editActivity1(activity.activity1Id)"></i>
+          </li>
+          <li *ngIf="!activity.activity2" class="list-inline-item">
+            <i class="fas fa-trash-alt text-danger pointer" (click)="deleteActivityType(activity)"></i>
+          </li>
+        </ul>
+      </td>
+      <td class="description">{{ activity.activity2 }}
+        <ul *ngIf="activity.activity2" class="list-inline icons animate text-right">
+          <li class="list-inline-item">
+            <i class="fas fa-edit text-secondary pointer" (click)="editActivity2(activity.activity2Id)"></i>
+          </li>
+          <li *ngIf="!activity.activity3" class="list-inline-item">
+            <i class="fas fa-trash-alt text-danger pointer" (click)="deleteActivityType(activity)"></i>
+          </li>
+        </ul>
+      </td>
+      <td class="description">{{ activity.activity3 }}
+        <ul *ngIf="activity.activity3" class="list-inline icons animate text-right">
+          <li class="list-inline-item">
+            <i class="fas fa-edit text-secondary pointer" (click)="editActivity3(activity.activity3Id)"></i>
+          </li>
+          <li class="list-inline-item">
+            <i class="fas fa-trash-alt text-danger pointer" (click)="deleteActivityType(activity)"></i>
+          </li>
+        </ul>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+

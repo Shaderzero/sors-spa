@@ -1,0 +1,14 @@
+<div>
+  <div class="modal-header py-0">
+    <h6 class="modal-title pull-left">{{title}}</h6>
+  </div>
+  <div class="modal-body">
+    <div *ngIf="text">
+      {{text}}
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" (click)="decline()">Отмена</button>
+      <button type="button" class="btn btn-success" (click)="confirm()">Да</button>
+    </div>
+  </div>
+</div>

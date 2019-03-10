@@ -1,0 +1,64 @@
+<div>
+  <div class="row">
+    <div class="col-12">
+      <div class="float-left">
+        <h4>Подразделения</h4>
+      </div>
+      <div class="float-right">
+        <div (click)="createDepartment()" class="btn btn-sm btn-outline-success">
+          добавить
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<hr class="mt-0">
+<div class="row">
+  <div class="col-6">
+    <div class="form-inline">
+      <div class="btn-group" role="group">
+        <div class="btn-group" dropdown>
+          <button dropdownToggle type="button" class="btn btn-secondary dropdown-toggle" aria-controls="orderDrop">
+            {{currentOrder}} <span class="caret"></span>
+          </button>
+          <ul id="orderDrop" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="orderDrop">
+            <li *ngFor="let o of orderOptions" role="menuitem" class="dropdown-item {{currentOder === o ? 'active' : ''"
+                (click)="sort(o)">
+              {{o}}
+            </li>
+          </ul>
+        </div>
+        <button type="button" class="btn {{ this.order === true ? 'btn-dark' : 'btn-secondary'}}"
+                (click)="sortOrder(true)"><i class="fas fa-sort-alpha-down"></i></button>
+        <button type="button" class="btn {{ this.order === false ? 'btn-dark' : 'btn-secondary'}}"
+                (click)="sortOrder(false)"><i class="fas fa-sort-alpha-up"></i></button>
+      </div>
+    </div>
+  </div>
+  <div class="col-6">
+    <form class="form-inline float-right mb-3" [formGroup]="filterForm" (ngSubmit)="filter()">
+      <input class="form-control mr-2" [ngClass]="{
+      'is-invalid':
+      filterForm.get('filterString').errors &&
+      filterForm.get('filterString').touched
+      }"
+             id="filterString" formControlName="filterString"/>
+      <button class="btn btn-outline-success" type="submit" [disabled]="!filterForm.valid">Filter</button>
+      <button class="btn btn-outline-warning ml-2" type="button" *ngIf="isFiltered" (click)="unFilter()"><i
+        class="fas fa-ban"></i></button>
+    </form>
+  </div>
+</div>
+<div>
+  <div *ngFor="let d of departmentsForTable" class="checkin card card-block my-2">
+    <div class="row mx-1 my-1">
+      <div class="col-12">
+        ({{d.code}}) {{d.name}} ({{d.shortName}})
+        <div class="float-right">
+          <i class="pointer far fa-edit mr-2" (click)="editDepartment(d)"></i>
+          <i class="pointer fas fa-ban" (click)="deleteDepartment(d)"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

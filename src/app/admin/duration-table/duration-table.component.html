@@ -1,0 +1,38 @@
+<div>
+  <div class="row">
+    <div class="col-12">
+      <div class="float-left">
+        <h4>Бизнес процессы</h4>
+      </div>
+      <div class="float-right">
+        <div (click)="createDuration()" class="btn btn-sm btn-outline-success">
+          добавить
+        </div>
+      </div>
+    </div>
+  </div>
+  <table class="table table-sm table-hover">
+    <thead>
+    <tr>
+      <th>Код
+      </th>
+      <th>
+        Наименование
+      </th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let d of durations">
+      <td>{{ d.code }}</td>
+      <td>{{ d.name }}</td>
+      <td class="float-right">
+        <i class="fas fa-edit text-secondary pointer mr-2" (click)="editDuration(d)"></i>
+        <i class="fas fa-trash-alt text-danger pointer" (click)="deleteDuration(d)"></i>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+

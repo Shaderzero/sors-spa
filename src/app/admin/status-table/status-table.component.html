@@ -1,0 +1,33 @@
+<div>
+  <div class="row">
+    <div class="col-12">
+      <div class="float-left">
+        <h4>Статусы риска</h4>
+      </div>
+      <div class="float-right">
+        <div (click)="createRiskStatus()" class="btn btn-sm btn-outline-success">
+          добавить
+        </div>
+      </div>
+    </div>
+  </div>
+  <table class="table table-sm table-hover">
+    <thead>
+    <tr>
+      <th>
+        Наименование
+      </th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let r of riskStatuses">
+      <td>{{ r.name }}</td>
+      <td class="float-right">
+        <i class="fas fa-edit text-secondary pointer mr-2" (click)="editRiskStatus(r)"></i>
+        <i class="fas fa-trash-alt text-danger pointer" (click)="deleteRiskStatus(r)"></i>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

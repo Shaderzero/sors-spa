@@ -1,0 +1,33 @@
+<div>
+  <div class="row">
+    <div class="col-12">
+      <div class="float-left">
+        <h4>Уровни значимости риска</h4>
+      </div>
+      <div class="float-right">
+        <div (click)="createSignificance()" class="btn btn-sm btn-outline-success">
+          добавить
+        </div>
+      </div>
+    </div>
+  </div>
+  <table class="table table-sm table-hover">
+    <thead>
+    <tr>
+      <th>
+        Наименование
+      </th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let s of significances">
+      <td>{{ s.name }}</td>
+      <td class="float-right">
+        <i class="fas fa-edit text-secondary pointer mr-2" (click)="editSignificance(s)"></i>
+        <i class="fas fa-trash-alt text-danger pointer" (click)="deleteSignificance(s)"></i>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

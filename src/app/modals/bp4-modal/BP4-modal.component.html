@@ -1,0 +1,64 @@
+<form [formGroup]="bpForm" (ngSubmit)="ok()">
+  <div class="modal-header p-1">
+    <h6 class="modal-title pull-left">Новый вид</h6>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body px-2 py-0">
+    <div class="form-group">
+      <select class="form-control p-1" [ngClass]="{
+            'is-invalid':
+            bpForm.get('bp1Id').errors &&
+            bpForm.get('bp1Id').touched
+          }"
+        formControlName="bp1Id" (ngModelChange)="patchBps2($event)">
+        <option *ngFor="let bp1 of bps1" [ngValue]="bp1.id">{{bp1.name}}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <select class="form-control p-1" [ngClass]="{
+              'is-invalid':
+              bpForm.get('bp2Id').errors &&
+              bpForm.get('bp2Id').touched
+            }"
+        formControlName="bp2Id" (ngModelChange)="patchBps3($event)">
+        <option *ngFor="let bp2 of bps2" [ngValue]="bp2.id">{{bp2.name}}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <select class="form-control p-1" [ngClass]="{
+              'is-invalid':
+              bpForm.get('parentId').errors &&
+              bpForm.get('parentId').touched
+            }"
+        (ngModelChange)="patchCode($event)" formControlName="parentId">
+        <option *ngFor="let bp3 of bps3" [ngValue]="bp3.id">{{bp3.name}}</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="mb-0">Код</label>
+      <input class="form-control p-1" [ngClass]="{
+                    'is-invalid':
+                    bpForm.get('code').errors &&
+                    bpForm.get('code').touched
+                    }"
+        formControlName="code" />
+      <div class="invalid-feedback">Код должен быть в диапазоне 10000 - 320600</div>
+    </div>
+    <div class="form-group">
+      <label class="mb-0">Наименование</label>
+      <textarea class="form-control p-1" [ngClass]="{
+                'is-invalid':
+                bpForm.get('name').errors &&
+                bpForm.get('name').touched
+                }"
+        autosize [minRows]="2" formControlName="name"></textarea>
+      <div class="invalid-feedback">Наименование не может превышать 200 символов</div>
+    </div>
+    <div class="modal-footer p-1">
+      <button type="button" class="btn btn-sm btn-outline-secondary" (click)="modalRef.hide()">Отмена</button>
+      <button type="button" class="btn btn-sm btn-outline-success" (click)="ok()" [disabled]="!bpForm.valid">Создать</button>
+    </div>
+  </div>
+</form>

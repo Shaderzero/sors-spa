@@ -1,0 +1,108 @@
+<form [formGroup]="incidentForm" (ngSubmit)="approveModal()">
+  <div class="row">
+    <div class="col-6">
+      <h2>Новое рисковое событие</h2>
+    </div>
+    <div class="col-6">
+      <div class="form-inline float-right">
+        <button type="submit" class="btn btn-primary mr-2" [disabled]="!incidentForm.valid">Создать</button>
+        <button type="button" class="btn btn-warning" (click)="cancel()">Отмена</button>
+      </div>
+    </div>
+  </div>
+  <hr class="mt-0">
+  <div class="form-group">
+    <label>Дата рискового события</label>
+    <input type="text" class="form-control" [ngClass]="{
+              'is-invalid':
+                incidentForm.get('dateIncident').errors &&
+                incidentForm.get('dateIncident').touched
+              }"
+      bsDatepicker [bsValue]="bsValue" formControlName="dateIncident" />
+  </div>
+  <div class="form-group">
+    <label for="description">Описание</label>
+    <textarea class="form-control" [ngClass]="{
+              'is-invalid':
+                incidentForm.get('description').errors &&
+                incidentForm.get('description').touched
+              }"
+      autosize [minRows]="2" id="description" formControlName="description" placeholder="Опишите произошедшее рисковое событие"></textarea>
+    <div class="invalid-feedback">Необходимо описание РС</div>
+  </div>
+  <accordion>
+    <accordion-group class="mb-3">
+      <button type="button" class="btn btn-link btn-block clearfix" accordion-heading>
+        <div class="pull-left float-left">Выберите включаемые сообщения о рисковых событиях</div>
+      </button>
+      <div>
+        <div *ngFor="let d of drafts" (click)="d.checked = !d.checked" class="checkin card card-block {{d.checked ? 'text-white bg-dark' : ''}} mb-3">
+          <div class="row mx-1 mt-2">
+            <div class="col-4">
+              <span class="font-weight-bolder">Дата создания: </span>
+              {{d.dateCreate | date: "dd.MM.yy"}}
+            </div>
+            <div class="col-6">
+              <span class="font-weight-bolder">Автор: </span>
+              {{d.author.fullname}}
+            </div>
+            <div class="col-2">
+              <div class="float-right">
+                <i class="fas fa-file-alt" (click)="d.collapsed = !d.collapsed; $event.stopPropagation()" tooltip="показать информацию"></i>
+              </div>
+            </div>
+          </div>
+          <div class="row mx-1">
+            <div class="col-12">
+              <span class="font-weight-bolder">Подразделение: </span>
+              {{d.department.name}}
+            </div>
+          </div>
+          <div class="row mx-1">
+            <div class="col-12">
+              <span class="font-weight-bolder">Наименование: </span>
+              {{d.description1}}
+            </div>
+          </div>
+          <div *ngIf="d.collapsed" class="row mx-1">
+            <div class="col-12">
+              <span class="font-weight-bolder">Описание: </span>
+              {{d.description2}}
+            </div>
+          </div>
+          <div *ngIf="d.collapsed" class="row mx-1">
+            <div class="col-12">
+              <span class="font-weight-bolder">Причины рискового события: </span>
+              {{d.description3}}
+            </div>
+          </div>
+          <div *ngIf="d.collapsed" class="row mx-1">
+            <div class="col-12">
+              <span class="font-weight-bolder">Затрагиваемые бизнес-процессы: </span>
+              {{d.description4}}
+            </div>
+          </div>
+          <div *ngIf="d.collapsed" class="row mx-1">
+            <div class="col-12">
+              <span class="font-weight-bolder">Предлагаемые мероприятия: </span>
+              {{d.description5}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </accordion-group>
+    <accordion-group>
+      <button type="button" class="btn btn-link btn-block clearfix" accordion-heading>
+        <div class="pull-left float-left">Выберите ответственные подразделения</div>
+      </button>
+      <div *ngFor="let d of departments" (click)="d.checked = !d.checked" class="checkin card card-block {{d.checked ? 'text-white bg-dark' : ''}} mb-1">
+        <div class="row">
+          <div class="col-12 mx-2">
+            <span class="far {{d.checked ? 'fa-check-square' : 'fa-square'}}"> </span>
+            ({{d.code}}) {{d.name}}
+          </div>
+        </div>
+      </div>
+    </accordion-group>
+  </accordion>
+</form>

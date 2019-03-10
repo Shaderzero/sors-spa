@@ -1,0 +1,49 @@
+<form [formGroup]="activityForm" (ngSubmit)="ok()">
+  <div class="modal-header p-1">
+    <h6 class="modal-title pull-left">{{title}}</h6>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body px-2 py-0">
+    <div class="form-group">
+      <label class="mb-0">Вид деятельности 1</label>
+      <select name="category" class="custom-select form-control p-1" [ngClass]="{
+          'is-invalid':
+          activityForm.get('parentId').errors &&
+          activityForm.get('parentId').touched
+        }"
+              (ngModelChange)="onChangeActivity1($event)"
+              formControlName="parentId">
+        <option *ngFor="let activity of activities1" [ngValue]="activity.id">
+          {{activity.name}}
+        </option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="mb-0">Код</label>
+      <input class="form-control p-1" [ngClass]="{
+                  'is-invalid':
+                  activityForm.get('code').errors &&
+                  activityForm.get('code').touched
+                  }"
+             formControlName="code"/>
+      <div class="invalid-feedback">Код должен быть в диапазоне 1000 - 9999</div>
+    </div>
+    <div class="form-group">
+      <label class="mb-0">Наименование</label>
+      <textarea class="form-control p-1" [ngClass]="{
+              'is-invalid':
+              activityForm.get('name').errors &&
+              activityForm.get('name').touched
+              }"
+                autosize [minRows]="2" formControlName="name"></textarea>
+      <div class="invalid-feedback">Наименование не может превышать 200 символов</div>
+    </div>
+    <div class="modal-footer p-1">
+      <button type="button" class="btn btn-sm btn-outline-secondary" (click)="modalRef.hide()">Отмена</button>
+      <button type="button" class="btn btn-sm btn-outline-success" (click)="ok()"
+              [disabled]="!activityForm.valid">{{buttonName}}</button>
+    </div>
+  </div>
+</form>

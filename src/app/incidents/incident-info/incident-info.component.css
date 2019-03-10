@@ -1,0 +1,16 @@
+::ng-deep div.panel-heading {
+  padding: 0.4em 0.8em;
+  cursor: pointer;
+}
+
+::ng-deep div.panel-body {
+  padding: 0;
+}
+
+i.fa-file-alt {
+  cursor: pointer;
+}
+
+.pointer {
+  cursor: pointer;
+}

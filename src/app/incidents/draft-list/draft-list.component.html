@@ -1,0 +1,110 @@
+<div class="row align-middle">
+  <div class="col-12">
+    <h2>Сообщения о рисковых событиях</h2>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xl-4 col-md-12">
+    <pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems" [itemsPerPage]="pagination.itemsPerPage"
+                [(ngModel)]="pagination.currentPage" (pageChanged)="pageChanged($event)" previousText="&lsaquo;"
+                nextText="&rsaquo;"
+                firstText="&laquo;" lastText="&raquo;">
+    </pagination>
+  </div>
+  <div class="col-xl-4 col-md-6 mb-3">
+    <div class="form-inline">
+      <div class="btn-group" role="group">
+        <div class="btn-group" dropdown>
+          <button dropdownToggle type="button" class="btn btn-outline-dark dropdown-toggle" aria-controls="orderDrop">
+            {{currentOrder}} <span class="caret"></span>
+          </button>
+          <ul id="orderDrop" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="orderDrop">
+            <li *ngFor="let o of orderOptions" role="menuitem" class="dropdown-item {{currentOder === o ? 'active' : ''"
+                (click)="sort(o)">
+              {{o}}
+            </li>
+          </ul>
+        </div>
+        <button type="button" class="btn {{ this.draftParams.orderAsc === true ? 'btn-primary' : 'btn-outline-dark'}}"
+                (click)="sortOrder(true)"><i class="fas fa-sort-alpha-down"></i></button>
+        <button type="button" class="btn {{ this.draftParams.orderAsc === false ? 'btn-primary' : 'btn-outline-dark'}}"
+                (click)="sortOrder(false)"><i class="fas fa-sort-alpha-up"></i></button>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-4 col-md-6 mb-3">
+    <form class="form-inline float-right" [formGroup]="filterForm" (ngSubmit)="filter()">
+      <input class="form-control mr-2" [ngClass]="{
+                    'is-invalid':
+                    filterForm.get('filterString').errors &&
+                    filterForm.get('filterString').touched
+                    }"
+             id="filterString" formControlName="filterString"/>
+      <button class="btn btn-outline-success" type="submit" [disabled]="!filterForm.valid">Filter</button>
+      <button class="btn btn-outline-warning ml-2" type="button" *ngIf="isFiltered" (click)="unFilter()"><i
+        class="fas fa-ban"></i></button>
+    </form>
+  </div>
+</div>
+<div>
+  <div *ngFor="let d of drafts" (click)="d.collapsed = !d.collapsed" class="checkin card card-block mb-3">
+    <div class="row mx-1 mt-2">
+      <div class="col-4">
+        <span class="font-weight-bolder">Дата создания: </span>
+        {{d.dateCreate | date: "dd.MM.yy"}}
+      </div>
+      <div class="col-6">
+        <span class="font-weight-bolder">Автор: </span>
+        {{d.author.fullname}}
+      </div>
+      <div class="col-2">
+        <div class="float-right">
+          <i *ngIf="d.status === 'refine'" class="fas fa-tools text-warning mr-2" tooltip="на доработке"></i>
+          <i *ngIf="d.status === 'draft'" class="fas fa-keyboard text-secondary mr-2" tooltip="черновик"></i>
+          <i *ngIf="d.status === 'sign'" class="fas fa-check-double text-primary mr-2" tooltip="на проверке риск менеджера"></i>
+          <i *ngIf="d.status === 'check'" class="fas fa-check text-primary mr-2" tooltip="на проверке риск координатора"></i>
+          <i *ngIf="d.status === 'open'" class="fas fa-briefcase text-success mr-2" tooltip="включено в рисковое событие"></i>
+          <i *ngIf="d.status === 'close'" class="fas fa-archive text-muted mr-2" tooltip="сообщение в архиве"></i>
+          <i class="fas fa-info text-info" [routerLink]="['/incidents/drafts/' + d.id]"
+             tooltip="показать информацию"></i>
+        </div>
+      </div>
+    </div>
+    <div class="row mx-1">
+      <div class="col-12">
+        <span class="font-weight-bolder">Подразделение: </span>
+        {{d.department.name}}
+      </div>
+    </div>
+    <div class="row mx-1">
+      <div class="col-12">
+        <span class="font-weight-bolder">Наименование: </span>
+        {{d.description1}}
+      </div>
+    </div>
+    <div *ngIf="d.collapsed" class="row mx-1">
+      <div class="col-12">
+        <span class="font-weight-bolder">Описание: </span>
+        {{d.description2}}
+      </div>
+    </div>
+    <div *ngIf="d.collapsed" class="row mx-1">
+      <div class="col-12">
+        <span class="font-weight-bolder">Причины рискового события: </span>
+        {{d.description3}}
+      </div>
+    </div>
+    <div *ngIf="d.collapsed" class="row mx-1">
+      <div class="col-12">
+        <span class="font-weight-bolder">Затрагиваемые бизнес-процессы: </span>
+        {{d.description4}}
+      </div>
+    </div>
+    <div *ngIf="d.collapsed" class="row mx-1">
+      <div class="col-12">
+        <span class="font-weight-bolder">Предлагаемые мероприятия: </span>
+        {{d.description5}}
+      </div>
+    </div>
+  </div>
+</div>

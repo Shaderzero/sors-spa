@@ -1,0 +1,61 @@
+<form [formGroup]="draftForm" (ngSubmit)="approveModal()">
+  <div class="row">
+    <div class="col-6">
+      <h2>Редактирование рискового события</h2>
+    </div>
+    <div class="col-6">
+      <div class="form-inline float-right">
+          <button type="submit" class="btn btn-primary mr-2" [disabled]="!draftForm.valid">Сохранить</button>
+          <button type="button" class="btn btn-warning" (click)="cancel()">Отмена</button>
+      </div>
+    </div>
+  </div>
+  <hr class="mt-0">
+  <div class="form-group">
+    <label for="description1">Краткое наименование</label>
+    <input type="text" class="form-control" [ngClass]="{
+              'is-invalid':
+                draftForm.get('description1').errors &&
+                draftForm.get('description1').touched
+              }"
+      id="description1" formControlName="description1" />
+    <div class="invalid-feedback">Необходимо указать краткое наименование</div>
+  </div>
+  <div class="form-group">
+    <label for="description2">Описание</label>
+    <textarea class="form-control" [ngClass]="{
+              'is-invalid':
+                draftForm.get('description2').errors &&
+                draftForm.get('description2').touched
+              }"
+      autosize [minRows]="2" id="description2" formControlName="description2" placeholder="Опишите произошедшее рисковое событие"></textarea>
+    <div class="invalid-feedback">Необходимо описание РС</div>
+  </div>
+  <div class="form-group">
+    <label for="description3">Причины рискового события</label>
+    <textarea class="form-control" [ngClass]="{
+              'is-invalid':
+                draftForm.get('description3').errors &&
+                draftForm.get('description3').touched
+              }"
+      autosize [minRows]="2" id="description3" formControlName="description3" placeholder=""></textarea>
+  </div>
+  <div class="form-group">
+    <label for="description4">Затрагиваемые бизнес-процессы</label>
+    <textarea class="form-control" [ngClass]="{
+              'is-invalid':
+                draftForm.get('description4').errors &&
+                draftForm.get('description4').touched
+              }"
+      autosize [minRows]="2" id="description4" formControlName="description4" placeholder=""></textarea>
+  </div>
+  <div class="form-group">
+    <label for="description5">Предлагаемые мероприятия</label>
+    <textarea class="form-control" [ngClass]="{
+                'is-invalid':
+                  draftForm.get('description5').errors &&
+                  draftForm.get('description5').touched
+                }"
+      autosize [minRows]="2" id="description5" formControlName="description5" placeholder=""></textarea>
+  </div>
+</form>

@@ -1,0 +1,7 @@
+span.badge, .dropdown-toggle, .dropdown-item {
+    cursor: pointer;
+}
+
+tr.check {
+    cursor: pointer;
+}

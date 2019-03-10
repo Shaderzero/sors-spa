@@ -1,0 +1,77 @@
+<div>
+  <div class="row">
+    <div class="col-12">
+      <div class="float-left">
+        <h4>Соответствие подразделений</h4>
+      </div>
+      <div class="float-right">
+        <div (click)="createDomainDepartment()" class="btn btn-sm btn-outline-success">
+          добавить
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<hr class="mt-0">
+<div class="row">
+  <div class="col-xl-4 col-md-12">
+    <pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems" [itemsPerPage]="pagination.itemsPerPage"
+                [(ngModel)]="pagination.currentPage" (pageChanged)="pageChanged($event)" previousText="&lsaquo;"
+                nextText="&rsaquo;"
+                firstText="&laquo;" lastText="&raquo;">
+    </pagination>
+  </div>
+  <div class="col-xl-4 col-md-6 mb-3">
+    <div class="form-inline">
+      <div class="btn-group" role="group">
+        <div class="btn-group" dropdown>
+          <button dropdownToggle type="button" class="btn btn-secondary dropdown-toggle" aria-controls="orderDrop">
+            {{currentOrder}} <span class="caret"></span>
+          </button>
+          <ul id="orderDrop" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="orderDrop">
+            <li *ngFor="let o of orderOptions" role="menuitem" class="dropdown-item {{currentOder === o ? 'active' : ''"
+                (click)="sort(o)">
+              {{o}}
+            </li>
+          </ul>
+        </div>
+        <button type="button" class="btn {{ this.depParams.orderAsc === true ? 'btn-dark' : 'btn-secondary'}}"
+                (click)="sortOrder(true)"><i class="fas fa-sort-alpha-down"></i></button>
+        <button type="button" class="btn {{ this.depParams.orderAsc === false ? 'btn-dark' : 'btn-secondary'}}"
+                (click)="sortOrder(false)"><i class="fas fa-sort-alpha-up"></i></button>
+      </div>
+    </div>
+  </div>
+  <div class="col-xl-4 col-md-6 mb-3">
+    <form class="form-inline float-right" [formGroup]="filterForm" (ngSubmit)="filter()">
+      <input class="form-control mr-2" [ngClass]="{
+                    'is-invalid':
+                    filterForm.get('filterString').errors &&
+                    filterForm.get('filterString').touched
+                    }"
+             id="filterString" formControlName="filterString"/>
+      <button class="btn btn-outline-success" type="submit" [disabled]="!filterForm.valid">Filter</button>
+      <button class="btn btn-outline-warning ml-2" type="button" *ngIf="isFiltered" (click)="unFilter()"><i
+        class="fas fa-ban"></i></button>
+    </form>
+  </div>
+</div>
+<table class="table table-sm table-hover">
+  <thead>
+  <tr>
+    <th class="align-middle">Наименование в Active Directory</th>
+    <th class="align-middle">Наименование в базе</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let d of domainDepartments">
+    <td>{{ d.name }}</td>
+    <td>{{ d.department.name }}</td>
+    <td class="float-right">
+      <i class="far fa-edit mr-2" (click)="editDomainDepartment(d)"></i>
+      <i class="fas fa-ban" (click)="deleteDomainDepartment(d)"></i>
+    </td>
+  </tr>
+  </tbody>
+</table>

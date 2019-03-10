@@ -1,0 +1,70 @@
+<div>
+  <div class="row">
+    <div class="col-12">
+      <div class="float-left">
+        <h4>Факторная классификация</h4>
+      </div>
+    </div>
+  </div>
+  <table class="table table-sm table-hover">
+    <thead>
+    <tr>
+      <th>
+        <div>Код
+        </div>
+      </th>
+      <th>
+        <div>Категория
+          <i class="fa fa-plus-circle text-success pointer" (click)="newFactorCategory()"></i>
+        </div>
+      </th>
+      <th>
+        <div>Класс
+          <i class="fa fa-plus-circle text-success pointer" (click)="newFactorClass()"></i>
+        </div>
+      </th>
+      <th>
+        <div>Вид
+          <i class="fa fa-plus-circle text-success pointer" (click)="newFactorType()"></i>
+        </div>
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let factor of factorTable">
+      <td>{{ factor.code }}</td>
+      <td class="description">{{ factor.category }}
+        <ul class="list-inline icons animate text-right">
+          <li class="list-inline-item">
+            <i class="fas fa-edit text-secondary pointer" (click)="editFactorCategory(factor.categoryId)"></i>
+          </li>
+          <li *ngIf="!factor.class" class="list-inline-item">
+            <i class="fas fa-trash-alt text-danger pointer" (click)="deleteFactor(factor.id)"></i>
+          </li>
+        </ul>
+      </td>
+      <td class="description">{{ factor.class }}
+        <ul *ngIf="factor.class" class="list-inline icons animate text-right">
+          <li class="list-inline-item">
+            <i class="fas fa-edit text-secondary pointer" (click)="editFactorClass(factor.classId)"></i>
+          </li>
+          <li *ngIf="!factor.class" class="list-inline-item">
+            <i class="fas fa-trash-alt text-danger pointer" (click)="deleteFactor(factor.id)"></i>
+          </li>
+        </ul>
+      </td>
+      <td class="description">{{ factor.type }}
+        <ul *ngIf="factor.type" class="list-inline icons animate text-right">
+          <li class="list-inline-item">
+            <i class="fas fa-edit text-secondary pointer" (click)="editFactorType(factor.typeId)"></i>
+          </li>
+          <li *ngIf="!factor.class" class="list-inline-item">
+            <i class="fas fa-trash-alt text-danger pointer" (click)="deleteFactor(factor.id)"></i>
+          </li>
+        </ul>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+

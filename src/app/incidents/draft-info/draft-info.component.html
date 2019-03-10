@@ -1,0 +1,106 @@
+<div>
+  <div class="row">
+    <div class="col-6">
+      <h2>Рисковое событие</h2>
+    </div>
+    <div class="col-6">
+      <div class="form-inline float-right">
+        <button *ngIf="canOpen" type="button" class="btn btn-sm btn-success mr-2" [routerLink]="['/incidents/new']"
+          tooltip="Создать РС для обработки или добавить к существующему" [delay]="1000">Обработать</button>
+        <button *ngIf="canCheck" type="button" class="btn btn-sm btn-success mr-2" (click)="checkModal()" tooltip="Отправить РС на проверку риск-координатору подразделения"
+          [delay]="1000">Отправить РК</button>
+        <button *ngIf="canSign" type="button" class="btn btn-sm btn-success mr-2" (click)="signModal()" tooltip="Отправить РС в Управление по рискам"
+          [delay]="1000">Отправить РМ</button>
+        <button *ngIf="canRefine" type="button" class="btn btn-sm btn-warning mr-2" (click)="refineModal()" tooltip="Отправить РС на доработку"
+          [delay]="1000">Доработка</button>
+        <button *ngIf="canEdit" type="button" class="btn btn-sm btn-secondary mr-2" [routerLink]="['/incidents/drafts/' + draft.id + '/edit']"
+          tooltip="Произвести редактирование РС" [delay]="1000">Изменить</button>
+        <button *ngIf="canDelete" type="button" class="btn btn-sm btn-danger" (click)="delete()" tooltip="Удалить РС"
+          [delay]="1000">Удалить</button>
+      </div>
+    </div>
+  </div>
+  <hr class="mt-0">
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-2">
+        <h5 class="card-header py-1">Краткое наименование</h5>
+        <div class="card-body px-2 py-1">
+          <div class="card-text">{{ draft.description1 }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="card mb-2">
+        <h5 class="card-header py-1">Дата создания</h5>
+        <div class="card-body px-2 py-1">
+          <div class="card-text">{{ draft.dateCreate | date: "dd.MM.yy" }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card mb-2">
+        <h5 class="card-header py-1">Статус</h5>
+        <div class="card-body px-2 py-1">
+          <div class="card-text">{{ draft.status }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="card mb-2">
+        <h5 class="card-header py-1">Сообщившее подразделение</h5>
+        <div class="card-body px-2 py-1">
+          <div class="card-text">{{ draft.department.name }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card mb-2">
+        <h5 class="card-header py-1">Сообщивший сотрудник</h5>
+        <div class="card-body px-2 py-1">
+          <div class="card-text">{{ draft.author.fullname }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="card mb-2">
+        <h5 class="card-header py-1">Описание</h5>
+        <div class="card-body px-2 py-1">
+          <div class="card-text">{{ draft.description2 }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card mb-2">
+        <h5 class="card-header py-1">Причины рискового события</h5>
+        <div class="card-body px-2 py-1">
+          <div class="card-text">{{ draft.description3 }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-6">
+      <div class="card mb-2">
+        <h5 class="card-header py-1">Затрагиваемые бизнес-процессы</h5>
+        <div class="card-body px-2 py-1">
+          <div class="card-text">{{ draft.description4 }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card mb-2">
+        <h5 class="card-header py-1">Предлагаемые мероприятия</h5>
+        <div class="card-body px-2 py-1">
+          <div class="card-text">{{ draft.description5 }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
