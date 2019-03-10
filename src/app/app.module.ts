@@ -3,14 +3,22 @@ import {NgModule} from '@angular/core';
 import {AutosizeModule} from 'ngx-autosize';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {
-  BsDropdownModule, BsDatepickerModule, PaginationModule,
-  ButtonsModule, CollapseModule, ModalModule, TooltipModule, defineLocale,
-  ruLocale, AccordionModule, TypeaheadModule
+  AccordionModule,
+  BsDatepickerModule,
+  BsDropdownModule,
+  ButtonsModule,
+  CollapseModule,
+  defineLocale,
+  ModalModule,
+  PaginationModule,
+  ruLocale,
+  TooltipModule,
+  TypeaheadModule
 } from 'ngx-bootstrap';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {ValuesComponent} from './values/values.component';
-import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 
 import {AuthService} from './_services/auth.service';
 import {DepartmentsComponent} from './admin/departments/departments.component';
@@ -63,7 +71,6 @@ import {IncidentDraftModalComponent} from './incidents/incident-draft-modal/inci
 import {IncidentResponsibleModalComponent} from './incidents/incident-responsible-modal/incident-responsible-modal.component';
 import {TextEditModalComponent} from './modals/text-edit-modal/text-edit-modal.component';
 import {DateEditModalComponent} from './modals/date-edit-modal/date-edit-modal.component';
-import {ExcelService} from './_services/excel.service';
 import {LoaderService} from './_helpers/loader/loader.service';
 import {AccountsPageResolver} from './_resolvers/admin/accountsPage.resolver';
 import {DomainDepartmentsPageResolver} from './_resolvers/admin/domaindepartmentsPage.resolver';
@@ -192,7 +199,6 @@ defineLocale('ru', ruLocale);
     MeasureService,
     ReportService,
     MailService,
-    ExcelService,
     ReferenceService,
     DepartmentsResolver,
     DomainDepartmentsResolver,

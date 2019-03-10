@@ -1,7 +1,7 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { BsModalRef } from 'ngx-bootstrap';
-import { AlertifyService } from 'src/app/_services/alertify.service';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {BsModalRef} from 'ngx-bootstrap';
+import {AlertifyService} from 'src/app/_services/alertify.service';
 import {ActivityType} from '../../_models/references/activity-type';
 import {ReferenceService} from '../../_services/reference.service';
 
@@ -20,7 +20,8 @@ export class Activity1ModalComponent implements OnInit {
   @Output() reload = new EventEmitter();
 
   constructor(public modalRef: BsModalRef, private fb: FormBuilder,
-    private refService: ReferenceService, private alertify: AlertifyService) { }
+              private refService: ReferenceService, private alertify: AlertifyService) {
+  }
 
   ngOnInit() {
     this.createActivityForm();
@@ -29,7 +30,8 @@ export class Activity1ModalComponent implements OnInit {
   createActivityForm() {
     this.activityForm = this.fb.group({
       code: [this.activity.code, [Validators.required, Validators.min(0), Validators.max(9999)]],
-      name: [this.activity.name, [Validators.required, Validators.maxLength(200)]]});
+      name: [this.activity.name, [Validators.required, Validators.maxLength(200)]]
+    });
   }
 
   ok() {

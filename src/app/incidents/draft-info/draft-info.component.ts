@@ -1,13 +1,13 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { Draft } from 'src/app/_models/draft';
-import { ActivatedRoute } from '@angular/router';
-import { AuthService } from 'src/app/_services/auth.service';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap';
-import { ConfirmModalComponent } from 'src/app/references/confirm-modal/confirm-modal.component';
-import { AlertifyService } from 'src/app/_services/alertify.service';
-import { MailService } from 'src/app/_services/mail.service';
-import { DraftService } from 'src/app/_services/draft.service';
-import { ConfirmCommentModalComponent } from 'src/app/references/confirm-comment-modal/confirm-comment-modal.component';
+import {Component, OnInit} from '@angular/core';
+import {Draft} from 'src/app/_models/draft';
+import {ActivatedRoute} from '@angular/router';
+import {AuthService} from 'src/app/_services/auth.service';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap';
+import {ConfirmModalComponent} from 'src/app/references/confirm-modal/confirm-modal.component';
+import {AlertifyService} from 'src/app/_services/alertify.service';
+import {MailService} from 'src/app/_services/mail.service';
+import {DraftService} from 'src/app/_services/draft.service';
+import {ConfirmCommentModalComponent} from 'src/app/references/confirm-comment-modal/confirm-comment-modal.component';
 
 @Component({
   selector: 'app-draft-info',
@@ -30,7 +30,8 @@ export class DraftInfoComponent implements OnInit {
               private authService: AuthService,
               private draftService: DraftService,
               private alertify: AlertifyService,
-              private mailService: MailService) { }
+              private mailService: MailService) {
+  }
 
   ngOnInit() {
     this.route.data.subscribe(data => {
@@ -54,8 +55,8 @@ export class DraftInfoComponent implements OnInit {
       isAuthor = true;
     }
     if (this.authService.roleMatch(['riskCoordinator'])
-        && this.authService.currentUser.department.id === this.draft.department.id) {
-          isRc = true;
+      && this.authService.currentUser.department.id === this.draft.department.id) {
+      isRc = true;
     }
     if (this.authService.roleMatch(['riskManager'])) {
       isRm = true;

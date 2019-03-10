@@ -1,9 +1,7 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { Account } from 'src/app/_models/account';
-import { UserService } from 'src/app/_services/user.service';
-import { TypeaheadMatch, BsModalRef } from 'ngx-bootstrap';
-import { mergeMap } from 'rxjs/operators';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Account} from 'src/app/_models/account';
+import {UserService} from 'src/app/_services/user.service';
+import {BsModalRef, TypeaheadMatch} from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-selectuser-modal',
@@ -19,7 +17,8 @@ export class SelectuserModalComponent implements OnInit {
   departmentUsers: Account[] = [];
 
   constructor(private userService: UserService,
-    public modalRef: BsModalRef) { }
+              public modalRef: BsModalRef) {
+  }
 
   ngOnInit() {
     this.getDepartmentUsers();

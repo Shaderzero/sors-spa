@@ -19,7 +19,8 @@ export class IncidentResponsibleModalComponent implements OnInit {
   constructor(public modalRef: BsModalRef,
               private draftService: DraftService,
               private userService: UserService,
-              private alertify: AlertifyService) { }
+              private alertify: AlertifyService) {
+  }
 
   ngOnInit() {
     this.getDepartments();

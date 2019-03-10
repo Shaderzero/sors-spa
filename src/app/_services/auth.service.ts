@@ -1,11 +1,9 @@
-import { Injectable, OnInit } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { Account } from '../_models/account';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { Department } from '../_models/department';
-import { logging } from 'protractor';
+import {Injectable} from '@angular/core';
+import {environment} from 'src/environments/environment';
+import {Account} from '../_models/account';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {Department} from '../_models/department';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +14,8 @@ export class AuthService {
   accounts: Account[];
   departments: Department[];
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   getCurrentUser(): Observable<Account> {
     return this.http.get<Account>(this.baseUrl);

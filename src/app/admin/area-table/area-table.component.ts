@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { Area } from 'src/app/_models/references/area';
-import { ActivatedRoute } from '@angular/router';
-import { AlertifyService } from 'src/app/_services/alertify.service';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import {Component, OnInit} from '@angular/core';
+import {Area} from 'src/app/_models/references/area';
+import {ActivatedRoute} from '@angular/router';
+import {AlertifyService} from 'src/app/_services/alertify.service';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 import {CodeNameModalComponent} from '../../modals/code-name-modal/code-name-modal.component';
 import {ConfirmModalComponent} from '../../references/confirm-modal/confirm-modal.component';
 import {ReferenceService} from '../../_services/reference.service';
@@ -19,7 +19,8 @@ export class AreaTableComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private refService: ReferenceService,
               private modalService: BsModalService,
-              private alertify: AlertifyService) { }
+              private alertify: AlertifyService) {
+  }
 
   ngOnInit() {
     this.route.data.subscribe(data => {

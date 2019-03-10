@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {environment} from 'src/environments/environment';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Department} from '../_models/department';
 import {Account} from '../_models/account';
 import {DomainDepartment} from '../_models/domainDepartment';

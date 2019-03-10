@@ -1,12 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { Draft } from 'src/app/_models/draft';
-import {ActivatedRoute, NavigationEnd, Router, RoutesRecognized} from '@angular/router';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AlertifyService } from 'src/app/_services/alertify.service';
-import { BsModalRef } from 'ngx-bootstrap';
-import { Pagination, PaginatedResult } from 'src/app/_models/pagination';
-import { DraftService } from 'src/app/_services/draft.service';
-import {filter, map} from 'rxjs/operators';
+import {Component, OnInit} from '@angular/core';
+import {Draft} from 'src/app/_models/draft';
+import {ActivatedRoute} from '@angular/router';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AlertifyService} from 'src/app/_services/alertify.service';
+import {BsModalRef} from 'ngx-bootstrap';
+import {PaginatedResult, Pagination} from 'src/app/_models/pagination';
+import {DraftService} from 'src/app/_services/draft.service';
 
 @Component({
   selector: 'app-draft-list',
@@ -26,7 +25,8 @@ export class DraftListComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private fb: FormBuilder,
               private draftService: DraftService,
-              private alertify: AlertifyService) { }
+              private alertify: AlertifyService) {
+  }
 
   ngOnInit() {
     this.createFilterForm();
@@ -49,12 +49,12 @@ export class DraftListComponent implements OnInit {
     this.draftService
       .getDrafts(this.pagination.currentPage, this.pagination.itemsPerPage, this.draftParams)
       .subscribe((res: PaginatedResult<Draft[]>) => {
-      this.drafts = res.result;
-      this.pagination = res.pagination;
-    }, error => {
-      console.log(error);
-      this.alertify.error('ошибка получения данных');
-    });
+        this.drafts = res.result;
+        this.pagination = res.pagination;
+      }, error => {
+        console.log(error);
+        this.alertify.error('ошибка получения данных');
+      });
   }
 
   sort(currentOrder: string) {
@@ -89,7 +89,8 @@ export class DraftListComponent implements OnInit {
 
   createFilterForm() {
     this.filterForm = this.fb.group({
-      filterString: ['', [Validators.minLength(3), Validators.maxLength(50)]]});
+      filterString: ['', [Validators.minLength(3), Validators.maxLength(50)]]
+    });
   }
 
   filter() {

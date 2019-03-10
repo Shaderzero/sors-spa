@@ -1,8 +1,8 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { BusinessProcess } from 'src/app/_models/references/businessProcess';
-import { BsModalRef } from 'ngx-bootstrap';
-import { AlertifyService } from 'src/app/_services/alertify.service';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {BusinessProcess} from 'src/app/_models/references/businessProcess';
+import {BsModalRef} from 'ngx-bootstrap';
+import {AlertifyService} from 'src/app/_services/alertify.service';
 import {ReferenceService} from '../../_services/reference.service';
 
 @Component({
@@ -22,7 +22,8 @@ export class BP4ModalComponent implements OnInit {
   @Output() reload = new EventEmitter();
 
   constructor(public modalRef: BsModalRef, private fb: FormBuilder,
-    private refService: ReferenceService, private alertify: AlertifyService) { }
+              private refService: ReferenceService, private alertify: AlertifyService) {
+  }
 
   ngOnInit() {
     this.fillBps1();
@@ -54,7 +55,7 @@ export class BP4ModalComponent implements OnInit {
     this.bps2.length = 0;
     for (let i = 0; i < this.bps1.length; i++) {
       if (this.bps1[i].id === bp1Id
-          && this.bps1[i].children) {
+        && this.bps1[i].children) {
         this.bps1[i].children.forEach(el => {
           this.bps2.push(el);
         });
@@ -67,7 +68,7 @@ export class BP4ModalComponent implements OnInit {
     this.bps3.length = 0;
     for (let i = 0; i < this.bps2.length; i++) {
       if (this.bps2[i].id === bp2Id
-          && this.bps2[i].children) {
+        && this.bps2[i].children) {
         this.bps2[i].children.forEach(el => {
           this.bps3.push(el);
         });
@@ -134,10 +135,10 @@ export class BP4ModalComponent implements OnInit {
                   }
                   if (this.bp.name === bp4.name && this.bp.id !== bp4.id
                     && this.bp.parentId === bp4.parentId) {
-                  this.alertify.error('Данное наименование уже используется для ' +
-                    'бизнес процесса (' + bp4.code + ') ' + bp4.name);
-                  return false;
-                }
+                    this.alertify.error('Данное наименование уже используется для ' +
+                      'бизнес процесса (' + bp4.code + ') ' + bp4.name);
+                    return false;
+                  }
                 }
               }
             }

@@ -1,11 +1,11 @@
 import {Injectable, OnInit} from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { AuthService } from './auth.service';
-import { HttpClient } from '@angular/common/http';
-import { SorsMail } from '../_models/sorsMail';
-import { Draft } from '../_models/draft';
-import { AlertifyService } from './alertify.service';
-import { Incident } from '../_models/incident';
+import {environment} from 'src/environments/environment';
+import {AuthService} from './auth.service';
+import {HttpClient} from '@angular/common/http';
+import {SorsMail} from '../_models/sorsMail';
+import {Draft} from '../_models/draft';
+import {AlertifyService} from './alertify.service';
+import {Incident} from '../_models/incident';
 import {Responsible} from '../_models/responsible';
 
 @Injectable({
@@ -17,8 +17,9 @@ export class MailService implements OnInit {
   from = 'sors@lost.net';
 
   constructor(private authService: AuthService,
-            private http: HttpClient,
-            private alertify: AlertifyService) { }
+              private http: HttpClient,
+              private alertify: AlertifyService) {
+  }
 
   ngOnInit(): void {
     this.getSiteUrl();
@@ -46,11 +47,11 @@ export class MailService implements OnInit {
 
   generateBody(text: string, link: string, comment: string): string {
     const body = '<html>' +
-                '<h2>Система обработки рисковых событий</h2>' +
-                '<p>' + text + '</p>' +
-                '<p>' + link + '</p>' +
-                '<p>' + comment + '</p>' +
-                '</html>';
+      '<h2>Система обработки рисковых событий</h2>' +
+      '<p>' + text + '</p>' +
+      '<p>' + link + '</p>' +
+      '<p>' + comment + '</p>' +
+      '</html>';
     return body;
   }
 
@@ -142,8 +143,8 @@ export class MailService implements OnInit {
   sendIncidentAssign(incident: Incident, comment: string) {
     const subject = 'Поступило в работу рисковое событие';
     const text = 'Вам расписано рисковое событие. ' +
-                  'По нему необходимо выбрать ответственных исполнителей от подразделения и/или проработать план мероприятий ' +
-                  'Для его открытия перейдите по ссылке ниже';
+      'По нему необходимо выбрать ответственных исполнителей от подразделения и/или проработать план мероприятий ' +
+      'Для его открытия перейдите по ссылке ниже';
     const link = this.siteUrl + 'incidents/' + incident.id;
     const recipients: string[] = [];
     const users = this.authService.getAccounts();

@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { BusinessProcess } from 'src/app/_models/references/BusinessProcess';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
-import { ActivatedRoute, Router } from '@angular/router';
-import { AlertifyService } from 'src/app/_services/alertify.service';
-import { BP1ModalComponent } from '../../modals/bp1-modal/BP1-modal.component';
-import { BP2ModalComponent } from '../../modals/bp2-modal/BP2-modal.component';
-import { BP3ModalComponent } from '../../modals/bp3-modal/BP3-modal.component';
-import { BP4ModalComponent } from '../../modals/bp4-modal/BP4-modal.component';
+import {Component, OnInit} from '@angular/core';
+import {BusinessProcess} from 'src/app/_models/references/BusinessProcess';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap';
+import {ActivatedRoute, Router} from '@angular/router';
+import {AlertifyService} from 'src/app/_services/alertify.service';
+import {BP1ModalComponent} from '../../modals/bp1-modal/BP1-modal.component';
+import {BP2ModalComponent} from '../../modals/bp2-modal/BP2-modal.component';
+import {BP3ModalComponent} from '../../modals/bp3-modal/BP3-modal.component';
+import {BP4ModalComponent} from '../../modals/bp4-modal/BP4-modal.component';
 import {ReferenceService} from '../../_services/reference.service';
 import {ConfirmModalComponent} from '../../references/confirm-modal/confirm-modal.component';
 
@@ -21,9 +21,10 @@ export class BpTableComponent implements OnInit {
   modalRef: BsModalRef;
 
   constructor(private route: ActivatedRoute, private refService: ReferenceService,
-    private alertify: AlertifyService,
-    private modalService: BsModalService,
-    public router: Router) { }
+              private alertify: AlertifyService,
+              private modalService: BsModalService,
+              public router: Router) {
+  }
 
   ngOnInit() {
     this.route.data.subscribe(data => {

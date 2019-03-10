@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { Factor } from 'src/app/_models/references/factor';
-import { ActivatedRoute, Router } from '@angular/router';
-import { AlertifyService } from 'src/app/_services/alertify.service';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap';
-import { FactorCategoryModalComponent } from '../../modals/factor-category-modal/factor-category-modal.component';
-import { FactorClassModalComponent } from '../../modals/factor-class-modal/factor-class-modal.component';
-import { FactorTypeModalComponent } from '../../modals/factor-type-modal/factor-type-modal.component';
+import {Component, OnInit} from '@angular/core';
+import {Factor} from 'src/app/_models/references/factor';
+import {ActivatedRoute, Router} from '@angular/router';
+import {AlertifyService} from 'src/app/_services/alertify.service';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap';
+import {FactorCategoryModalComponent} from '../../modals/factor-category-modal/factor-category-modal.component';
+import {FactorClassModalComponent} from '../../modals/factor-class-modal/factor-class-modal.component';
+import {FactorTypeModalComponent} from '../../modals/factor-type-modal/factor-type-modal.component';
 import {ReferenceService} from '../../_services/reference.service';
 import {ConfirmModalComponent} from '../../references/confirm-modal/confirm-modal.component';
 
@@ -20,9 +20,10 @@ export class FactorTableComponent implements OnInit {
   modalRef: BsModalRef;
 
   constructor(private route: ActivatedRoute, private refService: ReferenceService,
-    private alertify: AlertifyService,
-    private modalService: BsModalService,
-    public router: Router) { }
+              private alertify: AlertifyService,
+              private modalService: BsModalService,
+              public router: Router) {
+  }
 
   ngOnInit() {
     this.route.data.subscribe(data => {

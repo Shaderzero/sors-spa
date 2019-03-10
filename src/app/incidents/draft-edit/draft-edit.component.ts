@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
-import { AlertifyService } from 'src/app/_services/alertify.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Draft } from 'src/app/_models/draft';
-import { ConfirmCommentModalComponent } from 'src/app/references/confirm-comment-modal/confirm-comment-modal.component';
-import { DraftService } from 'src/app/_services/draft.service';
-import { AuthService } from 'src/app/_services/auth.service';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap';
+import {AlertifyService} from 'src/app/_services/alertify.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Draft} from 'src/app/_models/draft';
+import {ConfirmCommentModalComponent} from 'src/app/references/confirm-comment-modal/confirm-comment-modal.component';
+import {DraftService} from 'src/app/_services/draft.service';
+import {AuthService} from 'src/app/_services/auth.service';
 
 @Component({
   selector: 'app-draft-edit',
@@ -21,13 +21,13 @@ export class DraftEditComponent implements OnInit {
   draft: Draft;
 
   constructor(private draftService: DraftService,
-      private alertify: AlertifyService,
-      private authService: AuthService,
-      private modalService: BsModalService,
-      private fb: FormBuilder,
-      private route: ActivatedRoute,
-      private router: Router) {
-       }
+              private alertify: AlertifyService,
+              private authService: AuthService,
+              private modalService: BsModalService,
+              private fb: FormBuilder,
+              private route: ActivatedRoute,
+              private router: Router) {
+  }
 
   ngOnInit() {
     this.route.data.subscribe(data => {
@@ -52,18 +52,18 @@ export class DraftEditComponent implements OnInit {
 
   checkAbility() {
     if ((this.draft.status !== 'draft')
-        && (this.draft.status !== 'check')
-        && (this.draft.status !== 'refine')) {
-          if (!this.authService.isAdmin()) {
-            this.alertify.error('Вы не можете произвести редактирование данного сообщения');
-            return false;
-          } else {
-            this.alertify.message('Предоставлен доступ администратора');
-            return true;
-          }
-        } else {
-          return true;
-        }
+      && (this.draft.status !== 'check')
+      && (this.draft.status !== 'refine')) {
+      if (!this.authService.isAdmin()) {
+        this.alertify.error('Вы не можете произвести редактирование данного сообщения');
+        return false;
+      } else {
+        this.alertify.message('Предоставлен доступ администратора');
+        return true;
+      }
+    } else {
+      return true;
+    }
   }
 
   approveModal() {

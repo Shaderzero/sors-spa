@@ -1,12 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Incident } from 'src/app/_models/incident';
-import { ActivatedRoute } from '@angular/router';
-import { AlertifyService } from 'src/app/_services/alertify.service';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
-import { ConfirmModalComponent } from 'src/app/references/confirm-modal/confirm-modal.component';
-import { IncidentService } from 'src/app/_services/incident.service';
-import { Pagination, PaginatedResult } from 'src/app/_models/pagination';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Incident} from 'src/app/_models/incident';
+import {ActivatedRoute} from '@angular/router';
+import {AlertifyService} from 'src/app/_services/alertify.service';
+import {IncidentService} from 'src/app/_services/incident.service';
+import {PaginatedResult, Pagination} from 'src/app/_models/pagination';
 
 @Component({
   selector: 'app-incident-list',
@@ -25,7 +23,8 @@ export class IncidentListComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private fb: FormBuilder,
               private alertify: AlertifyService,
-              private incidentService: IncidentService) { }
+              private incidentService: IncidentService) {
+  }
 
   ngOnInit() {
     this.createFilterForm();
@@ -47,12 +46,12 @@ export class IncidentListComponent implements OnInit {
     this.incidentService
       .getIncidents(this.pagination.currentPage, this.pagination.itemsPerPage, this.incidentParams)
       .subscribe((res: PaginatedResult<Incident[]>) => {
-      this.incidents = res.result;
-      this.pagination = res.pagination;
-    }, error => {
-      console.log(error);
-      this.alertify.error('ошибка получения данных');
-    });
+        this.incidents = res.result;
+        this.pagination = res.pagination;
+      }, error => {
+        console.log(error);
+        this.alertify.error('ошибка получения данных');
+      });
   }
 
   sort(currentOrder: string) {
@@ -78,7 +77,8 @@ export class IncidentListComponent implements OnInit {
 
   createFilterForm() {
     this.filterForm = this.fb.group({
-      filterString: ['', [Validators.minLength(3), Validators.maxLength(50)]]});
+      filterString: ['', [Validators.minLength(3), Validators.maxLength(50)]]
+    });
   }
 
   filter() {

@@ -15,7 +15,8 @@ export class DateEditModalComponent implements OnInit {
 
   constructor(public modalRef: BsModalRef,
               private fb: FormBuilder,
-              private localeService: BsLocaleService) { }
+              private localeService: BsLocaleService) {
+  }
 
   ngOnInit() {
     this.localeService.use('ru');

@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {Routes, RouterModule} from '@angular/router';
+import {RouterModule, Routes} from '@angular/router';
 import {HomeComponent} from './home/home.component';
 import {AuthGuard} from './_guards/auth.guard';
 import {AdminPanelComponent} from './admin/admin-panel/admin-panel.component';
@@ -28,7 +28,6 @@ import {IncidentResolver} from './_resolvers/incident.resolver';
 import {AccountsPageResolver} from './_resolvers/admin/accountsPage.resolver';
 import {DomainDepartmentsPageResolver} from './_resolvers/admin/domaindepartmentsPage.resolver';
 import {ActivityTypesResolver} from './_resolvers/references/activity-type.resolver';
-import {ActivityType} from './_models/references/activity-type';
 import {ActivitytypeTableComponent} from './admin/activitytype-table/activitytype-table.component';
 import {AreaTableComponent} from './admin/area-table/area-table.component';
 import {AreasResolver} from './_resolvers/references/area.resolver';
@@ -42,7 +41,6 @@ import {FactorTableComponent} from './admin/factor-table/factor-table.component'
 import {FactorsResolver} from './_resolvers/references/factor.resolver';
 import {ManageabilityTableComponent} from './admin/manageability-table/manageability-table.component';
 import {ManageabilitiesResolver} from './_resolvers/references/manageability.resolver';
-import {Reaction} from './_models/references/reaction';
 import {ReactionTableComponent} from './admin/reaction-table/reaction-table.component';
 import {ReactionsResolver} from './_resolvers/references/reaction.resolver';
 import {SignificanceTableComponent} from './admin/significance-table/significance-table.component';

@@ -1,7 +1,7 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { AlertifyService } from 'src/app/_services/alertify.service';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
+import {Component, OnInit} from '@angular/core';
+import {ActivatedRoute} from '@angular/router';
+import {AlertifyService} from 'src/app/_services/alertify.service';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 import {BusinessType} from '../../_models/references/businessType';
 import {CodeNameModalComponent} from '../../modals/code-name-modal/code-name-modal.component';
 import {ConfirmModalComponent} from '../../references/confirm-modal/confirm-modal.component';
@@ -19,7 +19,8 @@ export class BusinessTypeTableComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private refService: ReferenceService,
               private modalService: BsModalService,
-              private alertify: AlertifyService) { }
+              private alertify: AlertifyService) {
+  }
 
   ngOnInit() {
     this.route.data.subscribe(data => {

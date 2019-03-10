@@ -1,11 +1,11 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Department } from 'src/app/_models/department';
-import { Account } from 'src/app/_models/account';
-import { BsModalRef, TypeaheadMatch } from 'ngx-bootstrap';
-import { AdminService } from 'src/app/_services/admin.service';
-import { AlertifyService } from 'src/app/_services/alertify.service';
-import { Role } from 'src/app/_models/role';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Department} from 'src/app/_models/department';
+import {Account} from 'src/app/_models/account';
+import {BsModalRef, TypeaheadMatch} from 'ngx-bootstrap';
+import {AdminService} from 'src/app/_services/admin.service';
+import {AlertifyService} from 'src/app/_services/alertify.service';
+import {Role} from 'src/app/_models/role';
 
 @Component({
   selector: 'app-account-modal',
@@ -25,7 +25,8 @@ export class AccountModalComponent implements OnInit {
   @Output() reload = new EventEmitter();
 
   constructor(public modalRef: BsModalRef, private fb: FormBuilder,
-    private adminService: AdminService, private alertify: AlertifyService) { }
+              private adminService: AdminService, private alertify: AlertifyService) {
+  }
 
   ngOnInit() {
     this.getDepartments();
@@ -57,7 +58,8 @@ export class AccountModalComponent implements OnInit {
       name: [this.account.name, [Validators.required, Validators.minLength(2), Validators.maxLength(50)]],
       fullname: [this.account.fullname, [Validators.required, Validators.minLength(2), Validators.maxLength(100)]],
       email: [this.account.email, [Validators.required, Validators.email]],
-      department: [this.account.department.name, [Validators.required]]});
+      department: [this.account.department.name, [Validators.required]]
+    });
   }
 
   onSelectDepartment(event: TypeaheadMatch): void {

@@ -15,7 +15,8 @@ export class IncidentDraftModalComponent implements OnInit {
 
   constructor(public modalRef: BsModalRef,
               private draftService: DraftService,
-              private alertify: AlertifyService) { }
+              private alertify: AlertifyService) {
+  }
 
   ngOnInit() {
     this.getDrafts();

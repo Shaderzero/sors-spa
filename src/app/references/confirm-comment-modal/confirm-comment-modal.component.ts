@@ -1,6 +1,6 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { BsModalRef } from 'ngx-bootstrap';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {BsModalRef} from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-comment-confirm-modal',
@@ -14,7 +14,8 @@ export class ConfirmCommentModalComponent implements OnInit {
   commentForm: FormGroup;
   model: any = {};
 
-  constructor(public modalRef: BsModalRef, private fb: FormBuilder) { }
+  constructor(public modalRef: BsModalRef, private fb: FormBuilder) {
+  }
 
   ngOnInit() {
     this.createCommentForm();

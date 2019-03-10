@@ -1,17 +1,17 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { BsModalRef, BsModalService, BsLocaleService } from 'ngx-bootstrap';
-import { AlertifyService } from 'src/app/_services/alertify.service';
-import { AuthService } from 'src/app/_services/auth.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { Draft } from 'src/app/_models/draft';
-import { Incident } from 'src/app/_models/incident';
-import { Department } from 'src/app/_models/department';
-import { ConfirmCommentModalComponent } from 'src/app/references/confirm-comment-modal/confirm-comment-modal.component';
-import { Responsible } from 'src/app/_models/responsible';
-import { IncidentService } from 'src/app/_services/incident.service';
-import { DraftService } from 'src/app/_services/draft.service';
-import { MailService } from 'src/app/_services/mail.service';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {BsLocaleService, BsModalRef, BsModalService} from 'ngx-bootstrap';
+import {AlertifyService} from 'src/app/_services/alertify.service';
+import {AuthService} from 'src/app/_services/auth.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Draft} from 'src/app/_models/draft';
+import {Incident} from 'src/app/_models/incident';
+import {Department} from 'src/app/_models/department';
+import {ConfirmCommentModalComponent} from 'src/app/references/confirm-comment-modal/confirm-comment-modal.component';
+import {Responsible} from 'src/app/_models/responsible';
+import {IncidentService} from 'src/app/_services/incident.service';
+import {DraftService} from 'src/app/_services/draft.service';
+import {MailService} from 'src/app/_services/mail.service';
 
 @Component({
   selector: 'app-incident-new',
@@ -29,16 +29,16 @@ export class IncidentNewComponent implements OnInit {
   bsValue = new Date();
 
   constructor(private localeService: BsLocaleService,
-      private route: ActivatedRoute,
-      private incidentService: IncidentService,
-      private draftService: DraftService,
-      private alertify: AlertifyService,
-      private authService: AuthService,
-      private modalService: BsModalService,
-      private fb: FormBuilder,
-      private mailService: MailService,
-      private router: Router) {
-       }
+              private route: ActivatedRoute,
+              private incidentService: IncidentService,
+              private draftService: DraftService,
+              private alertify: AlertifyService,
+              private authService: AuthService,
+              private modalService: BsModalService,
+              private fb: FormBuilder,
+              private mailService: MailService,
+              private router: Router) {
+  }
 
   ngOnInit() {
     this.localeService.use('ru');
@@ -53,7 +53,7 @@ export class IncidentNewComponent implements OnInit {
     this.incidentForm = this.fb.group({
       description: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(500)]],
       dateIncident: [this.bsValue, Validators.required]
-  });
+    });
   }
 
   approveModal() {

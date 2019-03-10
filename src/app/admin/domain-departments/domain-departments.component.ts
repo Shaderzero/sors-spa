@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 import {Department} from 'src/app/_models/department';
 import {DomainDepartment} from 'src/app/_models/domainDepartment';
@@ -10,7 +10,6 @@ import {DomainDepartmentModalComponent} from '../../modals/domain-department-mod
 import {DomainUser} from 'src/app/_models/domainUser';
 import {ConfirmModalComponent} from 'src/app/references/confirm-modal/confirm-modal.component';
 import {PaginatedResult, Pagination} from '../../_models/pagination';
-import {Draft} from '../../_models/draft';
 
 @Component({
   selector: 'app-domain-departments',

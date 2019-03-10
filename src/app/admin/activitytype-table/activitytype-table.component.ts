@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
-import { ActivatedRoute, Router } from '@angular/router';
-import { AlertifyService } from 'src/app/_services/alertify.service';
-import { Activity1ModalComponent } from '../../modals/activity1-modal/activity1-modal.component';
-import { Activity2ModalComponent } from '../../modals/activity2-modal/activity2-modal.component';
-import { Activity3ModalComponent } from '../../modals/activity3-modal/activity3-modal.component';
+import {Component, OnInit} from '@angular/core';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap';
+import {ActivatedRoute, Router} from '@angular/router';
+import {AlertifyService} from 'src/app/_services/alertify.service';
+import {Activity1ModalComponent} from '../../modals/activity1-modal/activity1-modal.component';
+import {Activity2ModalComponent} from '../../modals/activity2-modal/activity2-modal.component';
+import {Activity3ModalComponent} from '../../modals/activity3-modal/activity3-modal.component';
 import {ActivityType} from '../../_models/references/activity-type';
 import {ConfirmModalComponent} from '../../references/confirm-modal/confirm-modal.component';
 import {ReferenceService} from '../../_services/reference.service';
@@ -20,9 +20,10 @@ export class ActivitytypeTableComponent implements OnInit {
   modalRef: BsModalRef;
 
   constructor(private route: ActivatedRoute, private refService: ReferenceService,
-    private alertify: AlertifyService,
-    private modalService: BsModalService,
-    public router: Router) { }
+              private alertify: AlertifyService,
+              private modalService: BsModalService,
+              public router: Router) {
+  }
 
   ngOnInit() {
     this.route.data.subscribe(data => {

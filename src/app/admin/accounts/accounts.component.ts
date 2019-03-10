@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { BsModalRef, BsModalService } from 'ngx-bootstrap';
-import { Account } from 'src/app/_models/account';
-import { ActivatedRoute } from '@angular/router';
-import { AdminService } from 'src/app/_services/admin.service';
-import { AlertifyService } from 'src/app/_services/alertify.service';
-import { AccountModalComponent } from '../../modals/account-modal/account-modal.component';
-import { ConfirmModalComponent } from 'src/app/references/confirm-modal/confirm-modal.component';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap';
+import {Account} from 'src/app/_models/account';
+import {ActivatedRoute} from '@angular/router';
+import {AdminService} from 'src/app/_services/admin.service';
+import {AlertifyService} from 'src/app/_services/alertify.service';
+import {AccountModalComponent} from '../../modals/account-modal/account-modal.component';
+import {ConfirmModalComponent} from 'src/app/references/confirm-modal/confirm-modal.component';
 import {PaginatedResult, Pagination} from '../../_models/pagination';
 
 @Component({
@@ -28,7 +28,8 @@ export class AccountsComponent implements OnInit {
               private fb: FormBuilder,
               private adminService: AdminService,
               private modalService: BsModalService,
-              private alertify: AlertifyService) { }
+              private alertify: AlertifyService) {
+  }
 
   ngOnInit() {
     this.createFilterForm();
@@ -43,7 +44,8 @@ export class AccountsComponent implements OnInit {
 
   createFilterForm() {
     this.filterForm = this.fb.group({
-      filterString: ['', [Validators.minLength(3), Validators.maxLength(20)]]});
+      filterString: ['', [Validators.minLength(3), Validators.maxLength(20)]]
+    });
   }
 
   pageChanged(event: any): void {

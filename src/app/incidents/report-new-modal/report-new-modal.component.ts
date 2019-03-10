@@ -1,8 +1,7 @@
-import {Component, OnInit, Output, EventEmitter} from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Report} from 'src/app/_models/report';
-import {BsModalRef, BsLocaleService} from 'ngx-bootstrap';
-import {AlertifyService} from 'src/app/_services/alertify.service';
+import {BsModalRef} from 'ngx-bootstrap';
 import {AuthService} from '../../_services/auth.service';
 
 @Component({

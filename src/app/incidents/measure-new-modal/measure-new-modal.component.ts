@@ -1,8 +1,8 @@
-import { Component, OnInit, Output, EventEmitter, OnChanges } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Measure } from 'src/app/_models/measure';
-import { BsModalRef, BsLocaleService } from 'ngx-bootstrap';
-import { AlertifyService } from 'src/app/_services/alertify.service';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Measure} from 'src/app/_models/measure';
+import {BsLocaleService, BsModalRef} from 'ngx-bootstrap';
+import {AlertifyService} from 'src/app/_services/alertify.service';
 
 @Component({
   selector: 'app-measure-new-modal',
@@ -21,7 +21,8 @@ export class MeasureNewModalComponent implements OnInit {
   constructor(public modalRef: BsModalRef,
               private fb: FormBuilder,
               private alertify: AlertifyService,
-              private localeService: BsLocaleService) { }
+              private localeService: BsLocaleService) {
+  }
 
   ngOnInit() {
     this.localeService.use('ru');
@@ -38,16 +39,16 @@ export class MeasureNewModalComponent implements OnInit {
   }
 
   ok() {
-      this.model = Object.assign({}, this.measureForm.value);
-      this.measure.description = this.model.description;
-      this.measure.expectedResult = this.model.expectedResult;
-      this.measure.deadLine = this.model.deadLine;
-      this.measure.deadLineText = this.model.deadLineString;
-      this.measure.status = 'check';
-      if (this.checkUniqie()) {
-        this.outputMeasure.emit(this.measure);
-        this.modalRef.hide();
-      }
+    this.model = Object.assign({}, this.measureForm.value);
+    this.measure.description = this.model.description;
+    this.measure.expectedResult = this.model.expectedResult;
+    this.measure.deadLine = this.model.deadLine;
+    this.measure.deadLineText = this.model.deadLineString;
+    this.measure.status = 'check';
+    if (this.checkUniqie()) {
+      this.outputMeasure.emit(this.measure);
+      this.modalRef.hide();
+    }
   }
 
   checkUniqie() {

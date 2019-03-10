@@ -1,8 +1,8 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Measure} from 'src/app/_models/measure';
 import {Report} from 'src/app/_models/report';
 import {AlertifyService} from 'src/app/_services/alertify.service';
-import {BsModalService, BsModalRef} from 'ngx-bootstrap';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 import {ReportService} from 'src/app/_services/report.service';
 import {ReportNewModalComponent} from '../report-new-modal/report-new-modal.component';
 import {ConfirmModalComponent} from 'src/app/references/confirm-modal/confirm-modal.component';

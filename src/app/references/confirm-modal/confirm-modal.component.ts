@@ -1,6 +1,6 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { BsModalRef } from 'ngx-bootstrap';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {FormBuilder} from '@angular/forms';
+import {BsModalRef} from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-confirm-modal',
@@ -12,7 +12,8 @@ export class ConfirmModalComponent implements OnInit {
   title: string;
   text: string;
 
-  constructor(public modalRef: BsModalRef, private fb: FormBuilder) { }
+  constructor(public modalRef: BsModalRef, private fb: FormBuilder) {
+  }
 
   ngOnInit() {
   }

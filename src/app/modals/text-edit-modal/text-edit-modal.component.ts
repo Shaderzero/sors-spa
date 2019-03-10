@@ -13,7 +13,8 @@ export class TextEditModalComponent implements OnInit {
   inputText: string;
   editForm: FormGroup;
 
-  constructor(public modalRef: BsModalRef, private fb: FormBuilder) { }
+  constructor(public modalRef: BsModalRef, private fb: FormBuilder) {
+  }
 
   ngOnInit() {
     this.createCommentForm();

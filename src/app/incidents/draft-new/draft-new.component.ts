@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { AlertifyService } from 'src/app/_services/alertify.service';
-import { Router } from '@angular/router';
-import { BsModalService, BsModalRef } from 'ngx-bootstrap';
-import { Draft } from 'src/app/_models/draft';
-import { ConfirmCommentModalComponent } from 'src/app/references/confirm-comment-modal/confirm-comment-modal.component';
-import { DraftService } from 'src/app/_services/draft.service';
-import { AuthService } from 'src/app/_services/auth.service';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {AlertifyService} from 'src/app/_services/alertify.service';
+import {Router} from '@angular/router';
+import {BsModalRef, BsModalService} from 'ngx-bootstrap';
+import {Draft} from 'src/app/_models/draft';
+import {ConfirmCommentModalComponent} from 'src/app/references/confirm-comment-modal/confirm-comment-modal.component';
+import {DraftService} from 'src/app/_services/draft.service';
+import {AuthService} from 'src/app/_services/auth.service';
 
 @Component({
   selector: 'app-draft-new',
@@ -20,12 +20,12 @@ export class DraftNewComponent implements OnInit {
   comment: string;
 
   constructor(private draftService: DraftService,
-      private alertify: AlertifyService,
-      private modalService: BsModalService,
-      private fb: FormBuilder,
-      private router: Router,
-      private authService: AuthService) {
-       }
+              private alertify: AlertifyService,
+              private modalService: BsModalService,
+              private fb: FormBuilder,
+              private router: Router,
+              private authService: AuthService) {
+  }
 
   ngOnInit() {
     this.createDraftForm();

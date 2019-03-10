@@ -1,8 +1,8 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { BsModalRef } from 'ngx-bootstrap';
-import { Factor } from 'src/app/_models/references/factor';
-import { AlertifyService } from 'src/app/_services/alertify.service';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {BsModalRef} from 'ngx-bootstrap';
+import {Factor} from 'src/app/_models/references/factor';
+import {AlertifyService} from 'src/app/_services/alertify.service';
 import {ReferenceService} from '../../_services/reference.service';
 
 @Component({
@@ -20,7 +20,8 @@ export class FactorCategoryModalComponent implements OnInit {
   @Output() reload = new EventEmitter();
 
   constructor(public modalRef: BsModalRef, private fb: FormBuilder,
-    private refService: ReferenceService, private alertify: AlertifyService) { }
+              private refService: ReferenceService, private alertify: AlertifyService) {
+  }
 
   ngOnInit() {
     this.createCategoryForm();
@@ -29,7 +30,8 @@ export class FactorCategoryModalComponent implements OnInit {
   createCategoryForm() {
     this.categoryForm = this.fb.group({
       code: [this.category.code, [Validators.required, Validators.min(0), Validators.max(999999)]],
-      name: [this.category.name, [Validators.required, Validators.maxLength(200)]]});
+      name: [this.category.name, [Validators.required, Validators.maxLength(200)]]
+    });
   }
 
   ok() {

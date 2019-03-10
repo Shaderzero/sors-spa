@@ -1,9 +1,9 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Department } from 'src/app/_models/department';
-import { AdminService } from 'src/app/_services/admin.service';
-import { AlertifyService } from 'src/app/_services/alertify.service';
-import { BsModalRef } from 'ngx-bootstrap';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Department} from 'src/app/_models/department';
+import {AdminService} from 'src/app/_services/admin.service';
+import {AlertifyService} from 'src/app/_services/alertify.service';
+import {BsModalRef} from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-department-modal',
@@ -20,7 +20,8 @@ export class DepartmentModalComponent implements OnInit {
   @Output() reload = new EventEmitter();
 
   constructor(public modalRef: BsModalRef, private fb: FormBuilder,
-    private adminService: AdminService, private alertify: AlertifyService) { }
+              private adminService: AdminService, private alertify: AlertifyService) {
+  }
 
   ngOnInit() {
     this.createModalForm();
@@ -30,7 +31,8 @@ export class DepartmentModalComponent implements OnInit {
     this.modalForm = this.fb.group({
       code: [this.department.code, [Validators.required, Validators.min(2076000000), Validators.max(2076999999)]],
       shortName: [this.department.shortName, [Validators.required, Validators.maxLength(10)]],
-      name: [this.department.name, [Validators.required, Validators.maxLength(200)]]});
+      name: [this.department.name, [Validators.required, Validators.maxLength(200)]]
+    });
   }
 
   ok() {

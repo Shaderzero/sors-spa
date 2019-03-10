@@ -1,7 +1,7 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { BsModalRef } from 'ngx-bootstrap';
-import { AlertifyService } from 'src/app/_services/alertify.service';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {BsModalRef} from 'ngx-bootstrap';
+import {AlertifyService} from 'src/app/_services/alertify.service';
 import {ActivityType} from '../../_models/references/activity-type';
 import {ReferenceService} from '../../_services/reference.service';
 
@@ -22,7 +22,8 @@ export class Activity3ModalComponent implements OnInit {
   @Output() reload = new EventEmitter();
 
   constructor(public modalRef: BsModalRef, private fb: FormBuilder,
-    private refService: ReferenceService, private alertify: AlertifyService) { }
+              private refService: ReferenceService, private alertify: AlertifyService) {
+  }
 
   ngOnInit() {
     this.fillActivities1();
@@ -53,7 +54,7 @@ export class Activity3ModalComponent implements OnInit {
     this.activities2.length = 0;
     for (let i = 0; i < this.activities1.length; i++) {
       if (this.activities1[i].id === activity1Id
-          && this.activities1[i].children) {
+        && this.activities1[i].children) {
         this.activities1[i].children.forEach(el => {
           this.activities2.push(el);
         });
@@ -111,7 +112,7 @@ export class Activity3ModalComponent implements OnInit {
                 return false;
               }
               if (this.activity.name === activity3.name && this.activity.id !== activity3.id
-                  && this.activity.parentId === activity3.parentId) {
+                && this.activity.parentId === activity3.parentId) {
                 this.alertify.error('Данное наименование уже используется для ' +
                   'вида деятельности (' + activity3.code + ') ' + activity3.name);
                 return false;

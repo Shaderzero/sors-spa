@@ -1,11 +1,11 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { DomainDepartment } from 'src/app/_models/domainDepartment';
-import { Department } from 'src/app/_models/department';
-import { BsModalRef, TypeaheadMatch } from 'ngx-bootstrap';
-import { AdminService } from 'src/app/_services/admin.service';
-import { AlertifyService } from 'src/app/_services/alertify.service';
-import { DomainUser } from 'src/app/_models/domainUser';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {DomainDepartment} from 'src/app/_models/domainDepartment';
+import {Department} from 'src/app/_models/department';
+import {BsModalRef, TypeaheadMatch} from 'ngx-bootstrap';
+import {AdminService} from 'src/app/_services/admin.service';
+import {AlertifyService} from 'src/app/_services/alertify.service';
+import {DomainUser} from 'src/app/_models/domainUser';
 
 @Component({
   selector: 'app-domain-department-modal',
@@ -25,7 +25,8 @@ export class DomainDepartmentModalComponent implements OnInit {
   @Output() reload = new EventEmitter();
 
   constructor(public modalRef: BsModalRef, private fb: FormBuilder,
-    private adminService: AdminService, private alertify: AlertifyService) { }
+              private adminService: AdminService, private alertify: AlertifyService) {
+  }
 
   ngOnInit() {
     this.createDomainDepartmentList();

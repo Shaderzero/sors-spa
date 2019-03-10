@@ -1,8 +1,8 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { BsModalRef } from 'ngx-bootstrap';
-import { AlertifyService } from 'src/app/_services/alertify.service';
-import { Factor } from 'src/app/_models/references/factor';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {BsModalRef} from 'ngx-bootstrap';
+import {AlertifyService} from 'src/app/_services/alertify.service';
+import {Factor} from 'src/app/_models/references/factor';
 import {ReferenceService} from '../../_services/reference.service';
 
 @Component({
@@ -21,7 +21,8 @@ export class FactorClassModalComponent implements OnInit {
   @Output() reload = new EventEmitter();
 
   constructor(public modalRef: BsModalRef, private fb: FormBuilder,
-    private refService: ReferenceService, private alertify: AlertifyService) { }
+              private refService: ReferenceService, private alertify: AlertifyService) {
+  }
 
   ngOnInit() {
     this.getCategories();

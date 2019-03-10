@@ -1,14 +1,13 @@
 import {Component, OnInit} from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {BsModalRef, BsModalService} from 'ngx-bootstrap';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {BsModalRef} from 'ngx-bootstrap';
 import {DomainUser} from 'src/app/_models/domainUser';
-import {ActivatedRoute, ActivatedRouteSnapshot, Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {AdminService} from 'src/app/_services/admin.service';
 import {AlertifyService} from 'src/app/_services/alertify.service';
 import {Account} from 'src/app/_models/account';
 import {Department} from 'src/app/_models/department';
 import {DomainDepartment} from 'src/app/_models/domainDepartment';
-import {LoaderService} from '../../_helpers/loader/loader.service';
 
 @Component({
   selector: 'app-user-domain-merge',

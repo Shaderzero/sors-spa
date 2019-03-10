@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/_services/auth.service';
+import {Component, OnInit} from '@angular/core';
+import {AuthService} from 'src/app/_services/auth.service';
 import {DraftService} from '../../_services/draft.service';
 
 @Component({
@@ -18,7 +18,8 @@ export class IncidentPanelComponent implements OnInit {
   countClose: number;
 
   constructor(private authService: AuthService,
-              private draftService: DraftService) { }
+              private draftService: DraftService) {
+  }
 
   ngOnInit() {
     this.getUserRole();

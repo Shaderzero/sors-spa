@@ -1,8 +1,8 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { Factor } from 'src/app/_models/references/factor';
-import { BsModalRef } from 'ngx-bootstrap';
-import { AlertifyService } from 'src/app/_services/alertify.service';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Factor} from 'src/app/_models/references/factor';
+import {BsModalRef} from 'ngx-bootstrap';
+import {AlertifyService} from 'src/app/_services/alertify.service';
 import {ReferenceService} from '../../_services/reference.service';
 
 @Component({
@@ -12,7 +12,6 @@ import {ReferenceService} from '../../_services/reference.service';
 })
 export class FactorTypeModalComponent implements OnInit {
   typeForm: FormGroup;
-  model: any = {};
   buttonName: string;
   editMode: boolean;
   factors: Factor[];
@@ -22,7 +21,8 @@ export class FactorTypeModalComponent implements OnInit {
   @Output() reload = new EventEmitter();
 
   constructor(public modalRef: BsModalRef, private fb: FormBuilder,
-    private refService: ReferenceService, private alertify: AlertifyService) { }
+              private refService: ReferenceService, private alertify: AlertifyService) {
+  }
 
   ngOnInit() {
     this.fillCategories();
@@ -53,7 +53,7 @@ export class FactorTypeModalComponent implements OnInit {
     this.classes.length = 0;
     for (let i = 0; i < this.categories.length; i++) {
       if (this.categories[i].id === categoryId
-          && this.categories[i].children) {
+        && this.categories[i].children) {
         this.categories[i].children.forEach(el => {
           this.classes.push(el);
         });

@@ -4,10 +4,7 @@ import {environment} from 'src/environments/environment';
 import {Measure} from '../_models/measure';
 import {Observable} from 'rxjs';
 import {Patcher} from '../_models/patch';
-import {Report} from '../_models/report';
 import {AuthService} from './auth.service';
-import {Draft} from '../_models/draft';
-import {map} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

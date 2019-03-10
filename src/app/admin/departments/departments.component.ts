@@ -5,7 +5,7 @@ import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 import {AdminService} from 'src/app/_services/admin.service';
 import {AlertifyService} from 'src/app/_services/alertify.service';
 import {DepartmentModalComponent} from '../../modals/department-modal/department-modal.component';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ConfirmModalComponent} from 'src/app/references/confirm-modal/confirm-modal.component';
 
 @Component({

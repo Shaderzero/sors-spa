@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-references-panel',
@@ -6,11 +6,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./references-panel.component.css']
 })
 export class ReferencesPanelComponent implements OnInit {
-  checkRcCount: number;
-  checkRmCount: number;
   departmentId: number;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }

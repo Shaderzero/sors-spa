@@ -19,7 +19,6 @@ import {TextEditModalComponent} from '../../modals/text-edit-modal/text-edit-mod
 import {Patcher} from '../../_models/patch';
 import {DateEditModalComponent} from '../../modals/date-edit-modal/date-edit-modal.component';
 import {PatcherDate} from '../../_models/patchDate';
-import {ExcelService} from '../../_services/excel.service';
 
 @Component({
   selector: 'app-incident-info',
@@ -36,20 +35,6 @@ export class IncidentInfoComponent implements OnInit {
   draftOpen = false;
   responsibleOpen = false;
   measureOpen = false;
-  // для Excel:
-  data: any = [{
-    eid: 'e101',
-    ename: 'ravi',
-    esal: 1000
-  }, {
-    eid: 'e102',
-    ename: 'ram',
-    esal: 2000
-  }, {
-    eid: 'e103',
-    ename: 'rajesh',
-    esal: 3000
-  }];
 
   constructor(private authService: AuthService,
               private modalService: BsModalService,
@@ -59,8 +44,7 @@ export class IncidentInfoComponent implements OnInit {
               private userService: UserService,
               private alertify: AlertifyService,
               private mailService: MailService,
-              private router: Router,
-              private excelService: ExcelService) {
+              private router: Router) {
   }
 
   ngOnInit() {

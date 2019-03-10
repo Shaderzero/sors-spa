@@ -1,8 +1,8 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { BusinessProcess } from 'src/app/_models/references/businessProcess';
-import { BsModalRef } from 'ngx-bootstrap';
-import { AlertifyService } from 'src/app/_services/alertify.service';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {BusinessProcess} from 'src/app/_models/references/businessProcess';
+import {BsModalRef} from 'ngx-bootstrap';
+import {AlertifyService} from 'src/app/_services/alertify.service';
 import {ReferenceService} from '../../_services/reference.service';
 
 @Component({
@@ -21,7 +21,8 @@ export class BP3ModalComponent implements OnInit {
   @Output() reload = new EventEmitter();
 
   constructor(public modalRef: BsModalRef, private fb: FormBuilder,
-    private refService: ReferenceService, private alertify: AlertifyService) { }
+              private refService: ReferenceService, private alertify: AlertifyService) {
+  }
 
   ngOnInit() {
     this.fillBps1();
@@ -52,7 +53,7 @@ export class BP3ModalComponent implements OnInit {
     this.bps2.length = 0;
     for (let i = 0; i < this.bps1.length; i++) {
       if (this.bps1[i].id === bp1Id
-          && this.bps1[i].children) {
+        && this.bps1[i].children) {
         this.bps1[i].children.forEach(el => {
           this.bps2.push(el);
         });
@@ -110,7 +111,7 @@ export class BP3ModalComponent implements OnInit {
                 return false;
               }
               if (this.bp.name === bp3.name && this.bp.id !== bp3.id
-                  && this.bp.parentId === bp3.parentId) {
+                && this.bp.parentId === bp3.parentId) {
                 this.alertify.error('Данное наименование уже используется для ' +
                   'бизнес процесса (' + bp3.code + ') ' + bp3.name);
                 return false;

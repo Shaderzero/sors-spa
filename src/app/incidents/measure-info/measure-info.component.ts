@@ -1,4 +1,4 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Measure} from 'src/app/_models/measure';
 import {AlertifyService} from 'src/app/_services/alertify.service';
 import {Responsible} from 'src/app/_models/responsible';
@@ -20,8 +20,6 @@ export class MeasureInfoComponent implements OnInit {
   @Input() responsible: Responsible;
   filterForm: FormGroup;
   currentUser: Account;
-  isChanged = false;
-  showReport = false;
   modalRef: BsModalRef;
   measures: Measure[];
   measureParams: any = {};
@@ -196,7 +194,7 @@ export class MeasureInfoComponent implements OnInit {
         measure.deadLine = new Date(measure.deadLine.setHours(measure.deadLine.getHours() + 12));
       }
       measure.comment = comment;
-      measure.authorId = this.authService.currentUser.id
+      measure.authorId = this.authService.currentUser.id;
       this.measureService.updateMeasure(measure).subscribe((updatedMeasure: Measure) => {
         for (let i = 0; i < this.measures.length; i++) {
           if (+this.measures[i].id === +updatedMeasure.id) {

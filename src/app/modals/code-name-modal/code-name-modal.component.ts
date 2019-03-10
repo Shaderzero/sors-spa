@@ -1,7 +1,7 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { BsModalRef } from 'ngx-bootstrap';
-import { AlertifyService } from 'src/app/_services/alertify.service';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {BsModalRef} from 'ngx-bootstrap';
+import {AlertifyService} from 'src/app/_services/alertify.service';
 
 @Component({
   selector: 'app-code-name-modal',
@@ -13,13 +13,14 @@ export class CodeNameModalComponent implements OnInit {
   title: string;
   buttonName: string;
   editMode: boolean;
-  value: {id?: number; code: number, name: string};
-  values: {id: number, code: number, name: string}[];
+  value: { id?: number; code: number, name: string };
+  values: { id: number, code: number, name: string }[];
   @Output() outputValue = new EventEmitter();
 
   constructor(public modalRef: BsModalRef,
               private fb: FormBuilder,
-              private alertify: AlertifyService) { }
+              private alertify: AlertifyService) {
+  }
 
   ngOnInit() {
     this.createCodeNameForm();
