@@ -5,18 +5,29 @@
     </div>
     <div class="col-6">
       <div class="form-inline float-right">
-        <button *ngIf="canOpen" type="button" class="btn btn-sm btn-success mr-2" [routerLink]="['/incidents/new']"
-          tooltip="Создать РС для обработки или добавить к существующему" [delay]="1000">Обработать</button>
-        <button *ngIf="canCheck" type="button" class="btn btn-sm btn-success mr-2" (click)="checkModal()" tooltip="Отправить РС на проверку риск-координатору подразделения"
-          [delay]="1000">Отправить РК</button>
-        <button *ngIf="canSign" type="button" class="btn btn-sm btn-success mr-2" (click)="signModal()" tooltip="Отправить РС в Управление по рискам"
-          [delay]="1000">Отправить РМ</button>
-        <button *ngIf="canRefine" type="button" class="btn btn-sm btn-warning mr-2" (click)="refineModal()" tooltip="Отправить РС на доработку"
-          [delay]="1000">Доработка</button>
-        <button *ngIf="canEdit" type="button" class="btn btn-sm btn-secondary mr-2" [routerLink]="['/incidents/drafts/' + draft.id + '/edit']"
-          tooltip="Произвести редактирование РС" [delay]="1000">Изменить</button>
-        <button *ngIf="canDelete" type="button" class="btn btn-sm btn-danger" (click)="delete()" tooltip="Удалить РС"
-          [delay]="1000">Удалить</button>
+        <button *ngIf="canOpen" type="button" class="btn btn-sm btn-success mr-2"
+                [routerLink]="['/incidents/new', draft]"
+                tooltip="Создать РС для обработки или добавить к существующему" placement="bottom" [delay]="1000">Обработать
+        </button>
+        <button *ngIf="canCheck" type="button" class="btn btn-sm btn-success mr-2" (click)="checkModal()" tooltip="Отправить РС на проверку
+        риск-координатору подразделения" placement="bottom"
+                [delay]="1000">Отправить РК
+        </button>
+        <button *ngIf="canSign" type="button" class="btn btn-sm btn-success mr-2" (click)="signModal()"
+                tooltip="Отправить РС в Управление по рискам" placement="bottom"
+                [delay]="1000">Отправить РМ
+        </button>
+        <button *ngIf="canRefine" type="button" class="btn btn-sm btn-warning mr-2" (click)="refineModal()"
+                tooltip="Отправить РС на доработку" placement="bottom"
+                [delay]="1000">Доработка
+        </button>
+        <button *ngIf="canEdit" type="button" class="btn btn-sm btn-secondary mr-2"
+                [routerLink]="['/incidents/drafts/' + draft.id + '/edit']"
+                tooltip="Произвести редактирование РС" placement="bottom" [delay]="1000">Изменить
+        </button>
+        <button *ngIf="canDelete" type="button" class="btn btn-sm btn-danger" (click)="delete()" tooltip="Удалить РС" placement="bottom"
+                [delay]="1000">Удалить
+        </button>
       </div>
     </div>
   </div>
@@ -88,7 +99,7 @@
   <div class="row">
     <div class="col-lg-6">
       <div class="card mb-2">
-        <h5 class="card-header py-1">Затрагиваемые бизнес-процессы</h5>
+        <h5 class="card-header py-1">Последствия</h5>
         <div class="card-body px-2 py-1">
           <div class="card-text">{{ draft.description4 }}</div>
         </div>

@@ -19,6 +19,7 @@ import {TextEditModalComponent} from '../../modals/text-edit-modal/text-edit-mod
 import {Patcher} from '../../_models/patch';
 import {DateEditModalComponent} from '../../modals/date-edit-modal/date-edit-modal.component';
 import {PatcherDate} from '../../_models/patchDate';
+import {CountsService} from '../../_services/counts.service';
 
 @Component({
   selector: 'app-incident-info',
@@ -28,6 +29,7 @@ import {PatcherDate} from '../../_models/patchDate';
 export class IncidentInfoComponent implements OnInit {
   modalRef: BsModalRef;
   incident: Incident;
+  tmp: Account[] = [];
   newResponsibleAccounts: Account[] = []; // необходимо для рассылки писем...
   currentUser: Account;
   selectedValue: string;
@@ -44,7 +46,8 @@ export class IncidentInfoComponent implements OnInit {
               private userService: UserService,
               private alertify: AlertifyService,
               private mailService: MailService,
-              private router: Router) {
+              private router: Router,
+              private countsService: CountsService) {
   }
 
   ngOnInit() {
@@ -53,6 +56,12 @@ export class IncidentInfoComponent implements OnInit {
     });
     this.currentUser = this.authService.currentUser;
     this.getDepartmentAccounts();
+  }
+
+  fillDraftsAuthorNames() {
+    for (let i = 0; i < this.incident.drafts. length; i++) {
+      this.incident.drafts[i].author.fullname = this.authService.getFioByLogin(this.incident.drafts[i].author.name);
+    }
   }
 
   isAdmin() {
@@ -70,10 +79,17 @@ export class IncidentInfoComponent implements OnInit {
   getDepartmentAccounts() {
     this.userService.getDepartmentAccounts(this.currentUser.department.id).subscribe((res: Account[]) => {
       this.departmentAccounts = res;
+      console.log(this.departmentAccounts);
+      for (let i = 0; i < this.departmentAccounts.length; i++) {
+        this.departmentAccounts[i].fullname = this.authService.getFioByLogin(this.departmentAccounts[i].name);
+      }
     });
   }
 
   onSelect(event: TypeaheadMatch, responsible: Responsible): void {
+    if (this.tmp.length === 0) {
+      this.tmp = [...responsible.accounts];
+    }
     let include = true;
     for (let i = 0; i < responsible.accounts.length; i++) {
       if (+responsible.accounts[i].id === +event.item.id) {
@@ -136,6 +152,9 @@ export class IncidentInfoComponent implements OnInit {
   }
 
   removeAccount(user: Account, responsible: Responsible) {
+    if (this.tmp.length === 0) {
+      this.tmp = [...responsible.accounts];
+    }
     for (let i = 0; i < responsible.accounts.length; i++) {
       if (+responsible.accounts[i].id === +user.id) {
         responsible.accounts.splice(i, 1);
@@ -157,22 +176,29 @@ export class IncidentInfoComponent implements OnInit {
     this.incidentService.updateResponsibleAccounts(responsible).subscribe(() => {
       this.alertify.success('список ответственных работников обновлён');
       // надо подумать, что с этим делать
-      const responsibleForMail: Responsible = {
-        id: responsible.id,
-        department: responsible.department,
-        result: responsible.result,
-        accounts: this.newResponsibleAccounts
-      };
+      // const responsibleForMail: Responsible = {
+      //   id: responsible.id,
+      //   department: responsible.department,
+      //   result: responsible.result,
+      //   accounts: this.newResponsibleAccounts
+      // };
       if (this.newResponsibleAccounts.length > 0) {
-        this.mailService.sendResponsible(this.incident, responsibleForMail, '');
+        this.mailService.sendAccountsAssign(this.incident, this.newResponsibleAccounts, '');
         this.newResponsibleAccounts = [];
       }
       responsible.collapsed = false;
       responsible.isChanged = false;
+      this.tmp = [];
     }, error => {
       console.log(error);
       this.alertify.error('ошибка обновления списка ответственных работников');
     });
+  }
+
+  cancelResponsibleAccounts(responsible: Responsible) {
+    responsible.accounts = [...this.tmp];
+    responsible.isChanged = false;
+    this.tmp = [];
   }
 
   addResponsibles() {
@@ -281,6 +307,7 @@ export class IncidentInfoComponent implements OnInit {
     model.departmentId = this.authService.currentUser.department.id;
     this.draftService.setStatus(model).subscribe(() => {
       this.alertify.message('статус сообщения обновлён');
+      this.countsService.loadAll();
     }, error => {
       console.log(error);
       this.alertify.error('ошибка обновления статуса сообщения');

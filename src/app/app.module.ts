@@ -107,6 +107,11 @@ import {ManageabilityTableComponent} from './admin/manageability-table/manageabi
 import {ReactionTableComponent} from './admin/reaction-table/reaction-table.component';
 import {SignificanceTableComponent} from './admin/significance-table/significance-table.component';
 import {StatusTableComponent} from './admin/status-table/status-table.component';
+import {CountsService} from './_services/counts.service';
+import { LogsComponent } from './admin/logs/logs.component';
+import {LogsPageResolver} from './_resolvers/admin/logsPage.resolver';
+import { HelpComponent } from './help/help.component';
+import { NgxPopper } from 'angular-popper';
 
 defineLocale('ru', ruLocale);
 
@@ -166,7 +171,9 @@ defineLocale('ru', ruLocale);
     ManageabilityTableComponent,
     ReactionTableComponent,
     SignificanceTableComponent,
-    StatusTableComponent
+    StatusTableComponent,
+    LogsComponent,
+    HelpComponent
   ],
   imports: [
     BrowserModule,
@@ -183,7 +190,8 @@ defineLocale('ru', ruLocale);
     CollapseModule.forRoot(),
     AccordionModule.forRoot(),
     TooltipModule.forRoot(),
-    TypeaheadModule.forRoot()
+    TypeaheadModule.forRoot(),
+    NgxPopper
   ],
   providers: [
     {
@@ -223,7 +231,9 @@ defineLocale('ru', ruLocale);
     ManageabilitiesResolver,
     ReactionsResolver,
     RiskStatusesResolver,
-    SignificancesResolver
+    SignificancesResolver,
+    CountsService,
+    LogsPageResolver
   ],
   entryComponents: [
     DepartmentModalComponent,

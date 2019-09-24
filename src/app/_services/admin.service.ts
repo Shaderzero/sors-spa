@@ -9,6 +9,7 @@ import {Role} from '../_models/role';
 import {PaginatedResult} from '../_models/pagination';
 import {map} from 'rxjs/operators';
 import {AuthService} from './auth.service';
+import {Log} from '../_models/log';
 
 @Injectable({
   providedIn: 'root'
@@ -147,6 +148,37 @@ export class AdminService {
 
   deleteAccount(user: Account) {
     return this.http.delete(this.baseUrl + 'admin/accounts/' + user.id);
+  }
+
+  getLogsPaginated(page?, itemsPerPage?, accParams?): Observable<PaginatedResult<Log[]>> {
+    const paginatedResult: PaginatedResult<Log[]> = new PaginatedResult<Log[]>();
+    let params = new HttpParams();
+    params = params.append('accountId', this.authService.currentUser.id.toString());
+    params = params.append('departmentId', this.authService.currentUser.department.id.toString());
+    if (page != null && itemsPerPage != null) {
+      params = params.append('pageNumber', page);
+      params = params.append('pageSize', itemsPerPage);
+    }
+    if (accParams != null) {
+      if (accParams.order != null && accParams.orderAsc != null) {
+        params = params.append('order', accParams.order);
+        params = params.append('orderAsc', accParams.orderAsc);
+      }
+      if (accParams.filter != null) {
+        params = params.append('filter', accParams.filter);
+      }
+    }
+
+    return this.http.get<Log[]>(this.baseUrl + 'logs', {observe: 'response', params})
+      .pipe(
+        map(response => {
+          paginatedResult.result = response.body;
+          if (response.headers.get('Pagination') !== null) {
+            paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
+          }
+          return paginatedResult;
+        })
+      );
   }
 
 }

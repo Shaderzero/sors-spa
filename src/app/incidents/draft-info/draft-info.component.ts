@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Draft} from 'src/app/_models/draft';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {AuthService} from 'src/app/_services/auth.service';
 import {BsModalRef, BsModalService} from 'ngx-bootstrap';
 import {ConfirmModalComponent} from 'src/app/references/confirm-modal/confirm-modal.component';
@@ -8,6 +8,7 @@ import {AlertifyService} from 'src/app/_services/alertify.service';
 import {MailService} from 'src/app/_services/mail.service';
 import {DraftService} from 'src/app/_services/draft.service';
 import {ConfirmCommentModalComponent} from 'src/app/references/confirm-comment-modal/confirm-comment-modal.component';
+import {CountsService} from '../../_services/counts.service';
 
 @Component({
   selector: 'app-draft-info',
@@ -26,11 +27,13 @@ export class DraftInfoComponent implements OnInit {
   canRefine: boolean;
 
   constructor(private route: ActivatedRoute,
+              private router: Router,
               private modalService: BsModalService,
               private authService: AuthService,
               private draftService: DraftService,
               private alertify: AlertifyService,
-              private mailService: MailService) {
+              private mailService: MailService,
+              private countsService: CountsService) {
   }
 
   ngOnInit() {
@@ -51,6 +54,17 @@ export class DraftInfoComponent implements OnInit {
     let isAuthor = false;
     let isRc = false;
     let isRm = false;
+    if (this.authService.roleMatch(['admin'])
+      && this.authService.currentUser.department.id === this.draft.department.id) {
+      isRm = true;
+      this.canEdit = true;
+      this.canCheck = true;
+      this.canSign = true;
+      this.canOpen = true;
+      this.canDelete = true;
+      this.canRefine = true;
+      return;
+    }
     if (+this.authService.currentUser.id === +this.draft.author.id) {
       isAuthor = true;
     }
@@ -91,7 +105,6 @@ export class DraftInfoComponent implements OnInit {
       } else if (isRc) {
         this.canSign = true;
         this.canEdit = true;
-        this.canDelete = true;
       }
     }
   }
@@ -137,6 +150,7 @@ export class DraftInfoComponent implements OnInit {
     this.draftService.setStatus(this.model).subscribe(() => {
       this.draft.status = status;
       this.fillParameters();
+      this.countsService.loadAll();
       this.notificateStatus();
     }, error => {
       console.log(error);
@@ -173,6 +187,8 @@ export class DraftInfoComponent implements OnInit {
     this.modalRef.content.result.subscribe((res: boolean) => {
       if (res) {
         this.draftService.deleteDraft(this.draft).subscribe(() => {
+          this.router.navigate(['/incidents/drafts/list']);
+          this.countsService.counts.countDraft--;
           this.alertify.success('Сообщение о РС удалено');
         }, error => {
           console.log(error);

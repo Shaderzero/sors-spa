@@ -7,6 +7,7 @@
   <div class="col-xl-4 col-md-12">
     <pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems" [itemsPerPage]="pagination.itemsPerPage"
                 [(ngModel)]="pagination.currentPage" (pageChanged)="pageChanged($event)" previousText="&lsaquo;"
+                [maxSize]="5" [rotate]="true"
                 nextText="&rsaquo;"
                 firstText="&laquo;" lastText="&raquo;">
     </pagination>
@@ -14,7 +15,8 @@
   <div class="col-xl-4 col-md-6 mb-3">
     <div class="form-inline">
       <div class="btn-group" role="group">
-        <div class="btn-group" dropdown>
+        <div class="btn-group" dropdown tooltip="Выбор способа сортировки"
+             placement="top" [delay]="2000">
           <button dropdownToggle type="button" class="btn btn-outline-dark dropdown-toggle" aria-controls="orderDrop">
             {{currentOrder}} <span class="caret"></span>
           </button>
@@ -39,7 +41,8 @@
                     filterForm.get('filterString').errors &&
                     filterForm.get('filterString').touched
                     }"
-             id="filterString" formControlName="filterString"/>
+             id="filterString" formControlName="filterString"
+             placeholder="Поиск..."/>
       <button class="btn btn-outline-success" type="submit" [disabled]="!filterForm.valid">Filter</button>
       <button class="btn btn-outline-warning ml-2" type="button" *ngIf="isFiltered" (click)="unFilter()"><i
         class="fas fa-ban"></i></button>
@@ -55,7 +58,7 @@
       </div>
       <div class="col-6">
         <span class="font-weight-bolder">Автор: </span>
-        {{d.author.fullname}}
+        {{authService.getFioByLogin(d.author.name)}}
       </div>
       <div class="col-2">
         <div class="float-right">
@@ -78,7 +81,7 @@
     </div>
     <div class="row mx-1">
       <div class="col-12">
-        <span class="font-weight-bolder">Наименование: </span>
+        <span class="font-weight-bolder">Краткое наименование: </span>
         {{d.description1}}
       </div>
     </div>
@@ -96,7 +99,7 @@
     </div>
     <div *ngIf="d.collapsed" class="row mx-1">
       <div class="col-12">
-        <span class="font-weight-bolder">Затрагиваемые бизнес-процессы: </span>
+        <span class="font-weight-bolder">Последствия: </span>
         {{d.description4}}
       </div>
     </div>

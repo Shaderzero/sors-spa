@@ -17,6 +17,7 @@
   <div class="col-xl-4 col-md-12">
     <pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems" [itemsPerPage]="pagination.itemsPerPage"
                 [(ngModel)]="pagination.currentPage" (pageChanged)="pageChanged($event)" previousText="&lsaquo;"
+                [maxSize]="5" [rotate]="true"
                 nextText="&rsaquo;"
                 firstText="&laquo;" lastText="&raquo;">
     </pagination>

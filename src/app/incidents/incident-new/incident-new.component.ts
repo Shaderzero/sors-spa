@@ -3,7 +3,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BsLocaleService, BsModalRef, BsModalService} from 'ngx-bootstrap';
 import {AlertifyService} from 'src/app/_services/alertify.service';
 import {AuthService} from 'src/app/_services/auth.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, ActivatedRouteSnapshot, Router} from '@angular/router';
 import {Draft} from 'src/app/_models/draft';
 import {Incident} from 'src/app/_models/incident';
 import {Department} from 'src/app/_models/department';
@@ -12,6 +12,7 @@ import {Responsible} from 'src/app/_models/responsible';
 import {IncidentService} from 'src/app/_services/incident.service';
 import {DraftService} from 'src/app/_services/draft.service';
 import {MailService} from 'src/app/_services/mail.service';
+import {CountsService} from '../../_services/counts.service';
 
 @Component({
   selector: 'app-incident-new',
@@ -22,11 +23,14 @@ export class IncidentNewComponent implements OnInit {
   model: any = {};
   incident: Incident;
   drafts: Draft[] = [];
+  inputDraft: Draft;
   departments: Department[] = [];
   incidentForm: FormGroup;
   modalRef: BsModalRef;
   comment: string;
   bsValue = new Date();
+  draftOpen = false;
+  ownerOpen = false;
 
   constructor(private localeService: BsLocaleService,
               private route: ActivatedRoute,
@@ -37,21 +41,34 @@ export class IncidentNewComponent implements OnInit {
               private modalService: BsModalService,
               private fb: FormBuilder,
               private mailService: MailService,
-              private router: Router) {
+              private router: Router,
+              private countsService: CountsService) {
   }
 
   ngOnInit() {
     this.localeService.use('ru');
+    this.createEventForm();
     this.route.data.subscribe(data => {
       this.drafts = data['drafts'];
       this.departments = data['departments'];
+      this.route.params.subscribe(params => {
+        this.inputDraft = params as Draft;
+        if (this.inputDraft) {
+          // this.incidentForm.patchValue({dateIncident: this.inputDraft.dateCreate});
+          this.incidentForm.patchValue({description: this.inputDraft.description2});
+          this.drafts.forEach(draft => {
+            if (+draft.id === +this.inputDraft.id) {
+              draft.checked = true;
+            }
+          });
+        }
+      });
     });
-    this.createEventForm();
   }
 
   createEventForm() {
     this.incidentForm = this.fb.group({
-      description: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(500)]],
+      description: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(1000)]],
       dateIncident: [this.bsValue, Validators.required]
     });
   }
@@ -111,14 +128,16 @@ export class IncidentNewComponent implements OnInit {
       };
       this.incidentService.createIncident(this.incident).subscribe((incident: Incident) => {
         this.alertify.success('РС успешно создано');
-        this.router.navigate(['/incidents/' + incident.id]);
         this.mailService.sendIncidentAssign(incident, comment);
         for (let i = 0; i < selectedDrafts.length; i++) {
           this.setDraftStatus(selectedDrafts[i]);
         }
+        this.router.navigate(['/incidents/' + incident.id]);
       }, error => {
         console.log(error);
         this.alertify.error('ошибка создания РС');
+      }, () => {
+        this.countsService.loadAll();
       });
     }
   }

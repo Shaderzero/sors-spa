@@ -7,6 +7,8 @@ import {Draft} from 'src/app/_models/draft';
 import {ConfirmCommentModalComponent} from 'src/app/references/confirm-comment-modal/confirm-comment-modal.component';
 import {DraftService} from 'src/app/_services/draft.service';
 import {AuthService} from 'src/app/_services/auth.service';
+import {CountsService} from '../../_services/counts.service';
+import {MailService} from '../../_services/mail.service';
 
 @Component({
   selector: 'app-draft-new',
@@ -24,7 +26,9 @@ export class DraftNewComponent implements OnInit {
               private modalService: BsModalService,
               private fb: FormBuilder,
               private router: Router,
-              private authService: AuthService) {
+              private authService: AuthService,
+              private countsService: CountsService,
+              private mailService: MailService) {
   }
 
   ngOnInit() {
@@ -34,7 +38,7 @@ export class DraftNewComponent implements OnInit {
   createDraftForm() {
     this.draftForm = this.fb.group({
       description1: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(200)]],
-      description2: ['', [Validators.maxLength(1000)]],
+      description2: ['', [Validators.required, Validators.maxLength(1000)]],
       description3: ['', [Validators.maxLength(1000)]],
       description4: ['', [Validators.maxLength(1000)]],
       description5: ['', [Validators.maxLength(1000)]]
@@ -60,6 +64,7 @@ export class DraftNewComponent implements OnInit {
       this.model.status = 'draft';
       this.draftService.createDraft(this.model).subscribe((draft: Draft) => {
         this.alertify.success('РС успешно создано');
+        this.countsService.counts.countDraft++;
         this.router.navigate(['/incidents/drafts/' + draft.id]);
       }, error => {
         console.log(error);

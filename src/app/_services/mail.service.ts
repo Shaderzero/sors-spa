@@ -7,22 +7,18 @@ import {Draft} from '../_models/draft';
 import {AlertifyService} from './alertify.service';
 import {Incident} from '../_models/incident';
 import {Responsible} from '../_models/responsible';
+import {Account} from '../_models/account';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MailService implements OnInit {
+export class MailService {
   baseUrl = environment.apiUrl + 'mail';
-  siteUrl: string;
-  from = 'sors@lost.net';
+  from = 'sors@gazpromexport.gazprom.ru';
 
   constructor(private authService: AuthService,
               private http: HttpClient,
               private alertify: AlertifyService) {
-  }
-
-  ngOnInit(): void {
-    this.getSiteUrl();
   }
 
   sendMail(to: string[], subject: string, text: string, link: string, comment: string) {
@@ -31,18 +27,17 @@ export class MailService implements OnInit {
     mail.to = to;
     mail.subject = subject;
     mail.body = this.generateBody(text, link, comment);
-    console.log(mail);
     return this.http.post(this.baseUrl, mail);
   }
 
   getSiteUrl() {
-    let url = '';
-    if (!window.location.origin) {
-      url = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
-    } else {
-      url = window.location.origin;
-    }
-    this.siteUrl = url + '/';
+    // let url = '';
+    // if (!window.location.origin) {
+    //   url = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
+    // } else {
+    //   url = window.location.origin;
+    // }
+    // url = window.location.origin;
   }
 
   generateBody(text: string, link: string, comment: string): string {
@@ -58,7 +53,8 @@ export class MailService implements OnInit {
   sendDraftCheck(draft: Draft, comment: string) {
     const subject = 'Сообщение о рисковом событие';
     const text = 'На проверку направлено сообщение о рисковом событии. Для его открытия перейдите по ссылке ниже';
-    const link = this.siteUrl + 'incidents/drafts/' + draft.id;
+    const link = window.location.origin + '/incidents/drafts/' + draft.id;
+    console.log('link from method: ' + link);
     const recipients: string[] = [];
     const accounts = this.authService.getAccounts();
     for (let i = 0; i < accounts.length; i++) {
@@ -76,17 +72,17 @@ export class MailService implements OnInit {
         this.alertify.message('Уведомление отправлено');
       }, error => {
         console.log(error);
-        this.alertify.error(error);
+        this.alertify.error('Ошибка отправки уведомления');
       });
     } else {
-      this.alertify.error('не найдено получателей для отправки уведомления');
+      this.alertify.error('Не найдено получателей для отправки уведомления');
     }
   }
 
   sendDraftSign(draft: Draft, comment: string) {
     const subject = 'Сообщение о рисковом событие';
     const text = 'На проверку направлено сообщение о рисковом событии. Для его открытия перейдите по ссылке ниже';
-    const link = this.siteUrl + 'incidents/drafts/' + draft.id;
+    const link = window.location.origin + '/incidents/drafts/' + draft.id;
     const recipients: string[] = [];
     const users = this.authService.getAccounts();
     for (let i = 0; i < users.length; i++) {
@@ -113,7 +109,7 @@ export class MailService implements OnInit {
   sendDraftRefine(draft: Draft, comment: string) {
     const subject = 'Доработка сообщения о рисковом событии';
     const text = 'На доработку направлено сообщение о рисковом событии. Для его открытия перейдите по ссылке ниже';
-    const link = this.siteUrl + 'incidents/drafts/' + draft.id;
+    const link = window.location.origin + '/incidents/drafts/' + draft.id;
     const recipients: string[] = [];
     const users = this.authService.getAccounts();
     for (let i = 0; i < users.length; i++) {
@@ -145,7 +141,7 @@ export class MailService implements OnInit {
     const text = 'Вам расписано рисковое событие. ' +
       'По нему необходимо выбрать ответственных исполнителей от подразделения и/или проработать план мероприятий ' +
       'Для его открытия перейдите по ссылке ниже';
-    const link = this.siteUrl + 'incidents/' + incident.id;
+    const link = window.location.origin + '/incidents/' + incident.id;
     const recipients: string[] = [];
     const users = this.authService.getAccounts();
     for (let i = 0; i < users.length; i++) {
@@ -169,12 +165,37 @@ export class MailService implements OnInit {
     }
   }
 
+  sendAccountsAssign(incident: Incident, newResponsibleAccounts: Account[], comment: string) {
+    if (newResponsibleAccounts === null || newResponsibleAccounts.length === 0) {
+      return;
+    }
+    const subject = 'Поступило в работу рисковое событие';
+    const text = 'Вам расписано рисковое событие. ' +
+      'По нему необходимо проработать план мероприятий. ' +
+      'Для его открытия перейдите по ссылке ниже';
+    const link = window.location.origin + '/incidents/' + incident.id;
+    const recipients: string[] = [];
+    for (let i = 0; i < newResponsibleAccounts.length; i++) {
+      recipients.push(newResponsibleAccounts[i].email);
+    }
+    if (recipients.length > 0) {
+      this.sendMail(recipients, subject, text, link, comment).subscribe(() => {
+        this.alertify.message('Уведомление отправлено');
+      }, error => {
+        console.log(error);
+        this.alertify.error(error);
+      });
+    } else {
+      this.alertify.error('не найдено получателей для отправки уведомления');
+    }
+  }
+
   sendResponsible(incident: Incident, responsible: Responsible, comment: string) {
     const subject = 'Поступило в работу рисковое событие';
     const text = 'Вам расписано рисковое событие. ' +
       'По нему необходимо выбрать ответственных исполнителей от подразделения и/или проработать план мероприятий ' +
       'Для его открытия перейдите по ссылке ниже';
-    const link = this.siteUrl + 'incidents/' + incident.id;
+    const link = window.location.origin + '/incidents/' + incident.id;
     const recipients: string[] = [];
     const users = this.authService.getAccounts();
     for (let i = 0; i < users.length; i++) {

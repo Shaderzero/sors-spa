@@ -1,6 +1,8 @@
-<div class="mt-3 mx-3">
-  <div class="row">
-    <div class="col-3">
+<div class="wrapper">
+
+  <!-- Sidebar -->
+  <nav id="sidebar">
+    <div class="mt-2 ml-2">
       <h4>Справочники</h4>
       <div class="list-group">
         <button type="button" class="list-group-item list-group-item-action" [routerLink]="['/admin/departments']"
@@ -47,8 +49,67 @@
         </button>
       </div>
     </div>
-    <div class="col-9">
+  </nav>
+
+  <!-- Page Content -->
+  <div id="content" class="container-fluid m-2">
+    <!-- We'll fill this with dummy content -->
+          <router-outlet></router-outlet>
+  </div>
+</div>
+<!--
+<div class="mt-3 mx-3">
+  <div class="container-fluid">
+    <div class="container-sidebar mr-2">
+      <h4>Справочники</h4>
+      <div class="list-group">
+        <button type="button" class="list-group-item list-group-item-action" [routerLink]="['/admin/departments']"
+                routerLinkActive="active">Подразделения
+        </button>
+        <button type="button" class="list-group-item list-group-item-action" [routerLink]="['/admin/domaindepartments']"
+                routerLinkActive="active">Подразделения домена
+        </button>
+        <button type="button" class="list-group-item list-group-item-action" [routerLink]="['/admin/accounts']"
+                routerLinkActive="active">Пользователи
+        </button>
+        <button type="button" class="list-group-item list-group-item-action" [routerLink]="['/admin/domainusers']"
+                routerLinkActive="active">Пользователи в домене
+        </button>
+        <button type="button" class="list-group-item list-group-item-action" [routerLink]="['/admin/activitytypes']"
+                routerLinkActive="active">Виды деятельности
+        </button>
+        <button type="button" class="list-group-item list-group-item-action" [routerLink]="['/admin/areas']"
+                routerLinkActive="active">Сферы возникновения
+        </button>
+        <button type="button" class="list-group-item list-group-item-action" [routerLink]="['/admin/durations']"
+                routerLinkActive="active">Длительность
+        </button>
+        <button type="button" class="list-group-item list-group-item-action" [routerLink]="['/admin/factors']"
+                routerLinkActive="active">Факторная классификация
+        </button>
+        <button type="button" class="list-group-item list-group-item-action" [routerLink]="['/admin/manageabilities']"
+                routerLinkActive="active">Управляемость
+        </button>
+        <button type="button" class="list-group-item list-group-item-action" [routerLink]="['/admin/reactions']"
+                routerLinkActive="active">Реагирование
+        </button>
+        <button type="button" class="list-group-item list-group-item-action" [routerLink]="['/admin/significances']"
+                routerLinkActive="active">Значимость
+        </button>
+        <button type="button" class="list-group-item list-group-item-action" [routerLink]="['/admin/statuses']"
+                routerLinkActive="active">Статусы
+        </button>
+        <button type="button" class="list-group-item list-group-item-action" [routerLink]="['/admin/businesstypes']"
+                routerLinkActive="active">Виды бизнеса
+        </button>
+        <button type="button" class="list-group-item list-group-item-action" [routerLink]="['/admin/businessprocesses']"
+                routerLinkActive="active">Бизнес процессы
+        </button>
+      </div>
+    </div>
+    <div class="container">
       <router-outlet></router-outlet>
     </div>
   </div>
 </div>
+-->

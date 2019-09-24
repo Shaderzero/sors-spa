@@ -18,6 +18,7 @@ import {ConfirmCommentModalComponent} from '../../references/confirm-comment-mod
 })
 export class MeasureInfoComponent implements OnInit {
   @Input() responsible: Responsible;
+  @Input() status: string;
   filterForm: FormGroup;
   currentUser: Account;
   modalRef: BsModalRef;
@@ -47,6 +48,9 @@ export class MeasureInfoComponent implements OnInit {
   }
 
   canEdit() {
+    if (status === 'close') {
+      return false;
+    }
     const users = this.responsible.accounts;
     let result = false;
     if (users) {
@@ -61,6 +65,9 @@ export class MeasureInfoComponent implements OnInit {
   }
 
   canSign() {
+    if (status === 'close') {
+      return false;
+    }
     const department = this.responsible.department;
     return this.authService.isRiskCoordinator(department);
   }

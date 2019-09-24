@@ -117,7 +117,7 @@ export class UserDomainMergeComponent implements OnInit {
     }
     this.adminService.createAccounts(accountsForCreate).subscribe(() => {
       this.alertify.success('Пользователи успешно созданы');
-      this.router.navigate(['/admin/users']);
+      this.router.navigate(['/admin/accounts']);
     }, error => {
       console.log(error);
       this.alertify.error('ошибка создания пользователей');

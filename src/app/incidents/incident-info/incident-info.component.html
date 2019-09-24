@@ -6,8 +6,11 @@
       </div>
       <div class="float-right">
         <!--<i class="far fa-save" (click)="exportAsXLSX()"></i>-->
-        <div (click)="close()" class="btn btn-sm btn-danger" *ngIf="isRiskManager()"
+        <div (click)="close()" *ngIf="isRiskManager() && incident.status !=='close'"
              class="btn btn-sm btn-outline-dark">Закрыть РС
+        </div>
+        <div *ngIf="incident.status ==='close'"
+             class="btn btn-sm btn-outline-danger disabled">Закрыто
         </div>
         <div (click)="delete()" *ngIf="isAdmin()" class="btn btn-sm btn-outline-danger ml-2">Удалить РС</div>
       </div>
@@ -22,7 +25,7 @@
             Дата события
           </div>
           <div class="float-right">
-            <i *ngIf="isRiskManager()" class="far fa-edit pointer" (click)="editDate()" tooltip="изменить"></i>
+            <i *ngIf="isRiskManager() && incident.status !=='close'" class="far fa-edit pointer" (click)="editDate()" tooltip="изменить"></i>
           </div>
         </div>
         <div class="card-body px-2 py-1">
@@ -37,7 +40,7 @@
             Описание
           </div>
           <div class="float-right">
-            <i *ngIf="isRiskManager()" class="far fa-edit pointer" (click)="editDescription()" tooltip="изменить"></i>
+            <i *ngIf="isRiskManager() && incident.status !=='close'" class="far fa-edit pointer" (click)="editDescription()" tooltip="изменить"></i>
           </div>
         </div>
         <div class="card-body px-2 py-1">
@@ -52,10 +55,10 @@
         <div class="float-left font-weight-bolder" (click)="draftOpen = !draftOpen">
           <i *ngIf="draftOpen" class="far fa-minus-square"> </i>
           <i *ngIf="!draftOpen" class="fas fa-expand"> </i>
-          Включённые рисковые события
+          Включённые сообщения о рисковых событиях
         </div>
         <div class="float-right">
-          <i *ngIf="isRiskManager()" class="fa fa-plus-circle text-success"
+          <i *ngIf="isRiskManager() && incident.status !=='close'" class="fa fa-plus-circle text-success"
              (click)="addDrafts(); $event.stopPropagation()"></i>
         </div>
       </div>
@@ -67,13 +70,13 @@
           </div>
           <div class="col-6 px-1">
             <span class="font-weight-bolder">Автор: </span>
-            {{d.author.fullname}}
+            {{ authService.getFioByLogin(d.author.name) }}
           </div>
           <div class="col-2 px-1">
             <div class="float-right">
               <i (click)="d.collapsed = !d.collapsed" class="fas fa-info text-info pointer mr-2"
                  tooltip="показать информацию"></i>
-              <i *ngIf="isRiskManager()" (click)="removeDraft(d)" class="fas fa-ban text-danger pointer"
+              <i *ngIf="isRiskManager() && incident.status !=='close'" (click)="removeDraft(d)" class="fas fa-ban text-danger pointer"
                  tooltip="исключить сообщение"></i>
             </div>
           </div>
@@ -90,25 +93,25 @@
             {{d.description1}}
           </div>
         </div>
-        <div *ngIf="d.collapsed" class="row mx-1">
+        <div [hidden]="!d.collapsed" class="row mx-1">
           <div class="col-12 px-1">
             <span class="font-weight-bolder">Описание: </span>
             {{d.description2}}
           </div>
         </div>
-        <div *ngIf="d.collapsed" class="row mx-1">
+        <div [hidden]="!d.collapsed" class="row mx-1">
           <div class="col-12 px-1">
-            <span class="font-weight-bolder">Причины рискового события: </span>
+            <span class="font-weight-bolder">Причины: </span>
             {{d.description3}}
           </div>
         </div>
-        <div *ngIf="d.collapsed" class="row mx-1">
+        <div [hidden]="!d.collapsed" class="row mx-1">
           <div class="col-12 px-1">
-            <span class="font-weight-bolder">Затрагиваемые бизнес-процессы: </span>
+            <span class="font-weight-bolder">Последствия: </span>
             {{d.description4}}
           </div>
         </div>
-        <div *ngIf="d.collapsed" class="row mx-1">
+        <div [hidden]="!d.collapsed" class="row mx-1">
           <div class="col-12 px-1">
             <span class="font-weight-bolder">Предлагаемые мероприятия: </span>
             {{d.description5}}
@@ -121,10 +124,10 @@
         <div class="float-left font-weight-bolder" (click)="responsibleOpen = !responsibleOpen">
           <i *ngIf="responsibleOpen" class="far fa-minus-square"> </i>
           <i *ngIf="!responsibleOpen" class="fas fa-expand"> </i>
-          Ответственные подразделения
+          Владельцы рискового события
         </div>
         <div class="float-right">
-          <i *ngIf="isRiskManager()" class="fa fa-plus-circle text-success"
+          <i *ngIf="isRiskManager() && incident.status !=='close'" class="fa fa-plus-circle text-success"
              (click)="addResponsibles(); $event.stopPropagation()"></i>
         </div>
       </div>
@@ -149,7 +152,7 @@
             <div *ngFor="let u of r.accounts">
               <div class="mx-2">
                 <div class="float-left ml-3">
-                  {{u.fullname}}
+                  {{authService.getFioByLogin(u.name)}}
                 </div>
                 <div class="float-right">
                   <i *ngIf="isRiskCoordinator(r)" class="fas fa-ban"
@@ -170,9 +173,12 @@
                     type="button">добавить
               ответственного
             </button>
-            <button (click)="saveResponsibleAccounts(r)" *ngIf="r.isChanged" class="btn btn-sm btn-outline-success ml-2"
+            <button (click)="saveResponsibleAccounts(r)" [hidden]="!r.isChanged" class="btn btn-sm btn-outline-success ml-2"
                     type="button">сохранить
               изменения
+            </button>
+            <button (click)="cancelResponsibleAccounts(r)" [hidden]="!r.isChanged" class="btn btn-sm btn-outline-secondary ml-2"
+                    type="button">Отмена
             </button>
           </div>
         </accordion-group>
@@ -181,8 +187,8 @@
     <accordion-group [isDisabled]="true" [isOpen]="measureOpen" class="mb-3">
       <div accordion-heading>
         <div class="float-left font-weight-bolder" (click)="measureOpen = !measureOpen">
-          <i *ngIf="measureOpen" class="far fa-minus-square"> </i>
-          <i *ngIf="!measureOpen" class="fas fa-expand"> </i>
+          <i [hidden]="!measureOpen" class="far fa-minus-square"> </i>
+          <i [hidden]="measureOpen" class="fas fa-expand"> </i>
           Мероприятия
         </div>
       </div>
@@ -194,7 +200,7 @@
             </div>
           </div>
           <div class="mx-2 my-2">
-            <app-measure-info [responsible]="r"></app-measure-info>
+            <app-measure-info [responsible]="r" [status]="incident.status"></app-measure-info>
           </div>
         </accordion-group>
       </accordion>

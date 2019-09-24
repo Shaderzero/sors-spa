@@ -40,7 +40,8 @@ export class WinAuthInterceptor implements HttpInterceptor {
 
   private decreaseRequests() {
     this.totalRequests--;
-    if (this.totalRequests === 0) {
+    if (this.totalRequests <= 0) {
+      this.totalRequests = 0;
       this.loaderService.setLoading(false);
     }
   }

@@ -1,7 +1,7 @@
 <form [formGroup]="draftForm" (ngSubmit)="approveModal()">
   <div class="row">
     <div class="col-6">
-      <h2>Редактирование рискового события</h2>
+      <h2>Редактирование сообщения о рисковом событии</h2>
     </div>
     <div class="col-6">
       <div class="form-inline float-right">
@@ -41,7 +41,7 @@
       autosize [minRows]="2" id="description3" formControlName="description3" placeholder=""></textarea>
   </div>
   <div class="form-group">
-    <label for="description4">Затрагиваемые бизнес-процессы</label>
+    <label for="description4">Последствия</label>
     <textarea class="form-control" [ngClass]="{
               'is-invalid':
                 draftForm.get('description4').errors &&

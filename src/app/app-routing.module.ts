@@ -47,6 +47,9 @@ import {SignificanceTableComponent} from './admin/significance-table/significanc
 import {SignificancesResolver} from './_resolvers/references/significance.resolver';
 import {StatusTableComponent} from './admin/status-table/status-table.component';
 import {RiskStatusesResolver} from './_resolvers/references/riskstatus.resolver';
+import {LogsComponent} from './admin/logs/logs.component';
+import {LogsPageResolver} from './_resolvers/admin/logsPage.resolver';
+import {HelpComponent} from './help/help.component';
 
 
 const routes: Routes = [
@@ -56,6 +59,9 @@ const routes: Routes = [
     runGuardsAndResolvers: 'always',
     canActivate: [AuthGuard],
     children: [
+      {
+        path: 'help', component: HelpComponent
+      },
       {
         path: 'admin', component: AdminPanelComponent,
         data: {roles: ['admin']},
@@ -145,7 +151,20 @@ const routes: Routes = [
             resolve: {incidents: IncidentsResolver}
           },
           {
+            path: 'closed', component: IncidentListComponent,
+            resolve: {incidents: IncidentsResolver},
+            data: {status: 'close'}
+          },
+          {
             path: 'new', component: IncidentNewComponent,
+            resolve: {
+              drafts: IDraftsResolver,
+              departments: DepartmentsResolver
+            },
+            data: {roles: ['riskManager'], status: 'sign'}
+          },
+          {
+            path: 'new/:draft', component: IncidentNewComponent,
             resolve: {
               drafts: IDraftsResolver,
               departments: DepartmentsResolver
@@ -222,6 +241,11 @@ const routes: Routes = [
           },
         ]
       },
+      {
+        path: 'logs', component: LogsComponent,
+        data: {roles: ['admin', 'security']},
+        resolve: {logs: LogsPageResolver}
+      }
     ]
   }
 ];

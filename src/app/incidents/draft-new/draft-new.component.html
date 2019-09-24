@@ -1,12 +1,12 @@
 <form [formGroup]="draftForm" (ngSubmit)="approveModal()">
   <div class="row">
     <div class="col-6">
-      <h2>Создание сообщения</h2>
+      <h2>Создание сообщения о рисковом событии</h2>
     </div>
     <div class="col-6">
       <div class="form-inline float-right">
-          <button type="submit" class="btn btn-outline-success mr-2" [disabled]="!draftForm.valid">Создать</button>
-          <button type="button" class="btn btn-outline-secondary" (click)="cancel()">Отмена</button>
+        <button type="submit" class="btn btn-outline-success mr-2" [disabled]="!draftForm.valid">Сохранить</button>
+        <button type="button" class="btn btn-outline-secondary" (click)="cancel()">Отмена</button>
       </div>
     </div>
   </div>
@@ -18,7 +18,7 @@
                 draftForm.get('description1').errors &&
                 draftForm.get('description1').touched
               }"
-      id="description1" formControlName="description1" />
+           id="description1" formControlName="description1"/>
     <div class="invalid-feedback">Необходимо указать краткое наименование</div>
   </div>
   <div class="form-group">
@@ -28,7 +28,8 @@
                 draftForm.get('description2').errors &&
                 draftForm.get('description2').touched
               }"
-      autosize [minRows]="2" id="description2" formControlName="description2" placeholder="Опишите произошедшее рисковое событие"></textarea>
+              autosize [minRows]="2" id="description2" formControlName="description2"
+              placeholder="Опишите произошедшее рисковое событие"></textarea>
     <div class="invalid-feedback">Необходимо описание РС</div>
   </div>
   <div class="form-group">
@@ -38,16 +39,18 @@
                 draftForm.get('description3').errors &&
                 draftForm.get('description3').touched
               }"
-      autosize [minRows]="2" id="description3" formControlName="description3" placeholder=""></textarea>
+              autosize [minRows]="2" id="description3" formControlName="description3"
+              placeholder="Опишите причины возникновения рискового события"></textarea>
   </div>
   <div class="form-group">
-    <label for="description4">Затрагиваемые бизнес-процессы</label>
+    <label for="description4">Последствия</label>
     <textarea class="form-control" [ngClass]="{
               'is-invalid':
                 draftForm.get('description4').errors &&
                 draftForm.get('description4').touched
               }"
-      autosize [minRows]="2" id="description4" formControlName="description4" placeholder=""></textarea>
+              autosize [minRows]="2" id="description4" formControlName="description4"
+              placeholder="Опишите последствия реализации рискового события (в том числе возможные)"></textarea>
   </div>
   <div class="form-group">
     <label for="description5">Предлагаемые мероприятия</label>
@@ -56,6 +59,7 @@
                   draftForm.get('description5').errors &&
                   draftForm.get('description5').touched
                 }"
-      autosize [minRows]="2" id="description5" formControlName="description5" placeholder=""></textarea>
+              autosize [minRows]="2" id="description5" formControlName="description5"
+              placeholder="Опишите предлагаемые мероприятия по снижению вероятности и/или последствий реализации рискового события"></textarea>
   </div>
 </form>

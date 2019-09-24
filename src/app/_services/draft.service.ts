@@ -35,7 +35,9 @@ export class DraftService {
       if (draftParams.type != null) {
         params = params.append('type', draftParams.type);
       } else {
-        if (this.authService.roleMatch(['riskManager'])) {
+        if (this.authService.roleMatch(['admin'])) {
+          params = params.append('type', 'forAdmin');
+        } else if (this.authService.roleMatch(['riskManager'])) {
           params = params.append('type', 'forRM');
         } else if (this.authService.roleMatch(['riskCoordinator'])) {
           params = params.append('type', 'forRC');
@@ -79,15 +81,6 @@ export class DraftService {
 
   getDraft(id): Observable<Draft> {
     return this.http.get<Draft>(this.baseUrl + '/' + id);
-  }
-
-  getCountDrafts(draftParams): Observable<number> {
-    let params = new HttpParams();
-    params = params.append('accountId', draftParams.accountId);
-    params = params.append('departmentId', draftParams.departmentId);
-    params = params.append('status', draftParams.status);
-    params = params.append('type', draftParams.type);
-    return this.http.get<number>(this.baseUrl + '/counts', {params});
   }
 
   createDraft(draft: Draft) {

@@ -39,10 +39,22 @@ export class AuthService {
     });
     this.http.get(this.baseUrl + '/users').subscribe((res: Account[]) => {
       this.accounts = res;
+      // console.log(this.accounts);
     }, error => {
       console.log('get users list failed');
       console.log(error);
     });
+  }
+
+  getFioByLogin(login: string): string {
+    let result = login;
+    for (let i = 0; i < this.accounts.length; i++) {
+      if (this.accounts[i].name === login) {
+        result = this.accounts[i].fullname;
+        break;
+      }
+    }
+    return result;
   }
 
   isRiskCoordinator(department: Department) {
@@ -63,6 +75,13 @@ export class AuthService {
 
   isAdmin() {
     if (this.roleMatch(['admin'])) {
+      return true;
+    }
+    return false;
+  }
+
+  isSecurity() {
+    if (this.roleMatch(['admin', 'security'])) {
       return true;
     }
     return false;

@@ -32,9 +32,13 @@
   </div>
   <accordion>
     <accordion-group class="mb-3">
-      <button type="button" class="btn btn-link btn-block clearfix" accordion-heading>
-        <div class="pull-left float-left">Выберите включаемые сообщения о рисковых событиях</div>
-      </button>
+      <div accordion-heading class="pointer">
+        <div class="float-left font-weight-bolder" (click)="draftOpen = !draftOpen">
+          <i *ngIf="draftOpen" class="far fa-minus-square"> </i>
+          <i *ngIf="!draftOpen" class="fas fa-expand"> </i>
+          Включённые рисковые события
+        </div>
+      </div>
       <div>
         <div *ngFor="let d of drafts" (click)="d.checked = !d.checked" class="checkin card card-block {{d.checked ? 'text-white bg-dark' : ''}} mb-3">
           <div class="row mx-1 mt-2">
@@ -92,9 +96,13 @@
       </div>
     </accordion-group>
     <accordion-group>
-      <button type="button" class="btn btn-link btn-block clearfix" accordion-heading>
-        <div class="pull-left float-left">Выберите ответственные подразделения</div>
-      </button>
+      <div accordion-heading class="pointer">
+        <div class="float-left font-weight-bolder" (click)="ownerOpen = !ownerOpen">
+          <i *ngIf="ownerOpen" class="far fa-minus-square"> </i>
+          <i *ngIf="!ownerOpen" class="fas fa-expand"> </i>
+          Владельцы рискового события
+        </div>
+      </div>
       <div *ngFor="let d of departments" (click)="d.checked = !d.checked" class="checkin card card-block {{d.checked ? 'text-white bg-dark' : ''}} mb-1">
         <div class="row">
           <div class="col-12 mx-2">
