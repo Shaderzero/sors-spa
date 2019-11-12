@@ -3,6 +3,7 @@ import {AuthService} from 'src/app/_services/auth.service';
 import {DraftService} from '../../_services/draft.service';
 import {CountsService} from '../../_services/counts.service';
 import {Counts} from '../../_models/counts';
+import {ExcelService} from '../../_services/excel.service';
 
 @Component({
   selector: 'app-incident-panel',
@@ -15,7 +16,8 @@ export class IncidentPanelComponent implements OnInit {
 
   constructor(private authService: AuthService,
               private draftService: DraftService,
-              private countsService: CountsService) {
+              private countsService: CountsService,
+              private excelService: ExcelService) {
   }
 
   ngOnInit() {
@@ -34,6 +36,6 @@ export class IncidentPanelComponent implements OnInit {
   }
 
   report() {
-
+    this.excelService.getReport();
   }
 }

@@ -112,6 +112,7 @@ import { LogsComponent } from './admin/logs/logs.component';
 import {LogsPageResolver} from './_resolvers/admin/logsPage.resolver';
 import { HelpComponent } from './help/help.component';
 import { NgxPopper } from 'angular-popper';
+import {ExcelService} from './_services/excel.service';
 
 defineLocale('ru', ruLocale);
 
@@ -233,7 +234,8 @@ defineLocale('ru', ruLocale);
     RiskStatusesResolver,
     SignificancesResolver,
     CountsService,
-    LogsPageResolver
+    LogsPageResolver,
+    ExcelService
   ],
   entryComponents: [
     DepartmentModalComponent,

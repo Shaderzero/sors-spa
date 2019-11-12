@@ -30,16 +30,6 @@ export class MailService {
     return this.http.post(this.baseUrl, mail);
   }
 
-  getSiteUrl() {
-    // let url = '';
-    // if (!window.location.origin) {
-    //   url = window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
-    // } else {
-    //   url = window.location.origin;
-    // }
-    // url = window.location.origin;
-  }
-
   generateBody(text: string, link: string, comment: string): string {
     const body = '<html>' +
       '<h2>Система обработки рисковых событий</h2>' +
@@ -61,7 +51,7 @@ export class MailService {
       if (+accounts[i].department.id === +draft.department.id) {
         for (let ii = 0; ii < accounts[i].accountRoles.length; ii++) {
           if (accounts[i].accountRoles[ii].name === 'riskCoordinator') {
-            recipients.push(accounts[i].email);
+            recipients.push(accounts[i].name);
             break;
           }
         }
@@ -79,8 +69,26 @@ export class MailService {
     }
   }
 
-  sendDraftSign(draft: Draft, comment: string) {
+  sendDraftCheck2(draft: Draft, comment: string) {
     const subject = 'Сообщение о рисковом событие';
+    const text = 'На проверку направлено сообщение о рисковом событии. Для его открытия перейдите по ссылке ниже';
+    const link = window.location.origin + '/incidents/drafts/' + draft.id;
+    console.log('link from method: ' + link);
+    const mail = new SorsMail();
+    mail.from = this.from;
+    mail.subject = subject;
+    mail.body = this.generateBody(text, link, comment);
+    const url = this.baseUrl + '/draft/' + draft.id + '/check';
+    this.http.post(url, mail).subscribe(() => {
+      this.alertify.message('Уведомление отправлено');
+    }, error => {
+      console.log(error);
+      this.alertify.error('Ошибка отправки уведомления');
+    });
+  }
+
+  sendDraftSign(draft: Draft, comment: string) {
+    const subject = 'Сообщение о рисковом событии';
     const text = 'На проверку направлено сообщение о рисковом событии. Для его открытия перейдите по ссылке ниже';
     const link = window.location.origin + '/incidents/drafts/' + draft.id;
     const recipients: string[] = [];
@@ -88,7 +96,7 @@ export class MailService {
     for (let i = 0; i < users.length; i++) {
       for (let ii = 0; ii < users[i].accountRoles.length; ii++) {
         if (users[i].accountRoles[ii].name === 'riskManager') {
-          recipients.push(users[i].email);
+          recipients.push(users[i].name);
           break;
         }
       }
@@ -106,6 +114,24 @@ export class MailService {
 
   }
 
+  sendDraftSign2(draft: Draft, comment: string) {
+    const subject = 'Сообщение о рисковом событие';
+    const text = 'На проверку направлено сообщение о рисковом событии. Для его открытия перейдите по ссылке ниже';
+    const link = window.location.origin + '/incidents/drafts/' + draft.id;
+    console.log('link from method: ' + link);
+    const mail = new SorsMail();
+    mail.from = this.from;
+    mail.subject = subject;
+    mail.body = this.generateBody(text, link, comment);
+    const url = this.baseUrl + '/draft/' + draft.id + '/sign';
+    this.http.post(url, mail).subscribe(() => {
+      this.alertify.message('Уведомление отправлено');
+    }, error => {
+      console.log(error);
+      this.alertify.error('Ошибка отправки уведомления');
+    });
+  }
+
   sendDraftRefine(draft: Draft, comment: string) {
     const subject = 'Доработка сообщения о рисковом событии';
     const text = 'На доработку направлено сообщение о рисковом событии. Для его открытия перейдите по ссылке ниже';
@@ -114,11 +140,11 @@ export class MailService {
     const users = this.authService.getAccounts();
     for (let i = 0; i < users.length; i++) {
       if (+users[i].id === +draft.author.id) {
-        recipients.push(users[i].email);
+        recipients.push(users[i].name);
       } else if (+users[i].department.id === +draft.department.id) {
         for (let ii = 0; ii < users[i].accountRoles.length; ii++) {
           if (users[i].accountRoles[ii].name === 'riskCoordinator') {
-            recipients.push(users[i].email);
+            recipients.push(users[i].name);
             break;
           }
         }
@@ -136,6 +162,24 @@ export class MailService {
     }
   }
 
+  sendDraftRefine2(draft: Draft, comment: string) {
+    const subject = 'Сообщение о рисковом событие';
+    const text = 'На проверку направлено сообщение о рисковом событии. Для его открытия перейдите по ссылке ниже';
+    const link = window.location.origin + '/incidents/drafts/' + draft.id;
+    console.log('link from method: ' + link);
+    const mail = new SorsMail();
+    mail.from = this.from;
+    mail.subject = subject;
+    mail.body = this.generateBody(text, link, comment);
+    const url = this.baseUrl + '/draft/' + draft.id + '/refine';
+    this.http.post(url, mail).subscribe(() => {
+      this.alertify.message('Уведомление отправлено');
+    }, error => {
+      console.log(error);
+      this.alertify.error('Ошибка отправки уведомления');
+    });
+  }
+
   sendIncidentAssign(incident: Incident, comment: string) {
     const subject = 'Поступило в работу рисковое событие';
     const text = 'Вам расписано рисковое событие. ' +
@@ -149,7 +193,7 @@ export class MailService {
       for (let ii = 0; ii < incident.responsibles.length; ii++) {
         const responsibleDep = incident.responsibles[ii].department;
         if (+user.department.id === +responsibleDep.id && this.authService.accountHasRole(user, 'riskCoordinator')) {
-          recipients.push(user.email);
+          recipients.push(user.name);
         }
       }
     }
@@ -165,18 +209,37 @@ export class MailService {
     }
   }
 
+  sendIncidentAssign2(incident: Incident, comment: string) {
+    const subject = 'Поступило в работу рисковое событие';
+    const text = 'Вам расписано рисковое событие. ' +
+      'Вы можете выбрать ответственных исполнителей от подразделения и/или проработать план мероприятий, а также отслеживать их статус ' +
+      'Для его открытия перейдите по ссылке ниже';
+    const link = window.location.origin + '/incidents/' + incident.id;
+    const mail = new SorsMail();
+    mail.from = this.from;
+    mail.subject = subject;
+    mail.body = this.generateBody(text, link, comment);
+    const url = this.baseUrl + '/incident/' + incident.id + '/assign';
+    this.http.post(url, mail).subscribe(() => {
+      this.alertify.message('Уведомление отправлено');
+    }, error => {
+      console.log(error);
+      this.alertify.error('Ошибка отправки уведомления');
+    });
+  }
+
   sendAccountsAssign(incident: Incident, newResponsibleAccounts: Account[], comment: string) {
     if (newResponsibleAccounts === null || newResponsibleAccounts.length === 0) {
       return;
     }
     const subject = 'Поступило в работу рисковое событие';
     const text = 'Вам расписано рисковое событие. ' +
-      'По нему необходимо проработать план мероприятий. ' +
+      'Вы можете создавать по нему план мероприятий и/или отслеживать статус их выполнения. ' +
       'Для его открытия перейдите по ссылке ниже';
     const link = window.location.origin + '/incidents/' + incident.id;
     const recipients: string[] = [];
     for (let i = 0; i < newResponsibleAccounts.length; i++) {
-      recipients.push(newResponsibleAccounts[i].email);
+      recipients.push(newResponsibleAccounts[i].name);
     }
     if (recipients.length > 0) {
       this.sendMail(recipients, subject, text, link, comment).subscribe(() => {
@@ -190,6 +253,33 @@ export class MailService {
     }
   }
 
+  sendAccountsAssign2(incident: Incident, newResponsibleAccounts: Account[], comment: string) {
+    if (newResponsibleAccounts === null || newResponsibleAccounts.length === 0) {
+      return;
+    }
+    const subject = 'Поступило в работу рисковое событие';
+    const text = 'Вам расписано рисковое событие. ' +
+      'Вы можете создавать по нему план мероприятий и/или отслеживать статус их выполнения. ' +
+      'Для его открытия перейдите по ссылке ниже';
+    const link = window.location.origin + '/incidents/' + incident.id;
+    const mail = new SorsMail();
+    mail.from = this.from;
+    mail.subject = subject;
+    const recipients: string[] = [];
+    for (let i = 0; i < newResponsibleAccounts.length; i++) {
+      recipients.push(newResponsibleAccounts[i].name);
+    }
+    mail.to = recipients;
+    mail.body = this.generateBody(text, link, comment);
+    const url = this.baseUrl + '/incident/' + incident.id + '/acassign';
+    this.http.post(url, mail).subscribe(() => {
+      this.alertify.message('Уведомление отправлено');
+    }, error => {
+      console.log(error);
+      this.alertify.error('Ошибка отправки уведомления');
+    });
+  }
+
   sendResponsible(incident: Incident, responsible: Responsible, comment: string) {
     const subject = 'Поступило в работу рисковое событие';
     const text = 'Вам расписано рисковое событие. ' +
@@ -201,7 +291,33 @@ export class MailService {
     for (let i = 0; i < users.length; i++) {
       const user = users[i];
       if (+user.department.id === responsible.department.id && this.authService.accountHasRole(user, 'riskCoordinator')) {
-        recipients.push(user.email);
+        recipients.push(user.name);
+      }
+    }
+    if (recipients.length > 0) {
+      this.sendMail(recipients, subject, text, link, comment).subscribe(() => {
+        this.alertify.message('Уведомление отправлено');
+      }, error => {
+        console.log(error);
+        this.alertify.error(error);
+      });
+    } else {
+      this.alertify.error('не найдено получателей для отправки уведомления');
+    }
+  }
+
+  sendResponsible2(incident: Incident, responsible: Responsible, comment: string) {
+    const subject = 'Поступило в работу рисковое событие';
+    const text = 'Вам расписано рисковое событие. ' +
+      'По нему необходимо выбрать ответственных исполнителей от подразделения и/или проработать план мероприятий ' +
+      'Для его открытия перейдите по ссылке ниже';
+    const link = window.location.origin + '/incidents/' + incident.id + '/addassign/' + responsible;
+    const recipients: string[] = [];
+    const users = this.authService.getAccounts();
+    for (let i = 0; i < users.length; i++) {
+      const user = users[i];
+      if (+user.department.id === responsible.department.id && this.authService.accountHasRole(user, 'riskCoordinator')) {
+        recipients.push(user.name);
       }
     }
     if (recipients.length > 0) {

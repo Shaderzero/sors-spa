@@ -58,7 +58,7 @@
       </div>
       <div class="col-6">
         <span class="font-weight-bolder">Автор: </span>
-        {{authService.getFioByLogin(d.author.name)}}
+        {{d.author.fullname}}
       </div>
       <div class="col-2">
         <div class="float-right">
@@ -68,7 +68,7 @@
           <i *ngIf="d.status === 'check'" class="fas fa-check text-primary mr-2" tooltip="на проверке риск координатора"></i>
           <i *ngIf="d.status === 'open'" class="fas fa-briefcase text-success mr-2" tooltip="включено в рисковое событие"></i>
           <i *ngIf="d.status === 'close'" class="fas fa-archive text-muted mr-2" tooltip="сообщение в архиве"></i>
-          <i class="fas fa-info text-info" [routerLink]="['/incidents/drafts/' + d.id]"
+          <i class="fas fa-info btn btn-sm btn-outline-info" [routerLink]="['/incidents/drafts/' + d.id]"
              tooltip="показать информацию"></i>
         </div>
       </div>

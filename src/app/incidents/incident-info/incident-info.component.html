@@ -2,7 +2,12 @@
   <div class="row">
     <div class="col-12">
       <div class="float-left">
-        <h2>Рисковое событие</h2>
+        <h2>Рисковое событие
+          <i class="fas fa-file-excel btn btn-outline-success"
+             (click)="getExcel()"
+             tooltip="выгрузить в Excel">
+          </i>
+        </h2>
       </div>
       <div class="float-right">
         <!--<i class="far fa-save" (click)="exportAsXLSX()"></i>-->
@@ -54,7 +59,7 @@
       <div accordion-heading>
         <div class="float-left font-weight-bolder" (click)="draftOpen = !draftOpen">
           <i *ngIf="draftOpen" class="far fa-minus-square"> </i>
-          <i *ngIf="!draftOpen" class="fas fa-expand"> </i>
+          <i *ngIf="!draftOpen" class="far fa-plus-square"> </i>
           Включённые сообщения о рисковых событиях
         </div>
         <div class="float-right">
@@ -70,7 +75,7 @@
           </div>
           <div class="col-6 px-1">
             <span class="font-weight-bolder">Автор: </span>
-            {{ authService.getFioByLogin(d.author.name) }}
+            {{ d.author.fullname }}
           </div>
           <div class="col-2 px-1">
             <div class="float-right">
@@ -123,7 +128,7 @@
       <div accordion-heading>
         <div class="float-left font-weight-bolder" (click)="responsibleOpen = !responsibleOpen">
           <i *ngIf="responsibleOpen" class="far fa-minus-square"> </i>
-          <i *ngIf="!responsibleOpen" class="fas fa-expand"> </i>
+          <i *ngIf="!responsibleOpen" class="far fa-plus-square"> </i>
           Владельцы рискового события
         </div>
         <div class="float-right">
@@ -152,7 +157,7 @@
             <div *ngFor="let u of r.accounts">
               <div class="mx-2">
                 <div class="float-left ml-3">
-                  {{authService.getFioByLogin(u.name)}}
+                  {{ u.fullname }}
                 </div>
                 <div class="float-right">
                   <i *ngIf="isRiskCoordinator(r)" class="fas fa-ban"
@@ -188,7 +193,7 @@
       <div accordion-heading>
         <div class="float-left font-weight-bolder" (click)="measureOpen = !measureOpen">
           <i [hidden]="!measureOpen" class="far fa-minus-square"> </i>
-          <i [hidden]="measureOpen" class="fas fa-expand"> </i>
+          <i [hidden]="measureOpen" class="far fa-plus-square"> </i>
           Мероприятия
         </div>
       </div>

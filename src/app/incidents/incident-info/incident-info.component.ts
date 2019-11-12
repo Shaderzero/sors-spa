@@ -58,11 +58,11 @@ export class IncidentInfoComponent implements OnInit {
     this.getDepartmentAccounts();
   }
 
-  fillDraftsAuthorNames() {
-    for (let i = 0; i < this.incident.drafts. length; i++) {
-      this.incident.drafts[i].author.fullname = this.authService.getFioByLogin(this.incident.drafts[i].author.name);
-    }
-  }
+  // fillDraftsAuthorNames() {
+  //   for (let i = 0; i < this.incident.drafts. length; i++) {
+  //     this.incident.drafts[i].author.fullname = this.authService.getFioByLogin(this.incident.drafts[i].author.name);
+  //   }
+  // }
 
   isAdmin() {
     return this.authService.isAdmin();
@@ -79,10 +79,10 @@ export class IncidentInfoComponent implements OnInit {
   getDepartmentAccounts() {
     this.userService.getDepartmentAccounts(this.currentUser.department.id).subscribe((res: Account[]) => {
       this.departmentAccounts = res;
-      console.log(this.departmentAccounts);
-      for (let i = 0; i < this.departmentAccounts.length; i++) {
-        this.departmentAccounts[i].fullname = this.authService.getFioByLogin(this.departmentAccounts[i].name);
-      }
+      // console.log(this.departmentAccounts);
+      // for (let i = 0; i < this.departmentAccounts.length; i++) {
+      //   this.departmentAccounts[i].fullname = this.authService.getFioByLogin(this.departmentAccounts[i].name);
+      // }
     });
   }
 
@@ -376,6 +376,10 @@ export class IncidentInfoComponent implements OnInit {
         this.alertify.message('отмена');
       }
     });
+  }
+
+  getExcel() {
+    this.incidentService.getExcel(this.incident.id);
   }
 
 }

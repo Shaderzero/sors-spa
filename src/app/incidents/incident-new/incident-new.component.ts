@@ -113,8 +113,8 @@ export class IncidentNewComponent implements OnInit {
     const responsibles = this.getResponsibles();
     if (selectedDrafts.length === 0) {
       this.alertify.error('не выбраны сообщения о РС');
-    } else if (responsibles.length === 0) {
-      this.alertify.error('не выбраны ответственные');
+    // } else if (responsibles.length === 0) {
+    //   this.alertify.error('не выбраны ответственные');
     } else if (this.incidentForm.valid) {
       this.model = Object.assign({}, this.incidentForm.value);
       this.incident = {

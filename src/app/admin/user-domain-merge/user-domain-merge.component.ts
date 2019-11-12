@@ -8,6 +8,7 @@ import {AlertifyService} from 'src/app/_services/alertify.service';
 import {Account} from 'src/app/_models/account';
 import {Department} from 'src/app/_models/department';
 import {DomainDepartment} from 'src/app/_models/domainDepartment';
+import {AuthService} from '../../_services/auth.service';
 
 @Component({
   selector: 'app-user-domain-merge',
@@ -32,12 +33,14 @@ export class UserDomainMergeComponent implements OnInit {
   constructor(private route: ActivatedRoute,
               private fb: FormBuilder,
               private adminService: AdminService,
+              private authService: AuthService,
               private router: Router,
               private alertify: AlertifyService) {
   }
 
   ngOnInit() {
     this.createFilterForm();
+    // this.accounts = this.authService.getAccounts();
     this.route.data.subscribe(data => {
       this.domainUsers = data['domainusers'];
       this.accounts = data['accounts'];
@@ -126,36 +129,30 @@ export class UserDomainMergeComponent implements OnInit {
 
   fillArrays() {
     for (let i = 0; i < this.domainUsers.length; i++) {
-      let isNew = true;
-      let isDepChange = true;
       const du = this.domainUsers[i];
-      for (let ii = 0; ii < this.accounts.length; ii++) {
-        const a = this.accounts[ii];
-        if (a.name === du.name) {
-          isNew = false;
-          if (a.fullname !== du.fullname
-            || a.email !== du.email) {
-            this.changedUsers.push(du);
-            isDepChange = false;
-          } else if (a.department.domainDepartments) {
-            for (let iii = 0; iii < a.department.domainDepartments.length; iii++) {
-              if (a.department.domainDepartments[iii].name === du.domainDepartment) {
-                isDepChange = false;
-                break;
-              }
-            }
-          }
-          if (isDepChange) {
-            this.changedUsers.push(du);
-          }
+      const acc = this.accounts.find(function(element) {
+        return element.name == du.name;
+      });
+      if (acc == null) {
+        const dep = this.domainDepartments.find(function(element) {
+          return element.name == du.domainDepartment;
+        });
+        if (dep != null) {
+          this.newUsers.push(this.domainUsers[i]);
           break;
         }
-      }
-      if (isNew) {
-        for (let ii = 0; ii < this.domainDepartments.length; ii++) {
-          if (du.domainDepartment === this.domainDepartments[ii].name) {
-            this.newUsers.push(this.domainUsers[i]);
-            break;
+      } else {
+        if (acc.fullname !== du.fullname
+          || acc.email !== du.email) {
+          this.changedUsers.push(du);
+        } else {
+          const dep = this.domainDepartments.find(function(element) {
+            return element.name == du.domainDepartment;
+          });
+          if (dep != null) {
+            if (dep.department.id != acc.department.id) {
+              this.changedUsers.push(du);
+            }
           }
         }
       }

@@ -10,6 +10,7 @@ import {DomainDepartmentModalComponent} from '../../modals/domain-department-mod
 import {DomainUser} from 'src/app/_models/domainUser';
 import {ConfirmModalComponent} from 'src/app/references/confirm-modal/confirm-modal.component';
 import {PaginatedResult, Pagination} from '../../_models/pagination';
+import {AuthService} from '../../_services/auth.service';
 
 @Component({
   selector: 'app-domain-departments',
@@ -19,7 +20,7 @@ import {PaginatedResult, Pagination} from '../../_models/pagination';
 export class DomainDepartmentsComponent implements OnInit {
   filterForm: FormGroup;
   modalRef: BsModalRef;
-  domainUsers: DomainUser[];
+  // domainUsers: DomainUser[];
   departments: Department[];
   domainDepartments: DomainDepartment[];
   pagination: Pagination;
@@ -32,6 +33,7 @@ export class DomainDepartmentsComponent implements OnInit {
               private fb: FormBuilder,
               private adminService: AdminService,
               private modalService: BsModalService,
+              private authService: AuthService,
               private alertify: AlertifyService) {
   }
 
@@ -44,7 +46,7 @@ export class DomainDepartmentsComponent implements OnInit {
       this.domainDepartments = data['domaindepartments'].result;
       this.pagination = data['domaindepartments'].pagination;
       this.departments = data['departments'];
-      this.domainUsers = data['domainusers'];
+      // this.domainUsers = data['domainusers'];
     });
   }
 
@@ -108,7 +110,8 @@ export class DomainDepartmentsComponent implements OnInit {
     const initialState = {
       title: 'Создание подразделения',
       buttonName: 'Создать',
-      domainUsers: this.domainUsers,
+      // domainUsers: this.domainUsers,
+      domainUsers: this.authService.getAccounts(),
       departments: this.departments,
       domainDepartments: this.domainDepartments,
       domainDepartment: {id: null, name: '', department: {name: ''}},
@@ -126,7 +129,8 @@ export class DomainDepartmentsComponent implements OnInit {
     const initialState = {
       title: 'Редактирование подразделения',
       buttonName: 'Изменить',
-      domainUsers: this.domainUsers,
+      // domainUsers: this.domainUsers,
+      domainUsers: this.authService.getAccounts(),
       departments: this.departments,
       domainDepartments: this.domainDepartments,
       domainDepartment: domainDepartment,

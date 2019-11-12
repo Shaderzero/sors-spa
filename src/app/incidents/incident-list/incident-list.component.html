@@ -1,6 +1,11 @@
 <div class="row align-middle">
   <div class="col-12">
-    <h2>Рисковые события</h2>
+    <h2>Рисковые события
+      <i class="fas fa-file-excel btn btn-outline-success"
+         (click)="getReport()"
+         tooltip="выгрузить в Excel">
+      </i>
+    </h2>
   </div>
 </div>
 <div class="row">
@@ -26,9 +31,11 @@
             </li>
           </ul>
         </div>
-        <button type="button" class="btn {{ this.incidentParams.orderAsc === true ? 'btn-primary' : 'btn-outline-dark'}}"
+        <button type="button"
+                class="btn {{ this.incidentParams.orderAsc === true ? 'btn-primary' : 'btn-outline-dark'}}"
                 (click)="sortOrder(true)"><i class="fas fa-sort-alpha-down"></i></button>
-        <button type="button" class="btn {{ this.incidentParams.orderAsc === false ? 'btn-primary' : 'btn-outline-dark'}}"
+        <button type="button"
+                class="btn {{ this.incidentParams.orderAsc === false ? 'btn-primary' : 'btn-outline-dark'}}"
                 (click)="sortOrder(false)"><i class="fas fa-sort-alpha-up"></i></button>
       </div>
     </div>
@@ -61,7 +68,7 @@
       </div>
       <div class="col-2">
         <div class="float-right">
-          <i class="fas fa-info text-info pointer" [routerLink]="['/incidents/' + incident.id]"
+          <i class="fas fa-info btn btn-sm btn-outline-info" [routerLink]="['/incidents/' + incident.id]"
              tooltip="показать информацию"></i>
         </div>
       </div>

@@ -31,6 +31,7 @@ export class IncidentListComponent implements OnInit {
     this.incidentParams.order = 'dateIncident';
     this.incidentParams.orderAsc = true;
     this.currentOrder = 'Дата';
+    this.incidentParams.status = this.route.snapshot.data['status']; // добавил для Excel
     this.route.data.subscribe(data => {
       this.incidents = data['incidents'].result;
       this.pagination = data['incidents'].pagination;
@@ -94,5 +95,9 @@ export class IncidentListComponent implements OnInit {
     this.incidentParams = {};
     this.loadIncidents();
     this.isFiltered = false;
+  }
+
+  getReport() {
+    this.incidentService.getReport(this.incidentParams);
   }
 }

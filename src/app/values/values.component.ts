@@ -20,11 +20,11 @@ export class ValuesComponent implements OnInit {
 
   ngOnInit() {
     this.getValues().subscribe(res => {
-      console.log(res);
+      // console.log(res);
       this.values = res;
     });
     this.authService.getCurrentUser().subscribe(res => {
-      console.log(res);
+      // console.log(res);
       this.currentUser = res;
     });
   }

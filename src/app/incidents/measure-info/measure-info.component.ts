@@ -165,7 +165,7 @@ export class MeasureInfoComponent implements OnInit {
         measure.authorId = this.authService.currentUser.id;
         this.measureService.createMeasure(measure).subscribe((newMeasure: Measure) => {
           this.measures.push(newMeasure);
-          console.log(newMeasure);
+          // console.log(newMeasure);
           this.alertify.success('Создано новое мероприятие');
         }, error => {
           console.log(error);
