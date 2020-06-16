@@ -1,0 +1,89 @@
+<div class="m-3">
+  <div>
+    <div class="row">
+      <div class="col-12">
+        <div class="float-left">
+          <h4>Журнал входа пользователей</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr class="mt-0">
+  <div class="row">
+    <div class="col-xl-4 col-md-12">
+      <pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems" [itemsPerPage]="pagination.itemsPerPage"
+                  [(ngModel)]="pagination.currentPage" (pageChanged)="pageChanged($event)" previousText="&lsaquo;"
+                  [maxSize]="5" [rotate]="true"
+                  nextText="&rsaquo;"
+                  firstText="&laquo;" lastText="&raquo;">
+      </pagination>
+    </div>
+    <div class="col-xl-4 col-md-6 mb-3">
+      <div class="form-inline">
+        <div class="btn-group" role="group">
+          <div class="btn-group" dropdown>
+            <button dropdownToggle type="button" class="btn btn-secondary dropdown-toggle" aria-controls="orderDrop">
+              {{currentOrder}} <span class="caret"></span>
+            </button>
+            <ul id="orderDrop" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="orderDrop">
+              <li *ngFor="let o of orderOptions" role="menuitem"
+                  class="dropdown-item {{currentOder === o ? 'active' : ''"
+                  (click)="sort(o)">
+                {{o}}
+              </li>
+            </ul>
+          </div>
+          <button type="button" class="btn {{ this.logParams.orderAsc === true ? 'btn-dark' : 'btn-secondary'}}"
+                  (click)="sortOrder(true)"><i class="fas fa-sort-alpha-down"></i></button>
+          <button type="button" class="btn {{ this.logParams.orderAsc === false ? 'btn-dark' : 'btn-secondary'}}"
+                  (click)="sortOrder(false)"><i class="fas fa-sort-alpha-up"></i></button>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-4 col-md-6 mb-3">
+      <form class="form-inline float-right" [formGroup]="filterForm" (ngSubmit)="filter()">
+        <input class="form-control mr-2" [ngClass]="{
+                    'is-invalid':
+                    filterForm.get('filterString').errors &&
+                    filterForm.get('filterString').touched
+                    }"
+               id="filterString" formControlName="filterString"/>
+        <button class="btn btn-outline-success" type="submit" [disabled]="!filterForm.valid">Filter</button>
+        <button class="btn btn-outline-warning ml-2" type="button" *ngIf="isFiltered" (click)="unFilter()"><i
+          class="fas fa-ban"></i></button>
+      </form>
+    </div>
+  </div>
+  <table class="table table-sm table-hover">
+    <thead>
+    <tr>
+      <th>
+        <div>Дата
+        </div>
+      </th>
+      <th>
+        <div>Аккаунт</div>
+      </th>
+      <th>
+        <div>ФИО</div>
+      </th>
+      <th>
+        <div>Подразделение
+        </div>
+      </th>
+      <th>
+        <div>Права</div>
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let l of logs">
+      <td>{{ l.timestamp | date: "dd.MM.yy HH:mm:ss" : '+0000' }}</td>
+      <td>{{ l.account.name }}</td>
+      <td>{{ l.account.fullname }}</td>
+      <td>{{ l.account.department.name }}</td>
+      <td>{{ rolesToString(l.account.accountRoles)}}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>

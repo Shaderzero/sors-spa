@@ -1,0 +1,4 @@
+<span class="description">
+  {{ textData ? textData.value : name }}
+  <i *ngIf="isAdmin" class="fas fa-edit text-secondary pointer mr-2 pointer icons animate" (click)="edit(); $event.stopPropagation()"></i>
+</span>

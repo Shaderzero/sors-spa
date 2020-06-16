@@ -1,0 +1,21 @@
+.pointer {
+  cursor: pointer;
+}
+
+.icons {
+  font-size: 1rem;
+  opacity: 0;
+}
+
+.description {
+  overflow: hidden;
+  position: relative;
+}
+
+.description:hover .icons {
+  opacity: 1;
+}
+
+.animate {
+  transition: all 0.5s ease-in-out;
+}
