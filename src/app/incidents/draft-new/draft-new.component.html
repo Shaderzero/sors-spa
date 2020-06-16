@@ -1,65 +1,150 @@
 <form [formGroup]="draftForm" (ngSubmit)="approveModal()">
   <div class="row">
-    <div class="col-6">
-      <h2>Создание сообщения о рисковом событии</h2>
+    <div class="col-8">
+      <div class="form-inline float-left">
+        <h4 class="mr-2">
+          <app-smart-name [name]="'NewDraftTitle'"></app-smart-name>
+        </h4>
+        <div *ngIf="mode !== 'newExample'" class="btn-group" dropdown tooltip="Показать примеры сообщений"
+             placement="top" [delay]="2000">
+          <button dropdownToggle type="button" class="btn btn-sm btn-outline-info dropdown-toggle"
+                  aria-controls="orderDrop">
+            Показать пример <span class="caret"></span>
+          </button>
+          <ul id="orderDrop" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="orderDrop">
+            <li *ngFor="let e of examples; let i = index" (click)="showExample(e)" role="menuitem"
+                class="dropdown-item checkin">Пример {{i + 1}}</li>
+            <li (click)="example = false" role="menuitem" class="dropdown-item checkin">Скрыть пример</li>
+          </ul>
+        </div>
+      </div>
     </div>
-    <div class="col-6">
+    <div class="col-4">
       <div class="form-inline float-right">
-        <button type="submit" class="btn btn-outline-success mr-2" [disabled]="!draftForm.valid">Сохранить</button>
-        <button type="button" class="btn btn-outline-secondary" (click)="cancel()">Отмена</button>
+        <button type="submit" class="btn btn-sm btn-outline-success mr-2" [disabled]="!draftForm.valid">Сохранить
+        </button>
+        <button type="button" class="btn btn-sm btn-outline-secondary" (click)="cancel()">Отмена</button>
       </div>
     </div>
   </div>
   <hr class="mt-0">
-  <div class="form-group">
-    <label for="description1">Краткое наименование</label>
-    <input type="text" class="form-control" [ngClass]="{
+  <div class="row">
+    <div class="{{example ? 'col-6' : 'col-12'}}">
+      <div class="form-group">
+        <label>
+          <app-smart-name [name]="'IncidentTypeTitle'"></app-smart-name>
+        </label>
+        <select class="form-control p-1" [ngClass]="{
+              'is-invalid':
+              draftForm.get('incidentTypeId').errors &&
+              draftForm.get('incidentTypeId').touched
+            }"
+                formControlName="incidentTypeId">
+          <option *ngFor="let it of incidentTypes" [ngValue]="it.id">{{it.name}}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="description1">
+          <app-smart-name [name]="'DraftDescription1'"></app-smart-name>
+        </label>
+        <input type="text" class="form-control" [ngClass]="{
               'is-invalid':
                 draftForm.get('description1').errors &&
                 draftForm.get('description1').touched
               }"
-           id="description1" formControlName="description1"/>
-    <div class="invalid-feedback">Необходимо указать краткое наименование</div>
-  </div>
-  <div class="form-group">
-    <label for="description2">Описание</label>
-    <textarea class="form-control" [ngClass]="{
+               id="description1" formControlName="description1"
+               [placeholder]="description1Placeholder"/>
+      </div>
+      <div class="form-group">
+        <label for="description2">
+          <app-smart-name [name]="'DraftDescription2'"></app-smart-name>
+        </label>
+        <textarea class="form-control" [ngClass]="{
               'is-invalid':
                 draftForm.get('description2').errors &&
                 draftForm.get('description2').touched
               }"
-              autosize [minRows]="2" id="description2" formControlName="description2"
-              placeholder="Опишите произошедшее рисковое событие"></textarea>
-    <div class="invalid-feedback">Необходимо описание РС</div>
-  </div>
-  <div class="form-group">
-    <label for="description3">Причины рискового события</label>
-    <textarea class="form-control" [ngClass]="{
+                  autosize [minRows]="2" id="description2" formControlName="description2"
+                  [placeholder]="description2Placeholder"></textarea>
+        <div class="invalid-feedback">
+          <app-smart-name [name]="'DraftDescription2Invalid'"></app-smart-name>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="description3">
+          <app-smart-name [name]="'DraftDescription3'"></app-smart-name>
+        </label>
+        <textarea class="form-control" [ngClass]="{
               'is-invalid':
                 draftForm.get('description3').errors &&
                 draftForm.get('description3').touched
               }"
-              autosize [minRows]="2" id="description3" formControlName="description3"
-              placeholder="Опишите причины возникновения рискового события"></textarea>
-  </div>
-  <div class="form-group">
-    <label for="description4">Последствия</label>
-    <textarea class="form-control" [ngClass]="{
+                  autosize [minRows]="2" id="description3" formControlName="description3"
+                  [placeholder]="description3Placeholder"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="description4">
+          <app-smart-name [name]="'DraftDescription4'"></app-smart-name>
+        </label>
+        <textarea class="form-control" [ngClass]="{
               'is-invalid':
                 draftForm.get('description4').errors &&
                 draftForm.get('description4').touched
               }"
-              autosize [minRows]="2" id="description4" formControlName="description4"
-              placeholder="Опишите последствия реализации рискового события (в том числе возможные)"></textarea>
-  </div>
-  <div class="form-group">
-    <label for="description5">Предлагаемые мероприятия</label>
-    <textarea class="form-control" [ngClass]="{
+                  autosize [minRows]="2" id="description4" formControlName="description4"
+                  [placeholder]="description4Placeholder"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="description5">
+          <app-smart-name [name]="'DraftDescription5'"></app-smart-name>
+        </label>
+        <textarea class="form-control" [ngClass]="{
                 'is-invalid':
                   draftForm.get('description5').errors &&
                   draftForm.get('description5').touched
                 }"
-              autosize [minRows]="2" id="description5" formControlName="description5"
-              placeholder="Опишите предлагаемые мероприятия по снижению вероятности и/или последствий реализации рискового события"></textarea>
+                  autosize [minRows]="2" id="description5" formControlName="description5"
+                  [placeholder]="description5Placeholder"></textarea>
+      </div>
+    </div>
+    <div *ngIf="example" class="col-6">
+      <div class="form-group">
+        <label for="description1">
+          <app-smart-name [name]="'IncidentTypeTitle'"></app-smart-name>
+        </label>
+        <input type="text" class="form-control" value="{{eIncidentType}}" disabled/>
+      </div>
+      <div class="form-group">
+        <label for="description1">
+          <app-smart-name [name]="'DraftDescription1'"></app-smart-name>
+        </label>
+        <input type="text" class="form-control" value="{{eDesc1}}" disabled/>
+      </div>
+      <div class="form-group">
+        <label for="description2">
+          <app-smart-name [name]="'DraftDescription2'"></app-smart-name>
+        </label>
+        <textarea class="form-control" value="{{eDesc2}}" disabled></textarea>
+      </div>
+      <div class="form-group">
+        <label for="description3">
+          <app-smart-name [name]="'DraftDescription3'"></app-smart-name>
+        </label>
+        <textarea class="form-control" value="{{eDesc3}}" disabled></textarea>
+      </div>
+      <div class="form-group">
+        <label for="description4">
+          <app-smart-name [name]="'DraftDescription4'"></app-smart-name>
+        </label>
+        <textarea class="form-control" value="{{eDesc4}}" disabled></textarea>
+      </div>
+      <div class="form-group">
+        <label for="description5">
+          <app-smart-name [name]="'DraftDescription5'"></app-smart-name>
+        </label>
+        <textarea class="form-control" value="{{eDesc5}}" disabled></textarea>
+      </div>
+    </div>
   </div>
+
 </form>

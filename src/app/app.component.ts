@@ -1,4 +1,5 @@
 import {Component} from '@angular/core';
+import {TextDataService} from './_services/text-data.service';
 
 @Component({
   selector: 'app-root',

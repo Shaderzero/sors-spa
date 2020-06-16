@@ -99,6 +99,10 @@ export class IncidentService {
     return this.http.patch(this.baseUrl + '/' + incident.id, patch);
   }
 
+  updateIncidentType(model: any) {
+    return this.http.patch(this.baseUrl + '/' + model.id + '/type', model);
+  }
+
   patchDateIncident(incident: Incident, patch: PatcherDate[]) {
     return this.http.patch(this.baseUrl + '/' + incident.id, patch);
   }
@@ -115,8 +119,20 @@ export class IncidentService {
     return this.http.patch(this.baseUrl + '/' + model.id + '/status', model);
   }
 
+  resign(model: any) {
+    return this.http.patch(this.baseUrl + '/' + model.id + '/resign', model);
+  }
+
+  resignAll(model: any) {
+    return this.http.patch(this.baseUrl + '/' + model.id + '/resignall', model);
+  }
+
   addResponsible(incident: Incident, department: Department) {
     return this.http.get(this.baseUrl + '/' + incident.id + '/responsibleadd/' + department.id);
+  }
+
+  getHistory(incidentId: number) {
+    return this.http.get(this.baseUrl + '/' + incidentId + '/history');
   }
 
   removeResponsible(incident: Incident, responsible: Responsible) {
@@ -129,6 +145,10 @@ export class IncidentService {
 
   closeIncident(incident: Incident) {
     return this.http.get(this.baseUrl + '/' + incident.id + '/close');
+  }
+
+  approveIncident(incidentId: number, departmentId: number) {
+    return this.http.get(this.baseUrl + '/' + incidentId + '/approve/' + departmentId);
   }
 
   getReport(incidentParams?) {
@@ -236,7 +256,7 @@ export class IncidentService {
 
   downloadFile(data: any) {
     // console.log(data);
-    console.log('inside incident.service')
+    console.log('inside incident service');
     const blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
     const url = window.URL.createObjectURL(blob);
     console.log(url);

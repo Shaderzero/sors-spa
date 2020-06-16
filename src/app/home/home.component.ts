@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
+import {TextDataService} from '../_services/text-data.service';
 
 @Component({
   selector: 'app-home',
@@ -8,7 +9,7 @@ import {Router} from '@angular/router';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private route: ActivatedRoute, private textDataService: TextDataService) {
   }
 
   ngOnInit() {
@@ -19,6 +20,9 @@ export class HomeComponent implements OnInit {
       siteUrl = window.location.origin;
     }
     console.log(siteUrl);
+    // this.route.data.subscribe(data => {
+    //   this.textDataService.textDatas = data.textdatas;
+    // });
   }
 
 }

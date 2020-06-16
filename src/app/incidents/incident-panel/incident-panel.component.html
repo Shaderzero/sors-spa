@@ -1,91 +1,131 @@
 <div class="wrapper">
   <nav id="sidebar">
     <div class="mt-2 ml-2">
-      <h2>Cобытия</h2>
-      <div class="list-group pointer">
-        <button type="button" class="list-group-item list-group-item-action" [routerLink]="['/incidents/drafts/new']"
-                routerLinkActive="active" tooltip="Создать сообщение о РС" placement="right">Создать
+      <div class="d-flex justify-content-between align-items-center">
+        <h4>
+          <app-smart-name [name]="'IncidentPanelTitle'"></app-smart-name>
+        </h4>
+        <button type="button" class="btn btn-sm btn-success" [routerLink]="['/incidents/drafts/new']"
+                tooltip="Создать новое сообщение о рисковом событии" placement="bottom"
+                [delay]="1000">Создать
         </button>
-        <button type="button" class="list-group-item list-group-item-action"
+      </div>
+      <div class="list-group pointer">
+        <span type="button" class="list-group-item list-group-item-action"
                 [routerLink]="['/incidents/drafts/list']"
                 routerLinkActive="active"
                 tooltip="Отобразить все сообщения о РС, доступные пользователю" placement="right">
-          Сообщения о РС
-        </button>
-        <div class="py-1">
-          <button type="button"
-                  class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-1 px-2"
-                  [routerLink]="['/incidents/drafts/draft']"
-                  routerLinkActive="active"
-                  tooltip="Список созданных черновиков сообщений о РС" placement="right">
-            <i class="fas fa-keyboard mr-1"></i>
-            Черновики
-            <span class="badge badge-light badge-pill text-right">{{counts?.countDraft}}</span>
-          </button>
-          <button type="button"
-                  class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-1 px-2"
-                  [routerLink]="['/incidents/drafts/check']"
-                  routerLinkActive="active"
-                  tooltip="Ожидающие проверки риск-координатора сообщения о РС"
-                  placement="right">
-            <i class="fas fa-check mr-1"></i>
-            На проверке риск координатора
-            <span class="badge badge-light badge-pill text-right">{{counts?.countCheck}}</span>
-          </button>
-          <button type="button"
-                  class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-1 px-2"
-                  [routerLink]="['/incidents/drafts/sign']"
-                  routerLinkActive="active"
-                  tooltip="Ожидающие рассмотрения риск-менеджера сообщения о РС"
-                  placement="right">
-            <i class="fas fa-check-double mr-2"></i>
-            На рассмотрении риск менеджера
-            <span class="badge badge-light badge-pill text-right">{{counts?.countSign}}</span>
-          </button>
-          <button type="button"
-                  class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-1 px-2"
-                  [routerLink]="['/incidents/drafts/open']"
-                  routerLinkActive="active"
-                  tooltip="Сообщения о РС, включённые в рисковые события"
-                  placement="right">
-            <i class="fas fa-briefcase mr-1"></i>
-            Находятся в работе
-            <span class="badge badge-light badge-pill text-right">{{counts?.countOpen}}</span>
-          </button>
-          <button type="button"
-                  class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-1 px-2"
-                  [routerLink]="['/incidents/drafts/refine']"
-                  routerLinkActive="active"
-                  tooltip="Сообщения о РС, ожидающие исправления"
-                  placement="right">
-            <i class="fas fa-tools mr-1"></i>
-            На доработке
-            <span
-              class="badge {{counts?.countRefine > 0 ? 'badge-danger' : 'badge-light'}} badge-pill text-right">{{counts?.countRefine}}</span>
-          </button>
-          <button type="button"
-                  class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-1 px-2"
-                  [routerLink]="['/incidents/drafts/close']"
-                  routerLinkActive="active"
-                  tooltip="Закрытые сообщения о РС (рисковое событие было закрыто/урегулировано)"
-                  placement="right">
-            <i class="fas fa-archive mr-1"></i>
-            Архив
-            <span class="badge badge-light badge-pill text-right">{{counts?.countClose}}</span>
-          </button>
-        </div>
-        <button type="button" class="list-group-item list-group-item-action" [routerLink]="['/incidents/list']"
+          <app-smart-name [name]="'IncidentPanelMessageAll'"></app-smart-name>
+        </span>
+        <span type="button"
+                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-1 px-2"
+                [routerLink]="['/incidents/drafts/draft']"
                 routerLinkActive="active"
-                tooltip="Рисковые события в работе"
-                placement="right">
-          Рисковые события
-        </button>
-        <button type="button" class="list-group-item list-group-item-action" [routerLink]="['/incidents/closed']"
+                tooltip="Список созданных черновиков сообщений о РС" placement="right">
+          <i class="fas fa-keyboard mr-2"></i>
+          <app-smart-name [name]="'IncidentPanelMessageDraft'"></app-smart-name>
+          <span class="badge badge-light badge-pill">{{countsService.counts.draftCount}}</span>
+        </span>
+        <span type="button"
+                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-1 px-2"
+                [routerLink]="['/incidents/drafts/check']"
                 routerLinkActive="active"
-                tooltip="Закрытые рисковые события"
+                tooltip="Ожидающие проверки риск-координатора сообщения о РС"
                 placement="right">
-          Рисковые события (архив)
-        </button>
+          <i class="fas fa-check mr-2"></i>
+          <app-smart-name [name]="'IncidentPanelMessageCheck'"></app-smart-name>
+          <span class="badge badge-light badge-pill text-right">{{countsService.counts.rcCount}}</span>
+        </span>
+        <span type="button"
+                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-1 px-2"
+                [routerLink]="['/incidents/drafts/sign']"
+                routerLinkActive="active"
+                tooltip="Ожидающие рассмотрения риск-менеджера сообщения о РС"
+                placement="right">
+          <i class="fas fa-check-double mr-2"></i>
+          <app-smart-name [name]="'IncidentPanelMessageSign'"></app-smart-name>
+          <span class="badge badge-light badge-pill text-right">{{countsService.counts.rmCount}}</span>
+        </span>
+        <span type="button"
+                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-1 px-2"
+                [routerLink]="['/incidents/drafts/open']"
+                routerLinkActive="active"
+                tooltip="Сообщения о РС, включённые в рисковые события"
+                placement="right">
+          <i class="fas fa-briefcase mr-1"></i>
+          <app-smart-name [name]="'IncidentPanelMessageOpen'"></app-smart-name>
+          <span class="badge badge-light badge-pill text-right">{{countsService.counts.openCount}}</span>
+        </span>
+        <span type="button"
+                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-1 px-2"
+                [routerLink]="['/incidents/drafts/refine']"
+                routerLinkActive="active"
+                tooltip="Сообщения о РС, ожидающие исправления"
+                placement="right">
+          <i class="fas fa-tools mr-1"></i>
+          <app-smart-name [name]="'IncidentPanelMessageRefine'"></app-smart-name>
+          <span
+            class="badge {{countsService.counts.refineCount > 0 ? 'badge-danger' : 'badge-light'}} badge-pill text-right">{{countsService.counts.refineCount}}</span>
+        </span>
+        <span type="button"
+                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-1 px-2"
+                [routerLink]="['/incidents/drafts/close']"
+                routerLinkActive="active"
+                tooltip="Закрытые сообщения о РС (рисковое событие было закрыто/урегулировано)"
+                placement="right">
+          <i class="fas fa-archive mr-1"></i>
+          <app-smart-name [name]="'IncidentPanelMessageClose'"></app-smart-name>
+          <span class="badge badge-light badge-pill text-right">{{countsService.counts.closeCount}}</span>
+        </span>
+      </div>
+
+      <div class="list-group pointer py-3">
+        <span type="button" class="list-group-item list-group-item-action px-2"
+                routerLinkActive="active"
+                tooltip="Все рисковые события"
+                placement="right">
+          <span class="text-left" [routerLink]="['/incidents/list']">
+            <app-smart-name [name]="'IncidentPanelIncidentAll'"></app-smart-name>
+          </span>
+          <span type="button" class="text-right badge badge-success"
+                *ngIf="role === 'admin' || role ==='riskManager'"
+                [routerLink]="['/incidents/new']">
+            создать
+          </span>
+        </span>
+        <span type="button"
+                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-1 px-2"
+                [routerLink]="['/incidents/wait']"
+                routerLinkActive="active" *ngIf="role !== 'user'"
+                tooltip="Рисковые события на согласовании риск координаторов"
+                placement="right">
+          <app-smart-name [name]="'IncidentPanelIncidentWait'"></app-smart-name>
+          <span class="badge badge-light badge-pill">{{countsService.counts.waitIncidentCount}}</span>
+        </span>
+        <span type="button"
+                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-1 px-2"
+                [routerLink]="['/incidents/refine']"
+                routerLinkActive="active" *ngIf="role === 'admin' || role ==='riskManager'"
+                tooltip="Рисковые события на доработке"
+                placement="right">
+          <app-smart-name [name]="'IncidentPanelIncidentRefine'"></app-smart-name>
+          <span class="badge badge-light badge-pill">{{countsService.counts.refineIncidentCount}}</span>
+        </span>
+        <span type="button"
+                class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-1 px-2"
+                [routerLink]="['/incidents/open']"
+                routerLinkActive="active"
+                tooltip="Доступные к работе рисковые события"
+                placement="right">
+          <app-smart-name [name]="'IncidentPanelIncidentOpen'"></app-smart-name>
+          <span class="badge badge-light badge-pill">{{countsService.counts.openIncidentCount}}</span>
+        </span>
+        <span type="button" class="list-group-item list-group-item-action px-2" [routerLink]="['/incidents/closed']"
+                routerLinkActive="active"
+                tooltip="Урегулированные/закрытые рисковые события"
+                placement="right">
+          <app-smart-name [name]="'IncidentPanelIncidentClose'"></app-smart-name>
+        </span>
       </div>
     </div>
   </nav>
@@ -93,73 +133,3 @@
     <router-outlet></router-outlet>
   </div>
 </div>
-
-<!--
-<div class="mt-3 mx-3">
-  <div class="container-fluid">
-    <div class="container-sidebar mr-2">
-      <h2>Cобытия</h2>
-      <div class="list-group pointer">
-        <button type="button" class="list-group-item list-group-item-action" [routerLink]="['/incidents/drafts/new']"
-                routerLinkActive="active" tooltip="Создать сообщение о РС" placement="right">Создать
-        </button>
-        <button type="button" class="list-group-item list-group-item-action"
-                [routerLink]="['/incidents/drafts/list']"
-                routerLinkActive="active">
-          Сообщения о РС
-        </button>
-        <div class="py-1">
-          <button type="button"
-                  class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-1 px-2"
-                  [routerLink]="['/incidents/drafts/draft']"
-                  routerLinkActive="active"><i class="fas fa-keyboard mr-1"></i>
-            Черновики
-            <span class="badge badge-light badge-pill text-right">{{countDraft}}</span>
-          </button>
-          <button type="button"
-                  class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-1 px-2"
-                  [routerLink]="['/incidents/drafts/check']"
-                  routerLinkActive="active"><i class="fas fa-check mr-1"></i>
-            На проверке риск координатора
-            <span class="badge badge-light badge-pill text-right">{{countCheck}}</span>
-          </button>
-          <button type="button"
-                  class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-1 px-2"
-                  [routerLink]="['/incidents/drafts/sign']"
-                  routerLinkActive="active"><i class="fas fa-check-double mr-2"></i>
-            На рассмотрении риск менеджера
-            <span class="badge badge-light badge-pill text-right">{{countSign}}</span>
-          </button>
-          <button type="button"
-                  class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-1 px-2"
-                  [routerLink]="['/incidents/drafts/open']"
-                  routerLinkActive="active"><i class="fas fa-briefcase mr-1"></i>
-            Находятся в работе
-            <span class="badge badge-light badge-pill text-right">{{countOpen}}</span>
-          </button>
-          <button type="button"
-                  class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-1 px-2"
-                  [routerLink]="['/incidents/drafts/refine']"
-                  routerLinkActive="active"><i class="fas fa-tools mr-1"></i>
-            На доработке
-            <span class="badge {{countRefine > 0 ? 'badge-danger' : 'badge-light'}} badge-pill text-right">{{countRefine}}</span>
-          </button>
-          <button type="button"
-                  class="list-group-item list-group-item-action d-flex justify-content-between align-items-center py-1 px-2"
-                  [routerLink]="['/incidents/drafts/close']"
-                  routerLinkActive="active"><i class="fas fa-archive mr-1"></i>
-            Архив
-            <span class="badge badge-light badge-pill text-right">{{countClose}}</span>
-          </button>
-        </div>
-        <button type="button" class="list-group-item list-group-item-action" [routerLink]="['/incidents/list']"
-                routerLinkActive="active">Рисковые события
-        </button>
-      </div>
-    </div>
-    <div class="container-body">
-      <router-outlet></router-outlet>
-    </div>
-  </div>
-</div>
--->

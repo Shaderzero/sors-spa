@@ -6,7 +6,6 @@ import {AlertifyService} from 'src/app/_services/alertify.service';
 import {BsModalRef} from 'ngx-bootstrap';
 import {PaginatedResult, Pagination} from 'src/app/_models/pagination';
 import {DraftService} from 'src/app/_services/draft.service';
-import {forEach} from '@angular/router/src/utils/collection';
 import {AuthService} from '../../_services/auth.service';
 
 @Component({
@@ -40,9 +39,6 @@ export class DraftListComponent implements OnInit {
     this.route.data.subscribe(data => {
       this.drafts = data['drafts'].result;
       this.pagination = data['drafts'].pagination;
-      // for (let i = 0; i < this.drafts.length; i++) {
-      //   this.drafts[i].author.fullname = this.authService.getFioByLogin(this.drafts[i].author.name);
-      // }
     });
   }
 

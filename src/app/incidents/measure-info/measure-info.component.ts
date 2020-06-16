@@ -48,7 +48,7 @@ export class MeasureInfoComponent implements OnInit {
   }
 
   canEdit() {
-    if (status === 'close') {
+    if (this.status === 'close') {
       return false;
     }
     const users = this.responsible.accounts;
@@ -65,7 +65,7 @@ export class MeasureInfoComponent implements OnInit {
   }
 
   canSign() {
-    if (status === 'close') {
+    if (this.status === 'close') {
       return false;
     }
     const department = this.responsible.department;

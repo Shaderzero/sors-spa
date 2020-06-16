@@ -18,7 +18,7 @@ export class DraftsResolver implements Resolve<Draft[]> {
   }
 
   resolve(route: ActivatedRouteSnapshot): Observable<Draft[]> {
-    const status = route.data['status'];
+    const status = route.data.status;
     if (status) {
       this.draftParams.status = status;
     } else {

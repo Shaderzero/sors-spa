@@ -113,6 +113,15 @@ import {LogsPageResolver} from './_resolvers/admin/logsPage.resolver';
 import { HelpComponent } from './help/help.component';
 import { NgxPopper } from 'angular-popper';
 import {ExcelService} from './_services/excel.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {RolesGuard} from './_guards/roles.guard';
+import { TextDataTableComponent } from './admin/text-data-table/text-data-table.component';
+import {NameValueModalComponent} from './modals/name-value-modal/name-value-modal.component';
+import {TextDatasResolver} from './_resolvers/references/textdata.resolver';
+import { SmartNameComponent } from './references/smart-name/smart-name.component';
+import { IncidenttypeTableComponent } from './admin/incidenttype-table/incidenttype-table.component';
+import {IncidentTypesResolver} from './_resolvers/references/incidenttype.resolver';
+import {TextDataService} from './_services/text-data.service';
 
 defineLocale('ru', ruLocale);
 
@@ -174,7 +183,11 @@ defineLocale('ru', ruLocale);
     SignificanceTableComponent,
     StatusTableComponent,
     LogsComponent,
-    HelpComponent
+    HelpComponent,
+    TextDataTableComponent,
+    NameValueModalComponent,
+    SmartNameComponent,
+    IncidenttypeTableComponent
   ],
   imports: [
     BrowserModule,
@@ -192,7 +205,8 @@ defineLocale('ru', ruLocale);
     AccordionModule.forRoot(),
     TooltipModule.forRoot(),
     TypeaheadModule.forRoot(),
-    NgxPopper
+    NgxPopper,
+    BrowserAnimationsModule
   ],
   providers: [
     {
@@ -222,6 +236,7 @@ defineLocale('ru', ruLocale);
     DomainUsersResolver,
     AlertifyService,
     AuthGuard,
+    RolesGuard,
     LoaderService,
     ActivityTypesResolver,
     AreasResolver,
@@ -235,7 +250,10 @@ defineLocale('ru', ruLocale);
     SignificancesResolver,
     CountsService,
     LogsPageResolver,
-    ExcelService
+    ExcelService,
+    TextDatasResolver,
+    IncidentTypesResolver,
+    TextDataService
   ],
   entryComponents: [
     DepartmentModalComponent,
@@ -261,7 +279,8 @@ defineLocale('ru', ruLocale);
     BP4ModalComponent,
     FactorCategoryModalComponent,
     FactorClassModalComponent,
-    FactorTypeModalComponent
+    FactorTypeModalComponent,
+    NameValueModalComponent
   ],
   bootstrap: [
     AppComponent

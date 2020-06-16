@@ -1,8 +1,11 @@
 export interface Counts {
-  countDraft: number;
-  countCheck: number;
-  countSign: number;
-  countRefine: number;
-  countOpen: number;
-  countClose: number;
+  draftCount: number;
+  rcCount: number;
+  rmCount: number;
+  openCount: number;
+  refineCount: number;
+  closeCount: number;
+  waitIncidentCount: number;
+  refineIncidentCount: number;
+  openIncidentCount: number;
 }

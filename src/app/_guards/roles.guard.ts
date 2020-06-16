@@ -8,7 +8,7 @@ import {map} from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class RolesGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router, private alertify: AlertifyService) {
   }
 
@@ -20,17 +20,7 @@ export class AuthGuard implements CanActivate {
       }
       return true;
     }
-    return this.authService.getCurrentUser().pipe(map(res => {
-      this.authService.setCurrentUser(res);
-      if (res) {
-        if (roles) {
-          return this.checkRoles(roles);
-        } else {
-          return true;
-        }
-      }
-      return false;
-    }));
+    return false;
   }
 
   checkRoles(roles: string[]): boolean {

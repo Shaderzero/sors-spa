@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, NgZone, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {BsLocaleService, BsModalRef, BsModalService} from 'ngx-bootstrap';
 import {AlertifyService} from 'src/app/_services/alertify.service';
@@ -13,6 +13,7 @@ import {IncidentService} from 'src/app/_services/incident.service';
 import {DraftService} from 'src/app/_services/draft.service';
 import {MailService} from 'src/app/_services/mail.service';
 import {CountsService} from '../../_services/counts.service';
+import {IncidentType} from '../../_models/references/IncidentType';
 
 @Component({
   selector: 'app-incident-new',
@@ -25,6 +26,7 @@ export class IncidentNewComponent implements OnInit {
   drafts: Draft[] = [];
   inputDraft: Draft;
   departments: Department[] = [];
+  incidentTypes: IncidentType[];
   incidentForm: FormGroup;
   modalRef: BsModalRef;
   comment: string;
@@ -42,15 +44,17 @@ export class IncidentNewComponent implements OnInit {
               private fb: FormBuilder,
               private mailService: MailService,
               private router: Router,
-              private countsService: CountsService) {
+              private countsService: CountsService,
+              private zone: NgZone) {
   }
 
   ngOnInit() {
     this.localeService.use('ru');
     this.createEventForm();
     this.route.data.subscribe(data => {
-      this.drafts = data['drafts'];
-      this.departments = data['departments'];
+      this.drafts = data.drafts;
+      this.departments = data.departments;
+      this.incidentTypes = data.incidenttypes;
       this.route.params.subscribe(params => {
         this.inputDraft = params as Draft;
         if (this.inputDraft) {
@@ -68,6 +72,7 @@ export class IncidentNewComponent implements OnInit {
 
   createEventForm() {
     this.incidentForm = this.fb.group({
+      incidentTypeId: [1, Validators.required],
       description: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(1000)]],
       dateIncident: [this.bsValue, Validators.required]
     });
@@ -120,24 +125,27 @@ export class IncidentNewComponent implements OnInit {
       this.incident = {
         description: this.model.description,
         dateIncident: this.model.dateIncident,
+        incidentTypeId: this.model.incidentTypeId,
         comment: comment,
-        status: 'open',
+        status: 'wait',
         authorId: this.authService.currentUser.id,
         responsibles: responsibles,
         drafts: selectedDrafts
       };
       this.incidentService.createIncident(this.incident).subscribe((incident: Incident) => {
         this.alertify.success('РС успешно создано');
-        this.mailService.sendIncidentAssign(incident, comment);
+        // this.mailService.sendIncidentAssign(incident, comment);
         for (let i = 0; i < selectedDrafts.length; i++) {
           this.setDraftStatus(selectedDrafts[i]);
         }
-        this.router.navigate(['/incidents/' + incident.id]);
+        this.zone.run(() => {
+          this.router.navigate(['/incidents/' + incident.id]);
+        });
       }, error => {
         console.log(error);
         this.alertify.error('ошибка создания РС');
       }, () => {
-        this.countsService.loadAll();
+        this.countsService.updateCounts();
       });
     }
   }

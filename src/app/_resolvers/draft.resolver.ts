@@ -16,8 +16,12 @@ export class DraftResolver implements Resolve<Draft> {
   resolve(route: ActivatedRouteSnapshot): Observable<Draft> {
     return this.draftService.getDraft(route.params['id']).pipe(
       catchError(error => {
-        console.log(error);
-        this.alertify.error('Ошибка получения данных');
+        console.log(error.message);
+        if (+error.status === 403) {
+          this.alertify.error('Access denied');
+        } else {
+          this.alertify.error(error.message);
+        }
         this.route.navigate(['/incidents/drafts']);
         return of(null);
       })

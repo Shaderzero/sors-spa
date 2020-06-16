@@ -19,12 +19,6 @@ export class DraftInfoComponent implements OnInit {
   draft: Draft;
   model: any = {};
   modalRef: BsModalRef;
-  canEdit: boolean;
-  canCheck: boolean;
-  canSign: boolean;
-  canOpen: boolean;
-  canDelete: boolean;
-  canRefine: boolean;
 
   constructor(private route: ActivatedRoute,
               private router: Router,
@@ -38,75 +32,97 @@ export class DraftInfoComponent implements OnInit {
 
   ngOnInit() {
     this.route.data.subscribe(data => {
-      this.draft = data['draft'];
-      this.fillParameters();
+      this.draft = data.draft;
     });
   }
 
-  fillParameters() {
-    const status = this.draft.status;
-    this.canEdit = false;
-    this.canCheck = false;
-    this.canSign = false;
-    this.canOpen = false;
-    this.canDelete = false;
-    this.canRefine = false;
-    let isAuthor = false;
-    let isRc = false;
-    let isRm = false;
-    if (this.authService.roleMatch(['admin'])
-      && this.authService.currentUser.department.id === this.draft.department.id) {
-      isRm = true;
-      this.canEdit = true;
-      this.canCheck = true;
-      this.canSign = true;
-      this.canOpen = true;
-      this.canDelete = true;
-      this.canRefine = true;
-      return;
+  canEdit(): boolean {
+    if (this.isAdmin()) return true;
+    if (this.isAuthor() && this.status() === 'draft') return true;
+    if (this.isAuthor() && this.status() === 'refine') return true;
+    if (this.isRC() && this.status() === 'check') return true;
+    if (this.isRC() && this.status() === 'refine') return true;
+    return false;
+  }
+
+  canCheck(): boolean {
+    if (this.status() === 'example') return false;
+    if (this.isAdmin()) return true;
+    if (this.isAuthor() && this.status() === 'draft') return true;
+    if (this.isAuthor() && this.status() === 'refine') return true;
+    return false;
+  }
+
+  canSign(): boolean {
+    if (this.status() === 'example') return false;
+    if (this.isAdmin()) return true;
+    if (this.isRC() && this.status() === 'check') return true;
+    if (this.isRC() && this.status() === 'refine') return true;
+    if (this.isRM() && this.status() === 'check') return true;
+    if (this.isRM() && this.status() === 'refine') return true;
+    return false;
+  }
+
+  canOpen(): boolean {
+    if (this.status() === 'example') return false;
+    if (this.isAdmin()) return true;
+    if (this.isRM() && this.status() === 'check') return true;
+    if (this.isRM() && this.status() === 'sign') return true;
+    if (this.isRM() && this.status() === 'refine') return true;
+    return false;
+  }
+
+  canDelete(): boolean {
+    if (this.isAdmin()) return true;
+    if (this.isAuthor() && this.status() === 'draft') return true;
+    if (this.isAuthor() && this.status() === 'refine') return true;
+    return false;
+  }
+
+  canRefine(): boolean {
+    if (this.status() === 'example') return false;
+    if (this.isAdmin()) return true;
+    if (this.isRC() && this.status() === 'check') return true;
+    if (this.isRM() && this.status() === 'check') return true;
+    if (this.isRM() && this.status() === 'sign') return true;
+    return false;
+  }
+
+  isAdmin(): boolean {
+    if (this.authService.roleMatch(['admin'])) {
+      return true;
+    } else {
+      return false;
     }
-    if (+this.authService.currentUser.id === +this.draft.author.id) {
-      isAuthor = true;
-    }
+  }
+
+  isRC(): boolean {
     if (this.authService.roleMatch(['riskCoordinator'])
-      && this.authService.currentUser.department.id === this.draft.department.id) {
-      isRc = true;
+      && +this.authService.currentUser.department.id === +this.draft.department.id) {
+      return true;
+    } else {
+      return false;
     }
+  }
+
+  isAuthor(): boolean {
+    if (+this.authService.currentUser.id === +this.draft.author.id) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  isRM(): boolean {
     if (this.authService.roleMatch(['riskManager'])) {
-      isRm = true;
+      return true;
+    } else {
+      return false;
     }
-    if (status === 'open' || status === 'closed') {
-      return;
-    } else if (status === 'sign') {
-      if (isRm) {
-        this.canOpen = true;
-        this.canRefine = true;
-      }
-    } else if (status === 'check') {
-      if (isRm) {
-        this.canOpen = true;
-        this.canSign = true;
-      } else if (isRc) {
-        this.canRefine = true;
-        this.canSign = true;
-        this.canEdit = true;
-      }
-    } else if (status === 'draft') {
-      if (isAuthor) {
-        this.canCheck = true;
-        this.canEdit = true;
-        this.canDelete = true;
-      }
-    } else if (status === 'refine') {
-      if (isAuthor) {
-        this.canCheck = true;
-        this.canEdit = true;
-        this.canDelete = true;
-      } else if (isRc) {
-        this.canSign = true;
-        this.canEdit = true;
-      }
-    }
+  }
+
+  status(): string {
+    return this.draft.status;
   }
 
   checkModal() {
@@ -149,8 +165,7 @@ export class DraftInfoComponent implements OnInit {
     this.model.departmentId = this.authService.currentUser.department.id;
     this.draftService.setStatus(this.model).subscribe(() => {
       this.draft.status = status;
-      this.fillParameters();
-      this.countsService.loadAll();
+      this.countsService.updateCounts();
       this.notificateStatus();
     }, error => {
       console.log(error);
@@ -163,15 +178,15 @@ export class DraftInfoComponent implements OnInit {
     switch (status) {
       case 'check':
         this.alertify.success('Сообщение о рисковом событии отправлено риск координатору');
-        this.mailService.sendDraftCheck(this.draft, this.model.comment);
+        // this.mailService.sendDraftCheck(this.draft, this.model.comment);
         break;
       case'sign':
         this.alertify.success('Сообщение о рисковом событии отправлено риск менеджеру');
-        this.mailService.sendDraftSign(this.draft, this.model.comment);
+        // this.mailService.sendDraftSign(this.draft, this.model.comment);
         break;
       case'refine':
         this.alertify.success('Сообщение о рисковом событии отправлено на доработку');
-        this.mailService.sendDraftRefine(this.draft, this.model.comment);
+        // this.mailService.sendDraftRefine(this.draft, this.model.comment);
         break;
       default:
         break;
@@ -188,7 +203,7 @@ export class DraftInfoComponent implements OnInit {
       if (res) {
         this.draftService.deleteDraft(this.draft).subscribe(() => {
           this.router.navigate(['/incidents/drafts/list']);
-          this.countsService.counts.countDraft--;
+          this.countsService.updateCounts();
           this.alertify.success('Сообщение о РС удалено');
         }, error => {
           console.log(error);

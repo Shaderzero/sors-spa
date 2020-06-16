@@ -1,8 +1,9 @@
 export class SorsMail {
-  from: string;
   to: string[];
   subject: string;
-  body: string;
+  text: string;
+  link: string;
+  comment: string;
 
   constructor() {
   }

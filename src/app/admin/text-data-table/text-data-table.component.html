@@ -1,0 +1,35 @@
+<div>
+  <div class="row">
+    <div class="col-12">
+      <div class="float-left">
+        <h4>Сферы возникновения</h4>
+      </div>
+      <div class="float-right">
+        <div (click)="createText()" class="btn btn-sm btn-outline-success">
+          добавить
+        </div>
+      </div>
+    </div>
+  </div>
+  <table class="table table-sm table-hover">
+    <thead>
+    <tr>
+      <th>Наименование поля</th>
+      <th>Параметр</th>
+      <th>Значение</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let a of datas">
+      <td>{{ a.name }}</td>
+      <td>{{ a.param }}</td>
+      <td>{{ a.value }}</td>
+      <td class="float-right">
+        <i class="fas fa-edit text-secondary pointer mr-2" (click)="editText(a)"></i>
+        <i class="fas fa-trash-alt text-danger pointer" (click)="deleteText(a)"></i>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

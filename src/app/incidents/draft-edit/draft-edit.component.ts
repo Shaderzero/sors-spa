@@ -7,6 +7,9 @@ import {Draft} from 'src/app/_models/draft';
 import {ConfirmCommentModalComponent} from 'src/app/references/confirm-comment-modal/confirm-comment-modal.component';
 import {DraftService} from 'src/app/_services/draft.service';
 import {AuthService} from 'src/app/_services/auth.service';
+import {IncidentType} from '../../_models/references/IncidentType';
+import {TextDataService} from '../../_services/text-data.service';
+import {isNotNullOrUndefined} from 'codelyzer/util/isNotNullOrUndefined';
 
 @Component({
   selector: 'app-draft-edit',
@@ -17,10 +20,17 @@ export class DraftEditComponent implements OnInit {
   model: any = {};
   draftForm: FormGroup;
   modalRef: BsModalRef;
+  incidentTypes: IncidentType[];
   comment: string;
   draft: Draft;
+  description1Placeholder = '';
+  description2Placeholder = '';
+  description3Placeholder = '';
+  description4Placeholder = '';
+  description5Placeholder = '';
 
   constructor(private draftService: DraftService,
+              private textDataService: TextDataService,
               private alertify: AlertifyService,
               private authService: AuthService,
               private modalService: BsModalService,
@@ -30,8 +40,10 @@ export class DraftEditComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadPlaceholders();
     this.route.data.subscribe(data => {
-      this.draft = data['draft'];
+      this.draft = data.draft;
+      this.incidentTypes = data.incidentTypes;
       if (this.checkAbility()) {
         this.createDraftForm();
       } else {
@@ -40,14 +52,45 @@ export class DraftEditComponent implements OnInit {
     });
   }
 
+  loadPlaceholders() {
+    this.description1Placeholder = this.textDataService.getTextDataValue('Description1Placeholder');
+    this.description2Placeholder = this.textDataService.getTextDataValue('Description2Placeholder');
+    this.description3Placeholder = this.textDataService.getTextDataValue('Description3Placeholder');
+    this.description4Placeholder = this.textDataService.getTextDataValue('Description4Placeholder');
+    this.description5Placeholder = this.textDataService.getTextDataValue('Description5Placeholder');
+    // this.textDataService.getTextDataByName('description1Placeholder').subscribe(res => {
+    //   this.description1Placeholder = res.value;
+    // });
+    // this.textDataService.getTextDataByName('description2Placeholder').subscribe(res => {
+    //   this.description2Placeholder = res.value;
+    // });
+    // this.textDataService.getTextDataByName('description3Placeholder').subscribe(res => {
+    //   this.description3Placeholder = res.value;
+    // });
+    // this.textDataService.getTextDataByName('description4Placeholder').subscribe(res => {
+    //   this.description4Placeholder = res.value;
+    // });
+    // this.textDataService.getTextDataByName('description5Placeholder').subscribe(res => {
+    //   this.description5Placeholder = res.value;
+    // });
+  }
+
   createDraftForm() {
     this.draftForm = this.fb.group({
-      description1: [this.draft.description1, [Validators.required, Validators.minLength(4), Validators.maxLength(200)]],
-      description2: [this.draft.description2, [Validators.maxLength(1000)]],
+      incidentTypeId: [this.getIncidentType(), Validators.required],
+      description1: [this.draft.description1, [Validators.maxLength(200)]],
+      description2: [this.draft.description2, [Validators.required, Validators.maxLength(1000)]],
       description3: [this.draft.description3, [Validators.maxLength(1000)]],
       description4: [this.draft.description4, [Validators.maxLength(1000)]],
       description5: [this.draft.description5, [Validators.maxLength(1000)]]
     });
+  }
+
+  getIncidentType(): number {
+    if (this.draft.incidentType === null || this.draft.incidentType === undefined) {
+      return -1;
+    }
+    return this.draft.incidentType.id;
   }
 
   checkAbility() {

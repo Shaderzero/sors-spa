@@ -46,20 +46,9 @@ export class AuthService {
     });
   }
 
-  getFioByLogin(login: string): string {
-    let result = login;
-    for (let i = 0; i < this.accounts.length; i++) {
-      if (this.accounts[i].name === login) {
-        result = this.accounts[i].fullname;
-        break;
-      }
-    }
-    return result;
-  }
-
   isRiskCoordinator(department: Department) {
     if (this.roleMatch(['riskCoordinator'])) {
-      if (this.currentUser.department.id === department.id) {
+      if (+this.currentUser.department.id === +department.id) {
         return true;
       }
     }

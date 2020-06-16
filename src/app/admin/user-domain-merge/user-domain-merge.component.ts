@@ -131,26 +131,25 @@ export class UserDomainMergeComponent implements OnInit {
     for (let i = 0; i < this.domainUsers.length; i++) {
       const du = this.domainUsers[i];
       const acc = this.accounts.find(function(element) {
-        return element.name == du.name;
+        return element.name === du.name;
       });
       if (acc == null) {
         const dep = this.domainDepartments.find(function(element) {
-          return element.name == du.domainDepartment;
+          return element.name === du.domainDepartment;
         });
         if (dep != null) {
           this.newUsers.push(this.domainUsers[i]);
-          break;
         }
-      } else {
+      } else if (du.name !== du.fullname) {
         if (acc.fullname !== du.fullname
           || acc.email !== du.email) {
           this.changedUsers.push(du);
         } else {
           const dep = this.domainDepartments.find(function(element) {
-            return element.name == du.domainDepartment;
+            return element.name === du.domainDepartment;
           });
           if (dep != null) {
-            if (dep.department.id != acc.department.id) {
+            if (dep.department.id !== acc.department.id) {
               this.changedUsers.push(du);
             }
           }

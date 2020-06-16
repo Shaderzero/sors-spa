@@ -20,7 +20,7 @@ import {AuthService} from '../../_services/auth.service';
 export class DomainDepartmentsComponent implements OnInit {
   filterForm: FormGroup;
   modalRef: BsModalRef;
-  // domainUsers: DomainUser[];
+  domainUsers: DomainUser[];
   departments: Department[];
   domainDepartments: DomainDepartment[];
   pagination: Pagination;
@@ -46,7 +46,7 @@ export class DomainDepartmentsComponent implements OnInit {
       this.domainDepartments = data['domaindepartments'].result;
       this.pagination = data['domaindepartments'].pagination;
       this.departments = data['departments'];
-      // this.domainUsers = data['domainusers'];
+      this.domainUsers = data['domainusers'];
     });
   }
 
@@ -110,8 +110,7 @@ export class DomainDepartmentsComponent implements OnInit {
     const initialState = {
       title: 'Создание подразделения',
       buttonName: 'Создать',
-      // domainUsers: this.domainUsers,
-      domainUsers: this.authService.getAccounts(),
+      domainUsers: this.domainUsers,
       departments: this.departments,
       domainDepartments: this.domainDepartments,
       domainDepartment: {id: null, name: '', department: {name: ''}},

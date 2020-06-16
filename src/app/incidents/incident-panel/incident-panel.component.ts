@@ -12,27 +12,29 @@ import {ExcelService} from '../../_services/excel.service';
 })
 export class IncidentPanelComponent implements OnInit {
   role: string;
-  counts: Counts;
 
   constructor(private authService: AuthService,
               private draftService: DraftService,
-              private countsService: CountsService,
+              public countsService: CountsService,
               private excelService: ExcelService) {
   }
 
   ngOnInit() {
     this.getUserRole();
-    this.counts = this.countsService.counts;
+    this.countsService.updateCounts();
   }
 
   getUserRole() {
-    if (this.authService.roleMatch(['riskManager'])) {
+    if (this.authService.roleMatch(['admin'])) {
+      this.role = 'admin';
+    } else if (this.authService.roleMatch(['riskManager'])) {
       this.role = 'riskManager';
     } else if (this.authService.roleMatch(['riskCoordinator'])) {
       this.role = 'riskCoordinator';
-    } else if (this.authService.roleMatch(['user'])) {
+    } else {
       this.role = 'user';
     }
+    console.log('роль: ' + this.role);
   }
 
   report() {

@@ -1,12 +1,12 @@
 <form [formGroup]="incidentForm" (ngSubmit)="approveModal()">
   <div class="row">
     <div class="col-6">
-      <h2>Новое рисковое событие</h2>
+      <h4>Новое рисковое событие</h4>
     </div>
     <div class="col-6">
       <div class="form-inline float-right">
-        <button type="submit" class="btn btn-primary mr-2" [disabled]="!incidentForm.valid">Создать</button>
-        <button type="button" class="btn btn-warning" (click)="cancel()">Отмена</button>
+        <button type="submit" class="btn btn-sm btn-primary mr-2" [disabled]="!incidentForm.valid">Создать</button>
+        <button type="button" class="btn btn-sm btn-warning" (click)="cancel()">Отмена</button>
       </div>
     </div>
   </div>
@@ -19,6 +19,19 @@
                 incidentForm.get('dateIncident').touched
               }"
       bsDatepicker [bsValue]="bsValue" formControlName="dateIncident" />
+  </div>
+  <div class="form-group">
+    <label>
+      <app-smart-name [name]="'IncidentTypeTitle'"></app-smart-name>
+    </label>
+    <select class="form-control p-1" [ngClass]="{
+              'is-invalid':
+              incidentForm.get('incidentTypeId').errors &&
+              incidentForm.get('incidentTypeId').touched
+            }"
+            formControlName="incidentTypeId">
+      <option *ngFor="let it of incidentTypes" [ngValue]="it.id">{{it.name}}</option>
+    </select>
   </div>
   <div class="form-group">
     <label for="description">Описание</label>

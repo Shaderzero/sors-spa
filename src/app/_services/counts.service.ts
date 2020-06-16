@@ -4,6 +4,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {AuthService} from './auth.service';
 import {Counts} from '../_models/counts';
+import {IncidentPanelComponent} from '../incidents/incident-panel/incident-panel.component';
 
 @Injectable({
   providedIn: 'root'
@@ -13,12 +14,15 @@ export class CountsService {
   role: string;
   params: any;
   public counts: Counts = {
-    countCheck: 0,
-    countClose: 0,
-    countDraft: 0,
-    countOpen: 0,
-    countRefine: 0,
-    countSign: 0
+    draftCount: 0,
+    rcCount: 0,
+    rmCount: 0,
+    openCount: 0,
+    refineCount: 0,
+    closeCount: 0,
+    waitIncidentCount: 0,
+    refineIncidentCount: 0,
+    openIncidentCount: 0
   };
 
   constructor(private http: HttpClient,
@@ -28,68 +32,19 @@ export class CountsService {
 
   init() {
     this.params = {
-      accountId: this.authService.currentUser.id,
-      departmentId: this.authService.currentUser.department.id
+      accountId: this.authService.currentUser.id
     };
-    if (this.authService.roleMatch(['riskManager'])) {
-      this.role = 'riskManager';
-      this.params.type = 'forRM';
-    } else if (this.authService.roleMatch(['riskCoordinator'])) {
-      this.role = 'riskCoordinator';
-      this.params.type = 'forRC';
-    } else if (this.authService.roleMatch(['user'])) {
-      this.role = 'user';
-      this.params.type = 'forUser';
-    }
-    this.loadAll();
   }
 
-  loadAll() {
-    this.loadCheckCounts();
-    this.loadCloseCounts();
-    this.loadDraftCounts();
-    this.loadOpenCounts();
-    this.loadRefineCounts();
-    this.loadSignCounts();
-  }
-
-  loadDraftCounts() {
-    this.getCounts('draft').subscribe(res => {
-      this.counts.countDraft = res;
+  updateCounts() {
+    let params = new HttpParams();
+    params = params.append('accountId', this.params.accountId);
+    this.http.get<Counts>(this.baseUrl + 'counts', {params}).subscribe(res => {
+      this.counts = res;
     });
   }
 
-  loadSignCounts() {
-    this.getCounts('sign').subscribe(res => {
-      this.counts.countSign = res;
-    });
-  }
-
-  loadCheckCounts() {
-    this.getCounts('check').subscribe(res => {
-      this.counts.countCheck = res;
-    });
-  }
-
-  loadRefineCounts() {
-    this.getCounts('refine').subscribe(res => {
-      this.counts.countRefine = res;
-    });
-  }
-
-  loadCloseCounts() {
-    this.getCounts('close').subscribe(res => {
-      this.counts.countClose = res;
-    });
-  }
-
-  loadOpenCounts() {
-    this.getCounts('open').subscribe(res => {
-      this.counts.countOpen = res;
-    });
-  }
-
-  getCounts(status: string): Observable<number> {
+  getCountsOld(status: string): Observable<number> {
     let params = new HttpParams();
     params = params.append('accountId', this.params.accountId);
     params = params.append('departmentId', this.params.departmentId);

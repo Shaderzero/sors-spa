@@ -12,6 +12,7 @@ import {Manageability} from '../_models/references/manageability';
 import {Reaction} from '../_models/references/reaction';
 import {RiskStatus} from '../_models/references/riskStatus';
 import {Factor} from '../_models/references/factor';
+import {IncidentType} from '../_models/references/IncidentType';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,26 @@ export class ReferenceService {
   baseUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {
+  }
+
+  getIncidentTypes(): Observable<IncidentType[]> {
+    return this.http.get<IncidentType[]>(this.baseUrl + 'references/incidenttypes');
+  }
+
+  getIncidentType(id: number): Observable<IncidentType> {
+    return this.http.get<IncidentType>(this.baseUrl + 'references/incidenttypes/' + id);
+  }
+
+  deleteIncidentType(id: number) {
+    return this.http.delete(this.baseUrl + 'references/incidenttypes/' + id);
+  }
+
+  createIncidentType(entity: IncidentType) {
+    return this.http.post<IncidentType>(this.baseUrl + 'references/incidenttypes', entity);
+  }
+
+  updateIncidentType(entity: IncidentType) {
+    return this.http.put<IncidentType>(this.baseUrl + 'references/incidenttypes/' + entity.id, entity);
   }
 
   getActivityTypes(): Observable<ActivityType[]> {

@@ -1,6 +1,6 @@
 <div class="row align-middle">
   <div class="col-12">
-    <h2>Сообщения о рисковых событиях</h2>
+    <h4>Сообщения о рисковых событиях</h4>
   </div>
 </div>
 <div class="row">
@@ -54,23 +54,33 @@
     <div class="row mx-1 mt-2">
       <div class="col-4">
         <span class="font-weight-bolder">Дата создания: </span>
-        {{d.dateCreate | date: "dd.MM.yy"}}
+        {{d.dateCreate | date: "dd.MM.yyyy"}}
       </div>
-      <div class="col-6">
+      <div class="{{d.collapsed ? 'col-6' : 'col-4'}}">
         <span class="font-weight-bolder">Автор: </span>
         {{d.author.fullname}}
       </div>
-      <div class="col-2">
+      <div class="{{d.collapsed ? 'col-2' : 'col-4'}}">
+        <span *ngIf="!d.collapsed" class="font-weight-bolder">Категория: </span>
+        <span *ngIf="!d.collapsed">
+          {{d.incidentType?.id}}
+        </span>
         <div class="float-right">
-          <i *ngIf="d.status === 'refine'" class="fas fa-tools text-warning mr-2" tooltip="на доработке"></i>
-          <i *ngIf="d.status === 'draft'" class="fas fa-keyboard text-secondary mr-2" tooltip="черновик"></i>
-          <i *ngIf="d.status === 'sign'" class="fas fa-check-double text-primary mr-2" tooltip="на проверке риск менеджера"></i>
-          <i *ngIf="d.status === 'check'" class="fas fa-check text-primary mr-2" tooltip="на проверке риск координатора"></i>
-          <i *ngIf="d.status === 'open'" class="fas fa-briefcase text-success mr-2" tooltip="включено в рисковое событие"></i>
-          <i *ngIf="d.status === 'close'" class="fas fa-archive text-muted mr-2" tooltip="сообщение в архиве"></i>
+          <i *ngIf="d.status === 'refine'" class="fas fa-tools text-warning mr-2" container="body" placement="left" tooltip="на доработке"></i>
+          <i *ngIf="d.status === 'draft'" class="fas fa-keyboard text-secondary mr-2" container="body" placement="left" tooltip="черновик"></i>
+          <i *ngIf="d.status === 'sign'" class="fas fa-check-double text-primary mr-2" container="body" placement="left" tooltip="на проверке риск менеджера"></i>
+          <i *ngIf="d.status === 'check'" class="fas fa-check text-primary mr-2" container="body" placement="left" tooltip="на проверке риск координатора"></i>
+          <i *ngIf="d.status === 'open'" class="fas fa-briefcase text-success mr-2" container="body" placement="left" tooltip="включено в рисковое событие"></i>
+          <i *ngIf="d.status === 'close'" class="fas fa-archive text-muted mr-2" container="body" placement="left" tooltip="сообщение в архиве"></i>
           <i class="fas fa-info btn btn-sm btn-outline-info" [routerLink]="['/incidents/drafts/' + d.id]"
-             tooltip="показать информацию"></i>
+             tooltip="показать информацию" container="body" placement="left"></i>
         </div>
+      </div>
+    </div>
+    <div *ngIf="d.collapsed" class="row mx-1">
+      <div class="col-12">
+        <span class="font-weight-bolder">Категория: </span>
+        {{d.incidentType?.name}}
       </div>
     </div>
     <div class="row mx-1">
@@ -79,13 +89,19 @@
         {{d.department.name}}
       </div>
     </div>
-    <div class="row mx-1">
+    <div *ngIf="d.description1.length > 0" class="row mx-1">
       <div class="col-12">
         <span class="font-weight-bolder">Краткое наименование: </span>
         {{d.description1}}
       </div>
     </div>
-    <div *ngIf="d.collapsed" class="row mx-1">
+    <div *ngIf="!(d.description1.length > 0)" class="row mx-1">
+      <div class="col-12">
+        <span class="font-weight-bolder">Описание: </span>
+        {{d.description2}}
+      </div>
+    </div>
+    <div *ngIf="d.collapsed && d.description1.length > 0" class="row mx-1">
       <div class="col-12">
         <span class="font-weight-bolder">Описание: </span>
         {{d.description2}}

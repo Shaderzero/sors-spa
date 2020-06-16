@@ -2,22 +2,33 @@
   <div class="row">
     <div class="col-12">
       <div class="float-left">
-        <h2>Рисковое событие
-          <i class="fas fa-file-excel btn btn-outline-success"
+        <h4>Рисковое событие
+          <i class="fas fa-file-excel btn btn-outline-success pointer"
              (click)="getExcel()"
              tooltip="выгрузить в Excel">
           </i>
-        </h2>
+        </h4>
       </div>
       <div class="float-right">
-        <!--<i class="far fa-save" (click)="exportAsXLSX()"></i>-->
-        <div (click)="close()" *ngIf="isRiskManager() && incident.status !=='close'"
-             class="btn btn-sm btn-outline-dark">Закрыть РС
+        <div (click)="approve()" *ngIf="isRC && userStatus === 'wait'"
+             class="btn btn-sm btn-outline-success mr-2 pointer">Согласовать
+        </div>
+        <div (click)="resign()" *ngIf="isRM && incident.status === 'refine'"
+             class="btn btn-sm btn-outline-success mr-2 pointer">Авторам замечаний
+        </div>
+        <div (click)="resignAll()" *ngIf="isRM && incident.status === 'refine'"
+             class="btn btn-sm btn-outline-success mr-2 pointer" tooltip="Отправить на согласование всем">Пересогласовать
+        </div>
+        <div (click)="refine()" *ngIf="isRC && userStatus === 'wait'"
+             class="btn btn-sm btn-outline-danger mr-2 pointer">Доработка
+        </div>
+        <div (click)="close()" *ngIf="isRM && incident.status !=='close'"
+             class="btn btn-sm btn-outline-dark pointer">Закрыть РС
         </div>
         <div *ngIf="incident.status ==='close'"
-             class="btn btn-sm btn-outline-danger disabled">Закрыто
+             class="btn btn-sm btn-outline-danger disabled ml-2">Закрыто
         </div>
-        <div (click)="delete()" *ngIf="isAdmin()" class="btn btn-sm btn-outline-danger ml-2">Удалить РС</div>
+        <div (click)="delete()" *ngIf="isAdmin" class="btn btn-sm btn-outline-danger ml-2 pointer">Удалить РС</div>
       </div>
     </div>
   </div>
@@ -30,7 +41,8 @@
             Дата события
           </div>
           <div class="float-right">
-            <i *ngIf="isRiskManager() && incident.status !=='close'" class="far fa-edit pointer" (click)="editDate()" tooltip="изменить"></i>
+            <i *ngIf="isRM && incident.status !=='close'" class="far fa-edit pointer" (click)="editDate()"
+               tooltip="изменить"></i>
           </div>
         </div>
         <div class="card-body px-2 py-1">
@@ -42,10 +54,38 @@
       <div class="card mb-2">
         <div class="card-header font-weight-bolder px-2 py-1">
           <div class="float-left">
-            Описание
+            <app-smart-name [name]="'IncidentTypeTitle'"></app-smart-name>
           </div>
           <div class="float-right">
-            <i *ngIf="isRiskManager() && incident.status !=='close'" class="far fa-edit pointer" (click)="editDescription()" tooltip="изменить"></i>
+            <i *ngIf="isRM && incident.status !=='close'" class="far fa-edit pointer"
+               (click)="incidentEdit = !incidentEdit" tooltip="изменить"></i>
+          </div>
+        </div>
+        <div class="card-body px-2 py-1">
+          <div *ngIf="!incidentEdit" class="card-text">{{ incident.incidentType ? incident.incidentType.name : "" }}</div>
+          <div *ngIf="incidentEdit" class="card-text" [formGroup]="incidentTypeForm">
+            <select class="form-control p-1" formControlName="incidentTypeControl"
+                    (ngModelChange)="updateIncidentType($event)"
+            >
+              <option *ngFor="let it of incidentTypes" [ngValue]="it.id">
+                {{it.name}}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-2">
+        <div class="card-header font-weight-bolder px-2 py-1">
+          <div class="float-left">
+            <app-smart-name [name]="'IncidentDescriptionTitle'"></app-smart-name>
+          </div>
+          <div class="float-right">
+            <i *ngIf="isRM && incident.status !=='close'" class="far fa-edit pointer"
+               (click)="editDescription()" tooltip="изменить"></i>
           </div>
         </div>
         <div class="card-body px-2 py-1">
@@ -60,10 +100,10 @@
         <div class="float-left font-weight-bolder" (click)="draftOpen = !draftOpen">
           <i *ngIf="draftOpen" class="far fa-minus-square"> </i>
           <i *ngIf="!draftOpen" class="far fa-plus-square"> </i>
-          Включённые сообщения о рисковых событиях
+          <app-smart-name [name]="'IncidentInnerDrafts'"></app-smart-name>
         </div>
         <div class="float-right">
-          <i *ngIf="isRiskManager() && incident.status !=='close'" class="fa fa-plus-circle text-success"
+          <i *ngIf="isRM && incident.status !=='close'" class="fa fa-plus-circle text-success"
              (click)="addDrafts(); $event.stopPropagation()"></i>
         </div>
       </div>
@@ -80,9 +120,10 @@
           <div class="col-2 px-1">
             <div class="float-right">
               <i (click)="d.collapsed = !d.collapsed" class="fas fa-info text-info pointer mr-2"
-                 tooltip="показать информацию"></i>
-              <i *ngIf="isRiskManager() && incident.status !=='close'" (click)="removeDraft(d)" class="fas fa-ban text-danger pointer"
-                 tooltip="исключить сообщение"></i>
+                 tooltip="показать информацию" placement="left" container="body"></i>
+              <i *ngIf="isRM && incident.status !=='close'" (click)="removeDraft(d)"
+                 class="fas fa-ban text-danger pointer"
+                 tooltip="исключить сообщение" placement="left" container="body"></i>
             </div>
           </div>
         </div>
@@ -129,11 +170,15 @@
         <div class="float-left font-weight-bolder" (click)="responsibleOpen = !responsibleOpen">
           <i *ngIf="responsibleOpen" class="far fa-minus-square"> </i>
           <i *ngIf="!responsibleOpen" class="far fa-plus-square"> </i>
-          Владельцы рискового события
+          <app-smart-name [name]="'IncidentOwners'"></app-smart-name>
         </div>
         <div class="float-right">
-          <i *ngIf="isRiskManager() && incident.status !=='close'" class="fa fa-plus-circle text-success"
-             (click)="addResponsibles(); $event.stopPropagation()"></i>
+          <span
+            *ngIf="isRM && (incident.status === 'wait' || incident.status === 'refine')"
+            class="text-right badge badge-success"
+            (click)="addResponsibles(); $event.stopPropagation()" tooltip="добавить подразделение">
+            добавить
+          </span>
         </div>
       </div>
       <accordion *ngIf="incident.responsibles">
@@ -143,8 +188,18 @@
               {{r.department.name}}
             </div>
             <div class="float-right">
-              <i *ngIf="isRiskManager() && !r.accounts" class="fas fa-ban"
-                 (click)="removeResponsible(r); $event.stopPropagation()" tooltip="исключить подразделение"></i>
+              <span *ngIf="r.result === 'wait'">ожидание согласования</span>
+              <span *ngIf="r.result === 'watch'">согласовано</span>
+              <span *ngIf="r.result === 'refine'">на доработке</span>
+              <span *ngIf="r.result === 'deleted'">исключено</span>
+              <span *ngIf="isRM && r.result === 'deleted' && incident.status !== 'open' && incident.status !=='close'" class="text-right badge badge-secondary ml-2"
+                    (click)="addResponsible(r); $event.stopPropagation()" tooltip="вернуть подразделение">
+                вернуть
+              </span>
+              <span *ngIf="isRM && r.result === 'refine'" class="text-right badge badge-danger ml-2"
+                    (click)="removeResponsible(r); $event.stopPropagation()" tooltip="исключить подразделение">
+                исключить
+              </span>
             </div>
           </div>
           <div class="my-2">
@@ -160,7 +215,7 @@
                   {{ u.fullname }}
                 </div>
                 <div class="float-right">
-                  <i *ngIf="isRiskCoordinator(r)" class="fas fa-ban"
+                  <i *ngIf="isRiskCoordinator(r) && incident.status ==='open'" class="fas fa-ban pointer"
                      (click)="removeAccount(u, r)" tooltip="исключить из ответственных работников"></i>
                 </div>
               </div>
@@ -174,15 +229,18 @@
                    class="form-control-sm col-12" typeaheadOptionField="fullname">
           </div>
           <div class="btn-group float-left mx-2 mb-2">
-            <button (click)="r.collapsed = true" *ngIf="isRiskCoordinator(r)" class="btn btn-sm btn-outline-primary"
+            <button (click)="r.collapsed = true" *ngIf="isRiskCoordinator(r) && incident.status === 'open'"
+                    class="btn btn-sm btn-outline-primary"
                     type="button">добавить
               ответственного
             </button>
-            <button (click)="saveResponsibleAccounts(r)" [hidden]="!r.isChanged" class="btn btn-sm btn-outline-success ml-2"
+            <button (click)="saveResponsibleAccounts(r)" [hidden]="!r.isChanged"
+                    class="btn btn-sm btn-outline-success ml-2"
                     type="button">сохранить
               изменения
             </button>
-            <button (click)="cancelResponsibleAccounts(r)" [hidden]="!r.isChanged" class="btn btn-sm btn-outline-secondary ml-2"
+            <button (click)="cancelResponsibleAccounts(r)" [hidden]="!r.isChanged"
+                    class="btn btn-sm btn-outline-secondary ml-2"
                     type="button">Отмена
             </button>
           </div>
@@ -194,21 +252,55 @@
         <div class="float-left font-weight-bolder" (click)="measureOpen = !measureOpen">
           <i [hidden]="!measureOpen" class="far fa-minus-square"> </i>
           <i [hidden]="measureOpen" class="far fa-plus-square"> </i>
-          Мероприятия
+          <app-smart-name [name]="'IncidentMeasures'"></app-smart-name>
         </div>
       </div>
       <accordion *ngIf="incident.responsibles">
-        <accordion-group *ngFor="let r of incident.responsibles" class="mx-1 my-1">
-          <div accordion-heading>
-            <div class="float-left">
-              {{r.department.name}}
+        <div *ngFor="let r of incident.responsibles">
+          <accordion-group *ngIf="r.result !== 'deleted'" class="mx-1 my-1">
+            <div accordion-heading>
+              <div class="float-left">
+                {{r.department.name}}
+              </div>
             </div>
-          </div>
-          <div class="mx-2 my-2">
-            <app-measure-info [responsible]="r" [status]="incident.status"></app-measure-info>
-          </div>
-        </accordion-group>
+            <div class="mx-2 my-2">
+              <app-measure-info [responsible]="r" [status]="incident.status"></app-measure-info>
+            </div>
+          </accordion-group>
+        </div>
       </accordion>
+    </accordion-group>
+    <accordion-group [isDisabled]="true" [isOpen]="historyOpen" class="mb-3">
+      <div accordion-heading (click)="showHistory()">
+        <div class="float-left font-weight-bolder">
+          <i [hidden]="!historyOpen" class="far fa-minus-square"> </i>
+          <i [hidden]="historyOpen" class="far fa-plus-square"> </i>
+          <app-smart-name [name]="'IncidentHistory'"></app-smart-name>
+        </div>
+      </div>
+      <div class="card card-block my-2 mx-2">
+        <table class="table table-sm table-hover">
+          <thead>
+          <tr>
+            <th>*</th>
+            <th>Дата</th>
+            <th>Событие</th>
+            <th>Комментарий</th>
+            <th>Пользователь</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let h of history">
+            <td>{{ h.id }}</td>
+            <td>{{ h.timestamp | date: "dd.MM.yy HH:mm" }}</td>
+            <td>{{ h.action }}</td>
+            <td>{{ h.info }}</td>
+            <td>{{ h.account.fullname }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </accordion-group>
   </accordion>
 </div>
+

@@ -11,7 +11,6 @@ import {DomainDepartmentsResolver} from './_resolvers/admin/domaindepartments.re
 import {AccountsComponent} from './admin/accounts/accounts.component';
 import {AccountsResolver} from './_resolvers/admin/accounts.resolver';
 import {UserDomainMergeComponent} from './admin/user-domain-merge/user-domain-merge.component';
-import {ReferencesPanelComponent} from './references/references-panel/references-panel.component';
 import {IncidentPanelComponent} from './incidents/incident-panel/incident-panel.component';
 import {IncidentListComponent} from './incidents/incident-list/incident-list.component';
 import {IncidentsResolver} from './_resolvers/incidents.resolver';
@@ -50,13 +49,23 @@ import {RiskStatusesResolver} from './_resolvers/references/riskstatus.resolver'
 import {LogsComponent} from './admin/logs/logs.component';
 import {LogsPageResolver} from './_resolvers/admin/logsPage.resolver';
 import {HelpComponent} from './help/help.component';
+import {RolesGuard} from './_guards/roles.guard';
+import {TextDataTableComponent} from './admin/text-data-table/text-data-table.component';
+import {TextDatasResolver} from './_resolvers/references/textdata.resolver';
+import {IncidenttypeTableComponent} from './admin/incidenttype-table/incidenttype-table.component';
+import {IncidentTypesResolver} from './_resolvers/references/incidenttype.resolver';
 
 
 const routes: Routes = [
-  {path: '', component: HomeComponent},
+  {
+    path: '',
+    component: HomeComponent,
+    resolve: {textDatas: TextDatasResolver},
+  },
   {
     path: '',
     runGuardsAndResolvers: 'always',
+    resolve: {textDatas: TextDatasResolver},
     canActivate: [AuthGuard],
     children: [
       {
@@ -64,8 +73,23 @@ const routes: Routes = [
       },
       {
         path: 'admin', component: AdminPanelComponent,
+        canActivate: [RolesGuard],
         data: {roles: ['admin']},
         children: [
+          {
+            path: 'examples', component: DraftListComponent,
+            resolve: {drafts: DraftsResolver},
+            data: {status: 'example'}
+          },
+          {
+            path: 'incidenttypes', component: IncidenttypeTableComponent,
+            resolve: {incidenttypes: IncidentTypesResolver}
+          },
+          {
+            path: 'examples/new', component: DraftNewComponent,
+            resolve: {incidentTypes: IncidentTypesResolver},
+            data: {status: 'example', mode: 'newExample'}
+          },
           {
             path: 'departments', component: DepartmentsComponent,
             resolve: {departments: DepartmentsResolver}
@@ -131,16 +155,10 @@ const routes: Routes = [
             path: 'statuses', component: StatusTableComponent,
             resolve: {statuses: RiskStatusesResolver}
           },
-        ]
-      },
-      {
-        path: 'references', component: ReferencesPanelComponent,
-        data: {roles: ['admin', 'riskManager']},
-        children: [
           {
-            path: 'departments', component: DepartmentsComponent,
-            resolve: {departments: DepartmentsResolver}
-          }
+            path: 'textdatas', component: TextDataTableComponent,
+            resolve: {datas: TextDatasResolver}
+          },
         ]
       },
       {
@@ -156,15 +174,33 @@ const routes: Routes = [
             data: {status: 'close'}
           },
           {
+            path: 'open', component: IncidentListComponent,
+            resolve: {incidents: IncidentsResolver},
+            data: {status: 'open'}
+          },
+          {
+            path: 'refine', component: IncidentListComponent,
+            resolve: {incidents: IncidentsResolver},
+            data: {status: 'refine'}
+          },
+          {
+            path: 'wait', component: IncidentListComponent,
+            resolve: {incidents: IncidentsResolver},
+            data: {status: 'wait'}
+          },
+          {
             path: 'new', component: IncidentNewComponent,
+            canActivate: [RolesGuard],
             resolve: {
               drafts: IDraftsResolver,
-              departments: DepartmentsResolver
+              departments: DepartmentsResolver,
+              incidenttypes: IncidentTypesResolver
             },
             data: {roles: ['riskManager'], status: 'sign'}
           },
           {
             path: 'new/:draft', component: IncidentNewComponent,
+            canActivate: [RolesGuard],
             resolve: {
               drafts: IDraftsResolver,
               departments: DepartmentsResolver
@@ -193,14 +229,24 @@ const routes: Routes = [
           },
           {
             path: ':id', component: IncidentInfoComponent,
-            resolve: {incident: IncidentResolver}
+            resolve: {
+              incident: IncidentResolver,
+              incidenttypes: IncidentTypesResolver
+            }
           },
           {
             path: 'drafts/list', component: DraftListComponent,
             resolve: {drafts: DraftsResolver},
             data: {status: 'any'}
           },
-          {path: 'drafts/new', component: DraftNewComponent},
+          {
+            path: 'drafts/new', component: DraftNewComponent,
+            resolve: {
+              drafts: DraftsResolver,
+              incidentTypes: IncidentTypesResolver
+            },
+            data: {status: 'example', mode: ''}
+          },
           {
             path: 'drafts/draft', component: DraftListComponent,
             resolve: {drafts: DraftsResolver},
@@ -237,12 +283,16 @@ const routes: Routes = [
           }, // check it
           {
             path: 'drafts/:id/edit', component: DraftEditComponent,
-            resolve: {draft: DraftResolver}
+            resolve: {
+              draft: DraftResolver,
+              incidentTypes: IncidentTypesResolver
+            }
           },
         ]
       },
       {
         path: 'logs', component: LogsComponent,
+        canActivate: [RolesGuard],
         data: {roles: ['admin', 'security']},
         resolve: {logs: LogsPageResolver}
       }

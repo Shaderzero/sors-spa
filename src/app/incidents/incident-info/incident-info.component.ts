@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, NgZone, OnInit} from '@angular/core';
 import {Incident} from 'src/app/_models/incident';
 import {AuthService} from 'src/app/_services/auth.service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -20,6 +20,10 @@ import {Patcher} from '../../_models/patch';
 import {DateEditModalComponent} from '../../modals/date-edit-modal/date-edit-modal.component';
 import {PatcherDate} from '../../_models/patchDate';
 import {CountsService} from '../../_services/counts.service';
+import {ConfirmCommentModalComponent} from '../../references/confirm-comment-modal/confirm-comment-modal.component';
+import {Log} from '../../_models/log';
+import {IncidentType} from '../../_models/references/IncidentType';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-incident-info',
@@ -31,12 +35,21 @@ export class IncidentInfoComponent implements OnInit {
   incident: Incident;
   tmp: Account[] = [];
   newResponsibleAccounts: Account[] = []; // необходимо для рассылки писем...
+  incidentTypes: IncidentType[];
+  incidentEdit = false;
+  incidentTypeForm: FormGroup;
   currentUser: Account;
   selectedValue: string;
+  userStatus: string;
   departmentAccounts: Account[];
   draftOpen = false;
   responsibleOpen = false;
   measureOpen = false;
+  historyOpen = false;
+  isRC = false;
+  isRM = false;
+  isAdmin = false;
+  history: Log[];
 
   constructor(private authService: AuthService,
               private modalService: BsModalService,
@@ -47,29 +60,33 @@ export class IncidentInfoComponent implements OnInit {
               private alertify: AlertifyService,
               private mailService: MailService,
               private router: Router,
-              private countsService: CountsService) {
+              private countsService: CountsService,
+              private fb: FormBuilder,
+              private zone: NgZone) {
   }
 
   ngOnInit() {
     this.route.data.subscribe(data => {
-      this.incident = data['incident'];
+      this.incident = data.incident;
+      this.incidentTypes = data.incidenttypes;
     });
     this.currentUser = this.authService.currentUser;
+    this.incident.responsibles.forEach(r => {
+      if (this.isRiskCoordinator(r)) {
+        this.isRC = true;
+        this.userStatus = r.result;
+      }
+    });
+    this.isAdmin = this.authService.isAdmin();
+    this.isRM = this.authService.isRiskManager();
+    this.createIncidentTypeForm();
     this.getDepartmentAccounts();
   }
 
-  // fillDraftsAuthorNames() {
-  //   for (let i = 0; i < this.incident.drafts. length; i++) {
-  //     this.incident.drafts[i].author.fullname = this.authService.getFioByLogin(this.incident.drafts[i].author.name);
-  //   }
-  // }
-
-  isAdmin() {
-    return this.authService.isAdmin();
-  }
-
-  isRiskManager() {
-    return this.authService.isRiskManager();
+  createIncidentTypeForm() {
+    this.incidentTypeForm = this.fb.group({
+      incidentTypeControl: [this.incident.incidentType ? this.incident.incidentType.id : '']
+    });
   }
 
   isRiskCoordinator(responsible: Responsible) {
@@ -79,10 +96,6 @@ export class IncidentInfoComponent implements OnInit {
   getDepartmentAccounts() {
     this.userService.getDepartmentAccounts(this.currentUser.department.id).subscribe((res: Account[]) => {
       this.departmentAccounts = res;
-      // console.log(this.departmentAccounts);
-      // for (let i = 0; i < this.departmentAccounts.length; i++) {
-      //   this.departmentAccounts[i].fullname = this.authService.getFioByLogin(this.departmentAccounts[i].name);
-      // }
     });
   }
 
@@ -117,7 +130,8 @@ export class IncidentInfoComponent implements OnInit {
     this.modalRef.content.outputText.subscribe((res: string) => {
       const patch: Patcher = {
         propertyName: 'Description',
-        propertyValue: res
+        propertyValue: res,
+        authorId: this.currentUser.id
       };
       this.incidentService.patchIncident(this.incident, [patch]).subscribe(() => {
         this.incident.description = res;
@@ -175,15 +189,8 @@ export class IncidentInfoComponent implements OnInit {
   saveResponsibleAccounts(responsible: Responsible) {
     this.incidentService.updateResponsibleAccounts(responsible).subscribe(() => {
       this.alertify.success('список ответственных работников обновлён');
-      // надо подумать, что с этим делать
-      // const responsibleForMail: Responsible = {
-      //   id: responsible.id,
-      //   department: responsible.department,
-      //   result: responsible.result,
-      //   accounts: this.newResponsibleAccounts
-      // };
       if (this.newResponsibleAccounts.length > 0) {
-        this.mailService.sendAccountsAssign(this.incident, this.newResponsibleAccounts, '');
+        // this.mailService.sendAccountsAssign(this.incident, this.newResponsibleAccounts, '');
         this.newResponsibleAccounts = [];
       }
       responsible.collapsed = false;
@@ -191,7 +198,7 @@ export class IncidentInfoComponent implements OnInit {
       this.tmp = [];
     }, error => {
       console.log(error);
-      this.alertify.error('ошибка обновления списка ответственных работников');
+      this.alertify.error('ошибка обновления списка ответственных работников\n' + error.message);
     });
   }
 
@@ -206,49 +213,92 @@ export class IncidentInfoComponent implements OnInit {
       selectedResponsibles: this.incident.responsibles
     };
     this.modalRef = this.modalService.show(IncidentResponsibleModalComponent, {ignoreBackdropClick: true, initialState});
-    // this.modalRef.setClass('modal-lg');
     this.modalRef.content.outputDepartments.subscribe((departments: Department[]) => {
       if (departments.length > 0) {
         for (let i = 0; i < departments.length; i++) {
           this.incidentService.addResponsible(this.incident, departments[i]).subscribe((responsible: Responsible) => {
-            this.incident.responsibles.push(responsible);
+            // this.incident.responsibles.push(responsible);
             this.alertify.success('ответственное подразделение добавлено');
-            this.mailService.sendResponsible(this.incident, responsible, '');
+            this.incidentService.getIncident(this.incident.id).subscribe((incident: Incident) => {
+              this.incident = incident;
+            });
+            // this.mailService.sendResponsible(this.incident, responsible, '');
           }, error => {
             console.log(error);
             this.alertify.error('ошибка добавления ответстенного подразделения');
           });
         }
+        this.zone.run(() => {
+          this.router.navigate(['/incidents/' + this.incident.id]);
+        });
       } else {
         this.alertify.message('подразделений не выбрано');
       }
     });
   }
 
+  addResponsible(responsible: Responsible) {
+    this.incidentService.addResponsible(this.incident, responsible.department).subscribe((res: Responsible) => {
+      this.alertify.success('ответственное подразделение добавлено');
+      // this.mailService.sendResponsible(this.incident, res, '');
+      this.incidentService.getIncident(this.incident.id).subscribe((incident: Incident) => {
+        this.incident = incident;
+      });
+    }, error => {
+      console.log(error);
+      this.alertify.error('ошибка добавления ответстенного подразделения');
+    });
+  }
+
   removeResponsible(responsible: Responsible) {
     const initialState = {
       title: 'Исключение ответственного подразделения',
-      text: 'Исключить подразделение из списка ответственных?'
+      text: 'Комментарий'
     };
-    this.modalRef = this.modalService.show(ConfirmModalComponent, {ignoreBackdropClick: true, initialState});
-    this.modalRef.content.result.subscribe((res: boolean) => {
-      if (res) {
-        this.incidentService.removeResponsible(this.incident, responsible).subscribe(() => {
-          for (let i = 0; i < this.incident.responsibles.length; i++) {
-            if (+this.incident.responsibles[i].id === +responsible.id) {
-              this.incident.responsibles.splice(i, 1);
-              break;
-            }
-          }
-          this.alertify.success('Подразделение исключено');
-        }, error => {
-          console.log(error);
-          this.alertify.error('Ошибка исключения подразделения');
+    this.modalRef = this.modalService.show(ConfirmCommentModalComponent, {initialState});
+    this.modalRef.content.outputComment.subscribe((message) => {
+      const statusHelper = {
+        id: this.incident.id,
+        status: 'deleted',
+        authorId: this.authService.currentUser.id,
+        departmentId: responsible.department.id, // необходим ИД исключаемого подразделения
+        comment: message
+      };
+      this.incidentService.setStatus(statusHelper).subscribe(() => {
+        this.alertify.message('Подразделение удалено из списка наблюдателей');
+        this.countsService.updateCounts();
+        this.incidentService.getIncident(this.incident.id).subscribe((incident: Incident) => {
+          this.incident = incident;
         });
-      } else {
-        this.alertify.message('Отмена');
-      }
+      }, error => {
+        console.log(error);
+        this.alertify.error('ошибка удаления наблюдателя');
+      });
     });
+
+    // const initialState = {
+    //   title: 'Исключение ответственного подразделения',
+    //   text: 'Исключить подразделение из списка ответственных?'
+    // };
+    // this.modalRef = this.modalService.show(ConfirmModalComponent, {ignoreBackdropClick: true, initialState});
+    // this.modalRef.content.result.subscribe((res: boolean) => {
+    //   if (res) {
+    //     this.incidentService.removeResponsible(this.incident, responsible).subscribe(() => {
+    //       for (let i = 0; i < this.incident.responsibles.length; i++) {
+    //         if (+this.incident.responsibles[i].id === +responsible.id) {
+    //           this.incident.responsibles.splice(i, 1);
+    //           break;
+    //         }
+    //       }
+    //       this.alertify.success('Подразделение исключено');
+    //     }, error => {
+    //       console.log(error);
+    //       this.alertify.error('Ошибка исключения подразделения');
+    //     });
+    //   } else {
+    //     this.alertify.message('Отмена');
+    //   }
+    // });
   }
 
   addDrafts() {
@@ -260,7 +310,7 @@ export class IncidentInfoComponent implements OnInit {
           this.incidentService.addDraft(this.incident, drafts[i]).subscribe(() => {
             this.incident.drafts.push(drafts[i]);
             this.alertify.success('сообщение добавлено');
-            this.setDraftStatus(drafts[i], 'open');
+            // this.setDraftStatus(drafts[i], 'open');
           }, error => {
             console.log(error);
             this.alertify.error('ошибка добавления сообщения');
@@ -288,7 +338,7 @@ export class IncidentInfoComponent implements OnInit {
             }
           }
           this.alertify.success('Сообщение исключено');
-          this.setDraftStatus(draft, 'sign');
+          // this.setDraftStatus(draft, 'sign');
         }, error => {
           console.log(error);
           this.alertify.error('Ошибка исключения сообщения');
@@ -307,7 +357,7 @@ export class IncidentInfoComponent implements OnInit {
     model.departmentId = this.authService.currentUser.department.id;
     this.draftService.setStatus(model).subscribe(() => {
       this.alertify.message('статус сообщения обновлён');
-      this.countsService.loadAll();
+      this.countsService.updateCounts();
     }, error => {
       console.log(error);
       this.alertify.error('ошибка обновления статуса сообщения');
@@ -380,6 +430,136 @@ export class IncidentInfoComponent implements OnInit {
 
   getExcel() {
     this.incidentService.getExcel(this.incident.id);
+  }
+
+  approve() {
+    const statusHelper = {
+      id: this.incident.id,
+      status: 'watch',
+      authorId: this.authService.currentUser.id,
+      departmentId: this.authService.currentUser.department.id
+    };
+    this.incidentService.setStatus(statusHelper).subscribe(() => {
+      this.alertify.message('Рисковое событие согласовано');
+      this.zone.run(() => {
+        this.router.navigate(['/incidents/list']);
+      });
+      this.countsService.updateCounts();
+    }, error => {
+      console.log(error);
+      this.alertify.error('ошибка согласования рискового события');
+    });
+  }
+
+  refine() {
+    const initialState = {
+      title: 'Отправить рисковое событие на доработку?',
+      text: 'Текст замечания'
+    };
+    this.modalRef = this.modalService.show(ConfirmCommentModalComponent, {initialState});
+    this.modalRef.content.outputComment.subscribe((message) => {
+      const statusHelper = {
+        id: this.incident.id,
+        status: 'refine',
+        authorId: this.authService.currentUser.id,
+        departmentId: this.authService.currentUser.department.id,
+        comment: message
+      };
+      this.incidentService.setStatus(statusHelper).subscribe(() => {
+        this.alertify.message('Рисковое событие отправлено на доработку');
+        this.zone.run(() => {
+          this.router.navigate(['/incidents/wait']);
+        });
+        this.countsService.updateCounts();
+      }, error => {
+        console.log(error);
+        this.alertify.error('ошибка отправки рискового события на доработку');
+      });
+    });
+  }
+
+  resign() {
+    const initialState = {
+      title: 'Отправить рисковое событие на согласование авторам замечаний?',
+      text: 'Комментарий'
+    };
+    this.modalRef = this.modalService.show(ConfirmCommentModalComponent, {initialState});
+    this.modalRef.content.outputComment.subscribe((message) => {
+      const statusHelper = {
+        id: this.incident.id,
+        status: 'watch',
+        authorId: this.authService.currentUser.id,
+        departmentId: this.authService.currentUser.department.id,
+        comment: message
+      };
+      this.incidentService.resign(statusHelper).subscribe(() => {
+        this.alertify.message('Рисковое событие отправлено авторам замечаний');
+        this.zone.run(() => {
+          this.router.navigate(['/incidents/wait']);
+        });
+        this.countsService.updateCounts();
+      }, error => {
+        console.log(error);
+        this.alertify.error('ошибка отправки рискового события авторам замечаний');
+      });
+    });
+  }
+
+  resignAll() {
+    const initialState = {
+      title: 'Отправить рисковое событие на согласование всем участникам?',
+      text: 'Комментарий'
+    };
+    this.modalRef = this.modalService.show(ConfirmCommentModalComponent, {initialState});
+    this.modalRef.content.outputComment.subscribe((message) => {
+      const statusHelper = {
+        id: this.incident.id,
+        status: 'watch',
+        authorId: this.authService.currentUser.id,
+        departmentId: this.authService.currentUser.department.id,
+        comment: message
+      };
+      this.incidentService.resignAll(statusHelper).subscribe(() => {
+        this.alertify.message('Рисковое событие отправлено всем участникам согласования');
+        this.zone.run(() => {
+          this.router.navigate(['/incidents/wait']);
+        });
+        this.countsService.updateCounts();
+      }, error => {
+        console.log(error);
+        this.alertify.error('ошибка отправки рискового события авторам замечаний');
+      });
+    });
+  }
+
+  showHistory() {
+    if (this.historyOpen) {
+      this.historyOpen = false;
+    } else {
+      this.incidentService.getHistory(this.incident.id).subscribe((res: Log[]) => {
+        this.history = res;
+        this.historyOpen = true;
+      });
+    }
+  }
+
+  updateIncidentType(it: number) {
+    const statusHelper = {
+      id: this.incident.id,
+      authorId: this.authService.currentUser.id,
+      incidentTypeId: it
+    };
+    this.incidentService.updateIncidentType(statusHelper).subscribe(() => {
+      this.alertify.message('Категория рискового события обновлена');
+      this.incident.incidentType = this.incidentTypes.find(function(element) {
+        return +element.id === +it;
+      });
+    }, error => {
+      console.log(error);
+      this.alertify.error('ошибка обновления категории рискового события');
+    }, () => {
+      this.incidentEdit = false;
+    });
   }
 
 }
